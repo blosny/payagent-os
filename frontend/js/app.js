@@ -40,6 +40,7 @@ const i18n = {
     chipPass: 'Limit İçi ($15)',
     chipExceed: 'Limit Aşımı ($85 HITL)',
     chipUnknown: 'Yetkisiz Satıcı',
+    chipPayout: 'Freelance Hakediş ($35)',
     hitlTitle: 'İnsan Onay Masası (HITL Queue)',
     hitlDesc: 'Güvenlik limitlerini aşan veya listede olmayan satıcı işlemleri insan denetimine düşer.',
     fleetTitle: 'Aktif Ajan Filosu & Cüzdanlar',
@@ -100,6 +101,7 @@ const i18n = {
     chipPass: 'Within Limit ($15)',
     chipExceed: 'Exceed Limit ($85 HITL)',
     chipUnknown: 'Unlisted Vendor',
+    chipPayout: 'Freelance Payout ($35)',
     hitlTitle: 'Pending Human Approvals (HITL)',
     hitlDesc: 'Transactions that exceeded autonomous safety caps or targeted unlisted vendors.',
     fleetTitle: 'Active Agent Fleet & Wallets',
@@ -161,6 +163,7 @@ const el = {
   chipPass: document.getElementById('chip-pass'),
   chipExceed: document.getElementById('chip-exceed'),
   chipUnauthorized: document.getElementById('chip-unauthorized'),
+  chipPayout: document.getElementById('chip-payout'),
 };
 
 // Apply i18n
@@ -486,6 +489,16 @@ el.chipUnauthorized.addEventListener('click', () => {
   el.simReasoning.value = currentLang === 'tr'
     ? 'Beyaz listede olmayan harici sunucudan GPU kiralama denemesi.'
     : 'Attempting off-market compute procurement from unapproved merchant.';
+});
+
+el.chipPayout.addEventListener('click', () => {
+  el.simAgentSelect.value = 'agent-payout';
+  el.simAmount.value = '35.00';
+  el.simRecipient.value = 'alex.freelancer@paypal.com';
+  el.simCategory.value = 'FREELANCE_PAYOUT';
+  el.simReasoning.value = currentLang === 'tr'
+    ? 'Grafik tasarım ve UI bileşen teslimi için serbest çalışana hakediş ödemesi.'
+    : 'Milestone payment disbursement to external freelancer for UI asset delivery.';
 });
 
 // Language Switch Buttons
