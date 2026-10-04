@@ -65,3 +65,40 @@ def test_negotiation_self_error(engine):
     )
     with pytest.raises(ValueError, match="cannot negotiate a budget transfer with itself"):
         engine.negotiate_budget_transfer(req)
+
+
+@pytest.mark.anyio
+async def test_automated_shortfall_detection_and_approval(engine):
+    # agent-research: max_per_transaction=25.0, daily_budget=100.0
+    # intent: 85.0 -> shortfall = 60.0
+    # agent-devops has 200.0 headroom, should be picked as donor
+    from backend.app.models.transaction import TransactionIntent, TransactionStatus
+
+    intent = TransactionIntent(
+        agent_id="agent-research",
+        amount=85.0,
+        currency="USD",
+        recipient="OpenAI",
+        category="API_QUOTA",
+        reasoning="Batch embedding job for 50k scientific papers",
+    )
+
+    tx = await engine.submit_intent(intent)
+
+    assert tx.status == TransactionStatus.PENDING_APPROVAL
+    assert tx.shortfall_amount == 60.0
+    assert tx.proposed_donor_agent_id in ["agent-payout", "agent-devops"]
+    donor_id = tx.proposed_donor_agent_id
+    donor_initial_budget = engine.get_agent(donor_id).policy.daily_budget
+
+    # Now approve the transaction
+    resolved = await engine.resolve_pending_transaction(tx.id, "APPROVE")
+    assert resolved.status == TransactionStatus.APPROVED_BY_HUMAN
+
+    # Donor should have given 60.0
+    donor = engine.get_agent(donor_id)
+    research = engine.get_agent("agent-research")
+    assert donor.policy.daily_budget == donor_initial_budget - 60.0
+    assert research.policy.daily_budget == 160.0  # 100 + 60
+
+
