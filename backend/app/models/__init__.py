@@ -6,6 +6,7 @@ from .transaction import (
     TransactionType,
     ApprovalAction,
 )
+from .negotiation import NegotiationRequest, NegotiationRecord
 
 __all__ = [
     "Agent",
@@ -17,4 +18,6 @@ __all__ = [
     "TransactionStatus",
     "TransactionType",
     "ApprovalAction",
+    "NegotiationRequest",
+    "NegotiationRecord",
 ]
