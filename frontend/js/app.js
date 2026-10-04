@@ -211,10 +211,10 @@ async function fetchSummary() {
     if (!res.ok) return;
     const data = await res.json();
 
-    el.statAllocated.textContent = `$${data.total_allocated_funds.toFixed(2)}`;
-    el.statSpentToday.textContent = `$${data.total_spent_today.toFixed(2)}`;
+    el.statAllocated.textContent = data.total_allocated_funds.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    el.statSpentToday.textContent = data.total_spent_today.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     el.statPending.textContent = data.pending_approval_count;
-    el.statVolume.textContent = `$${data.total_volume_processed.toFixed(2)}`;
+    el.statVolume.textContent = data.total_volume_processed.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     
     el.statAgentsCount.textContent = currentLang === 'tr' 
       ? `${data.active_agents_count} aktif AI ajanı cüzdanında`
@@ -281,12 +281,15 @@ function renderFleet() {
 
     card.innerHTML = `
       <div class="agent-card-top">
-        <span class="agent-card-title">${agent.name}</span>
-        <span class="agent-card-balance">$${agent.wallet_balance.toFixed(2)}</span>
+        <div class="agent-title-row">
+          <span class="fleet-status-dot" title="Active"></span>
+          <span class="agent-card-title">${agent.name}</span>
+        </div>
+        <span class="agent-card-balance font-mono">$${agent.wallet_balance.toFixed(2)}</span>
       </div>
 
       <div class="budget-bar-wrap">
-        <div class="budget-bar-labels">
+        <div class="budget-bar-labels font-mono">
           <span>${limitLabel}: $${agent.policy.max_per_transaction.toFixed(2)}</span>
           <span>${spentLabel}: $${spent.toFixed(2)} / $${dailyCap.toFixed(2)} (${pct}%)</span>
         </div>
@@ -317,7 +320,7 @@ async function fetchTransactions() {
   }
 }
 
-// Render HITL Queue (Invoice style)
+// Render HITL Queue (Hero Feature with Diff Breakdown & PayPal button)
 function renderHITLQueue() {
   const pending = transactionsList.filter((t) => t.status === 'PENDING_APPROVAL');
   el.hitlContainer.innerHTML = '';
@@ -333,26 +336,54 @@ function renderHITLQueue() {
   }
 
   pending.forEach((tx) => {
+    const agent = agentsList.find((a) => a.id === tx.agent_id);
+    const limit = agent ? agent.policy.max_per_transaction : 0;
+    const overAmount = Math.max(0, tx.amount - limit);
+
+    const diffHtml = limit > 0
+      ? `<div class="diff-breakdown font-mono">
+           <span>${currentLang === 'tr' ? 'Talep:' : 'Req:'} <strong>$${tx.amount.toFixed(2)}</strong></span>
+           <span>•</span>
+           <span>${currentLang === 'tr' ? 'Limit:' : 'Limit:'} $${limit.toFixed(2)}</span>
+           <span>•</span>
+           <span style="color: #f87171;">(+$${overAmount.toFixed(2)} ${currentLang === 'tr' ? 'Aşım' : 'Over'})</span>
+         </div>`
+      : '';
+
     const card = document.createElement('div');
     card.className = 'invoice-review-card';
     card.innerHTML = `
       <div class="invoice-header">
-        <span class="invoice-agent">${tx.agent_name}</span>
-        <span class="invoice-amount">$${tx.amount.toFixed(2)} ${tx.currency}</span>
+        <div class="hitl-agent-wrap">
+          <div class="agent-avatar-icon">🤖</div>
+          <span class="invoice-agent">${tx.agent_name}</span>
+        </div>
+        <span class="invoice-amount font-mono">$${tx.amount.toFixed(2)} <span style="font-size: 0.8rem; color: #a1a1aa;">${tx.currency}</span></span>
       </div>
-      <div class="invoice-flag">⚠️ ${tx.policy_evaluation_reason}</div>
+      ${diffHtml}
       <div class="invoice-body">
-        <strong>${currentLang === 'tr' ? 'Niyet / Gerekçe:' : 'Reasoning:'}</strong> ${tx.reasoning}
+        <strong>${currentLang === 'tr' ? 'Gerekçe (Prompt):' : 'Reasoning:'}</strong> ${tx.reasoning}
         <br><strong>${currentLang === 'tr' ? 'Alıcı:' : 'Payee:'}</strong> ${tx.recipient} (${tx.category})
       </div>
       <div class="invoice-footer">
-        <button class="fin-btn fin-btn-sm fin-btn-reject" onclick="resolveHITL('${tx.id}', 'REJECT')">${i18n[currentLang].btnReject}</button>
-        <button class="fin-btn fin-btn-sm fin-btn-approve" onclick="resolveHITL('${tx.id}', 'APPROVE')">${i18n[currentLang].btnAuthorize}</button>
+        <button class="fin-btn fin-btn-reject" onclick="resolveHITL('${tx.id}', 'REJECT')">${i18n[currentLang].btnReject}</button>
+        <button class="fin-btn fin-btn-approve-paypal" onclick="resolveHITL('${tx.id}', 'APPROVE')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M7 21h4.5l1.1-7h1.5c3.1 0 5.4-1.8 5.9-5.2.6-3.9-1.8-5.8-5.3-5.8H6.5a.8.8 0 0 0-.8.7L2.4 20.6c-.1.4.2.7.6.7H7z" fill="#ffffff"/>
+          </svg>
+          ${i18n[currentLang].btnAuthorize}
+        </button>
       </div>
     `;
     el.hitlContainer.appendChild(card);
   });
 }
+
+// 1-Click Copy Reference ID
+window.copyRef = function (text) {
+  navigator.clipboard.writeText(text);
+  showToast(currentLang === 'tr' ? `Kopyalandı: ${text}` : `Copied: ${text}`, 'success');
+};
 
 // Render Audit Trail
 function renderAuditTable() {
@@ -389,12 +420,27 @@ function renderAuditTable() {
     const ref = tx.paypal_order_id || tx.paypal_payout_batch_id || tx.id;
 
     tr.innerHTML = `
-      <td>${timeStr}</td>
-      <td style="font-weight: 700; color: #ffffff;">${tx.agent_name}</td>
-      <td style="font-weight: 800; color: #f8fafc;">$${tx.amount.toFixed(2)}</td>
-      <td>${tx.recipient}</td>
-      <td><span class="status-tag ${tagClass}">${statusText}</span></td>
-      <td class="ref-code">${ref}</td>
+      <td class="font-mono text-zinc-400">${timeStr}</td>
+      <td style="font-weight: 600; color: #ffffff;">${tx.agent_name}</td>
+      <td class="font-mono" style="font-weight: 700; color: #f4f4f5;">$${tx.amount.toFixed(2)}</td>
+      <td class="text-zinc-300">${tx.recipient}</td>
+      <td>
+        <span class="status-tag ${tagClass}">
+          <span class="status-dot-indicator"></span>
+          ${statusText}
+        </span>
+      </td>
+      <td>
+        <div class="ref-code-wrap">
+          <span class="ref-code font-mono">${ref}</span>
+          <button class="btn-copy-ref" onclick="copyRef('${ref}')" title="Copy ID">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+      </td>
     `;
     el.auditTableBody.appendChild(tr);
   });
