@@ -417,6 +417,24 @@ function renderHITLQueue() {
          </div>`
       : '';
 
+    const borrowingBannerHtml = tx.shortfall_amount && tx.proposed_donor_agent_name
+      ? `<div class="borrowing-proposal-banner">
+           <div class="proposal-banner-title">
+             <span>🤝</span>
+             <span>${currentLang === 'tr' ? 'Kardeş Karttan Otonom Fonlama Teklifi' : 'Peer Shortfall Borrowing Proposal'}</span>
+           </div>
+           <div class="proposal-banner-text">
+             ${currentLang === 'tr'
+               ? `Bu harcama ajanın limitini aşıyor (<strong>$${tx.shortfall_amount.toFixed(2)} eksik</strong>). Sistem, boşta bütçesi olan <span class="proposal-banner-highlight">${tx.proposed_donor_agent_name}</span> kartından aktarım yapmayı öneriyor.`
+               : `This intent exceeds agent limit (<strong>$${tx.shortfall_amount.toFixed(2)} shortfall</strong>). System proposes transferring quota from <span class="proposal-banner-highlight">${tx.proposed_donor_agent_name}</span>.`}
+           </div>
+         </div>`
+      : '';
+
+    const approveBtnLabel = tx.shortfall_amount
+      ? (currentLang === 'tr' ? `✓ $${tx.shortfall_amount.toFixed(2)} Aktar ve PayPal İle Öde` : `✓ Transfer $${tx.shortfall_amount.toFixed(2)} & Settle`)
+      : i18n[currentLang].btnAuthorize;
+
     const card = document.createElement('div');
     card.className = 'invoice-review-card';
     card.innerHTML = `
@@ -428,6 +446,7 @@ function renderHITLQueue() {
         <span class="invoice-amount font-mono">$${tx.amount.toFixed(2)} <span style="font-size: 0.8rem; color: #a1a1aa;">${tx.currency}</span></span>
       </div>
       ${diffHtml}
+      ${borrowingBannerHtml}
       <div class="invoice-body">
         <strong>${currentLang === 'tr' ? 'Gerekçe (Prompt):' : 'Reasoning:'}</strong> ${tx.reasoning}
         <br><strong>${currentLang === 'tr' ? 'Alıcı:' : 'Payee:'}</strong> ${tx.recipient} (${tx.category})
@@ -438,7 +457,7 @@ function renderHITLQueue() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
             <path d="M7 21h4.5l1.1-7h1.5c3.1 0 5.4-1.8 5.9-5.2.6-3.9-1.8-5.8-5.3-5.8H6.5a.8.8 0 0 0-.8.7L2.4 20.6c-.1.4.2.7.6.7H7z" fill="#ffffff"/>
           </svg>
-          ${i18n[currentLang].btnAuthorize}
+          ${approveBtnLabel}
         </button>
       </div>
     `;
@@ -526,10 +545,72 @@ window.resolveHITL = async function (txId, decision) {
       showToast(err.detail || 'Hata oluştu', 'error');
       return;
     }
-    showToast(
-      decision === 'APPROVE' ? i18n[currentLang].toastApproveSuccess : i18n[currentLang].toastRejectSuccess,
-      decision === 'APPROVE' ? 'success' : 'warning'
-    );
+
+    const resolvedTx = await res.json();
+
+    if (decision === 'APPROVE') {
+      if (resolvedTx.shortfall_amount && resolvedTx.proposed_donor_agent_name) {
+        showToast(
+          currentLang === 'tr'
+            ? `🤝 $${resolvedTx.shortfall_amount.toFixed(2)} ${resolvedTx.proposed_donor_agent_name}'den aktarıldı ve PayPal ile capture edildi!`
+            : `🤝 $${resolvedTx.shortfall_amount.toFixed(2)} transferred from ${resolvedTx.proposed_donor_agent_name} and settled via PayPal!`,
+          'success'
+        );
+      } else {
+        showToast(i18n[currentLang].toastApproveSuccess, 'success');
+      }
+
+      // Update Negotiation Chat feed with the latest negotiation log
+      try {
+        const negRes = await fetch(`${API_BASE}/negotiations`);
+        if (negRes.ok) {
+          const negs = await negRes.json();
+          if (negs.length > 0 && el.negotiationChatFeed) {
+            const latest = negs[0];
+            const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            el.negotiationChatFeed.innerHTML = `
+              <div class="chat-bubble-agent req">
+                <div class="chat-header-row">
+                  <div class="chat-author">
+                    <span>🤖</span>
+                    <span>${latest.requester_name}</span>
+                  </div>
+                  <div style="display: flex; gap: 0.4rem; align-items: center;">
+                    <span class="chat-badge chat-badge-req">Talep (${latest.urgency})</span>
+                    <span class="chat-meta-time font-mono">${timeNow}</span>
+                  </div>
+                </div>
+                <div class="chat-body-text">
+                  "${latest.justification}" — <strong>$${latest.amount.toFixed(2)} USD</strong> günlük kota aktarımı talep edildi.
+                </div>
+              </div>
+
+              <div class="chat-bubble-agent target">
+                <div class="chat-header-row">
+                  <div class="chat-author">
+                    <span>🛡️</span>
+                    <span>${latest.target_name}</span>
+                  </div>
+                  <div style="display: flex; gap: 0.4rem; align-items: center;">
+                    <span class="chat-badge chat-badge-approved">✓ SÜPERVİZÖR ONAYLADI</span>
+                    <span class="chat-meta-time font-mono">${timeNow}</span>
+                  </div>
+                </div>
+                <div class="chat-body-text font-mono" style="font-size: 0.74rem;">
+                  ${latest.transcript.split('\n')[1] || latest.transcript}
+                </div>
+              </div>
+            `;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to update negotiation feed:', e);
+      }
+
+    } else {
+      showToast(i18n[currentLang].toastRejectSuccess, 'warning');
+    }
+
     await refreshAll();
   } catch (err) {
     showToast('Bağlantı hatası', 'error');

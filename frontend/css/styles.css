@@ -828,6 +828,42 @@ body {
   margin-bottom: 0.4rem;
 }
 
+.borrowing-proposal-banner {
+  background: rgba(0, 207, 222, 0.08);
+  border: 1px solid rgba(0, 207, 222, 0.35);
+  border-left: 3px solid #00cfde;
+  border-radius: var(--radius-xs);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.45rem;
+  margin-bottom: 0.45rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.proposal-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #00cfde;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.proposal-banner-text {
+  font-size: 0.74rem;
+  color: #e4e4e7;
+  line-height: 1.45;
+}
+
+.proposal-banner-highlight {
+  color: #34d399;
+  font-weight: 700;
+}
+
 /* --------------------------------------------------------------------------
    Agent Fleet Cards
    -------------------------------------------------------------------------- */
