@@ -113,14 +113,3 @@ Run the test suite:
 pytest -v
 ```
 
----
-
-<details>
-<summary><strong>🇹🇷 Türkçe Özet & Hızlı Notlar</strong></summary>
-
-### Backend Özeti:
-PayAgent OS backend'i, FastAPI ve PayPal REST API v2 kullanarak yapay zeka ajanlarının güvenli harcama yapmasını sağlayan bir orkestrasyon motorudur. 
-- **`paypal_service.py`:** PayPal OAuth 2.0, Orders ve Payouts API'lerini asenkron yönetir.
-- **`policy_engine.py`:** Ajanların harcama limitlerini, günlük bütçelerini ve onaylı satıcı listelerini denetler. Güvenlik sınırını aşan işlemler iptal edilmez; İnsan Onay Masası'na (Human-in-the-Loop) aktarılır.
-- **Test:** `pytest -v` komutu ile tüm politika kuralları doğrulanır.
-</details>
