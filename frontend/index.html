@@ -1,234 +1,283 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PayAgent OS — Autonomous AI Agent Financial Infrastructure</title>
-  <meta name="description" content="Policy-governed, budget-controlled autonomous payment orchestration engine for AI agents powered by PayPal.">
+  <title>PayAgent OS — Otonom AI Ajanları İçin PayPal Harcama ve Finans Altyapısı</title>
+  <meta name="description" content="Yapay zeka ajanları için politika denetimli, bütçe kotalı ve güvenli PayPal ödeme orkestrasyon sistemi.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Top Navigation Bar -->
-    <header class="app-header">
-      <div class="brand-section">
-        <div class="brand-logo">
-          <div class="shield-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="M9 12l2 2 4-4"/>
-            </svg>
-          </div>
-          <div class="brand-text">
-            <h1>PayAgent OS</h1>
-            <span class="brand-sub">PayPal Autonomous Agent Commerce</span>
-          </div>
+  <div class="app-layout">
+    
+    <!-- Üst Gezinme ve Durum Çubuğu -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <div class="paypal-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.89a.853.853 0 0 1 .842-.716h7.247c3.486 0 5.867 1.84 5.258 5.768-.535 3.447-2.827 5.244-5.918 5.244H9.728l-1.34 8.151h-.002a.85.85 0 0 1-.84.717l-.47-.717z" fill="#0079C1"/>
+            <path d="M8.766 21.337h3.805a.853.853 0 0 0 .842-.716l1.09-6.936h1.22c3.09 0 5.383-1.797 5.918-5.244.609-3.928-1.772-5.768-5.258-5.768H9.136a.853.853 0 0 0-.842.716L4.944 20.62a.641.641 0 0 0 .633.74h3.189z" fill="#00457C"/>
+            <path d="M8.766 14.401l1.09-6.936h4.527c1.472 0 2.664.398 3.322 1.127.354.393.57.886.634 1.488.423 3.99-2.316 4.321-4.786 4.321H8.766z" fill="#0079C1"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-name">PayAgent <span>OS</span></h1>
+          <p class="brand-tagline" data-i18n="tagline">Otonom Ajan Harcama & Cüzdan Orkestrasyonu</p>
         </div>
       </div>
 
-      <div class="header-status-section">
-        <div class="status-pill" id="paypal-status-pill">
-          <span class="status-dot pulse"></span>
-          <span class="status-text" id="paypal-mode-label">PayPal Sandbox: Connected</span>
+      <div class="nav-controls">
+        <!-- Canlı PayPal Durum Rozeti -->
+        <div class="conn-pill" id="paypal-conn-pill">
+          <span class="conn-indicator"></span>
+          <span class="conn-label" id="paypal-conn-label">PayPal Sandbox: Bağlı</span>
         </div>
-        <a href="/docs" target="_blank" class="nav-link" id="nav-swagger-docs">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
+
+        <!-- Dil Seçici (TR / EN) -->
+        <div class="lang-switch" role="group" aria-label="Language Switcher">
+          <button type="button" class="lang-btn active" id="btn-lang-tr">TR</button>
+          <button type="button" class="lang-btn" id="btn-lang-en">EN</button>
+        </div>
+
+        <!-- API Dökümanı Linki -->
+        <a href="/docs" target="_blank" class="nav-icon-link" id="nav-api-docs">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
           </svg>
-          API Docs
+          <span data-i18n="apiDocs">API Kılavuzu</span>
         </a>
       </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="main-content">
-      <!-- Top Metrics Row -->
-      <section class="metrics-grid" id="section-metrics">
-        <div class="metric-card" id="metric-allocated">
-          <div class="metric-header">
-            <span class="metric-title">Total Allocated Budget</span>
-            <div class="metric-icon blue">💰</div>
-          </div>
-          <div class="metric-value" id="val-allocated">$0.00</div>
-          <div class="metric-sub" id="sub-active-agents">Across 3 active AI agents</div>
-        </div>
-
-        <div class="metric-card" id="metric-spent-today">
-          <div class="metric-header">
-            <span class="metric-title">Autonomous Spend (Today)</span>
-            <div class="metric-icon purple">⚡</div>
-          </div>
-          <div class="metric-value" id="val-spent-today">$0.00</div>
-          <div class="metric-sub" id="sub-auto-pct">100% Policy compliant</div>
-        </div>
-
-        <div class="metric-card" id="metric-pending-hitl">
-          <div class="metric-header">
-            <span class="metric-title">Human-in-the-Loop Queue</span>
-            <div class="metric-icon amber">👤</div>
-          </div>
-          <div class="metric-value" id="val-pending">0</div>
-          <div class="metric-sub text-amber" id="sub-pending-label">Pending supervisor review</div>
-        </div>
-
-        <div class="metric-card" id="metric-total-volume">
-          <div class="metric-header">
-            <span class="metric-title">Settled via PayPal</span>
-            <div class="metric-icon cyan">🛡️</div>
-          </div>
-          <div class="metric-value" id="val-volume">$0.00</div>
-          <div class="metric-sub">Orders v2 & Payouts API</div>
-        </div>
-      </section>
-
-      <!-- Two-Column Interactive Workspace -->
-      <div class="workspace-grid">
-        <!-- Left Column: Simulator & Pending Approvals -->
-        <div class="workspace-col-left">
-          
-          <!-- Interactive Autonomous Simulator -->
-          <section class="card-glass" id="section-simulator">
-            <div class="card-header">
-              <div class="card-title-group">
-                <h2>Simulate Autonomous Agent Purchase</h2>
-                <p class="card-desc">Trigger a real-time procurement intent from an AI agent to test policy guardrails and PayPal execution.</p>
-              </div>
-            </div>
-
-            <form id="intent-simulator-form" class="simulator-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="sim-agent-select">Calling Agent</label>
-                  <select id="sim-agent-select" class="form-input">
-                    <!-- Loaded dynamically -->
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="sim-amount">Amount (USD)</label>
-                  <div class="input-with-prefix">
-                    <span class="prefix">$</span>
-                    <input type="number" id="sim-amount" class="form-input" value="24.50" step="0.5" min="1" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="sim-recipient">Vendor or PayPal Recipient</label>
-                  <input type="text" id="sim-recipient" class="form-input" value="OpenAI" placeholder="e.g. OpenAI, AWS, or contractor@paypal.me" required>
-                </div>
-                <div class="form-group">
-                  <label for="sim-category">Procurement Category</label>
-                  <select id="sim-category" class="form-input">
-                    <option value="API_QUOTA">API Token Quota</option>
-                    <option value="CLOUD_COMPUTE">Cloud GPU / Compute</option>
-                    <option value="DATASET_ACCESS">Scientific Dataset</option>
-                    <option value="FREELANCE_PAYOUT">Freelance Milestone</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="sim-reasoning">AI Agent Reasoning Prompt (Natural Language)</label>
-                <textarea id="sim-reasoning" class="form-input" rows="2" required>Allocating 500k additional inference tokens for user sentiment analysis pipeline.</textarea>
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary" id="btn-submit-intent">
-                  <span class="btn-icon">⚡</span> Execute Autonomous Intent
-                </button>
-                <div class="quick-scenarios">
-                  <span>Quick Test:</span>
-                  <button type="button" class="btn-chip" id="chip-pass">Pass Limit ($15)</button>
-                  <button type="button" class="btn-chip" id="chip-exceed">Trigger HITL ($85)</button>
-                  <button type="button" class="btn-chip" id="chip-unauthorized">Unlisted Vendor</button>
-                </div>
-              </div>
-            </form>
-          </section>
-
-          <!-- Human-in-the-Loop Approval Queue -->
-          <section class="card-glass" id="section-hitl">
-            <div class="card-header">
-              <div class="card-title-group">
-                <h2>Pending Human Approvals (HITL Queue)</h2>
-                <p class="card-desc">Transactions that exceeded autonomous safety limits or targeted unapproved merchants.</p>
-              </div>
-              <span class="badge badge-amber" id="badge-hitl-count">0 Pending</span>
-            </div>
-
-            <div id="hitl-queue-container" class="hitl-list">
-              <!-- Rendered via JS -->
-              <div class="empty-state" id="hitl-empty-state">
-                <div class="empty-icon">✓</div>
-                <p>No transactions pending human review. All agents operating safely within policies.</p>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- Right Column: Agent Fleets & Live Audit Trail -->
-        <div class="workspace-col-right">
-          <!-- Agent Fleet Cards -->
-          <section class="card-glass" id="section-fleet">
-            <div class="card-header">
-              <div class="card-title-group">
-                <h2>Active Agent Fleet</h2>
-                <p class="card-desc">Registered autonomous AI workers and their policy guardrails.</p>
-              </div>
-            </div>
-            <div class="fleet-grid" id="fleet-container">
-              <!-- Rendered dynamically -->
-            </div>
-          </section>
-
-          <!-- Live Audit Log -->
-          <section class="card-glass" id="section-audit">
-            <div class="card-header">
-              <div class="card-title-group">
-                <h2>Immutable Audit Trail & PayPal Orders</h2>
-                <p class="card-desc">Verifiable record of every autonomous and human-approved financial transaction.</p>
-              </div>
-              <button class="btn btn-secondary btn-sm" id="btn-refresh-audit">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M23 4v6h-6"/>
-                  <path d="M1 20v-6h6"/>
-                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                </svg>
-                Refresh
-              </button>
-            </div>
-
-            <div class="audit-table-wrapper">
-              <table class="audit-table" id="audit-table">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Agent</th>
-                    <th>Amount</th>
-                    <th>Vendor / Receiver</th>
-                    <th>Status</th>
-                    <th>PayPal Ref</th>
-                  </tr>
-                </thead>
-                <tbody id="audit-table-body">
-                  <!-- Rendered dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </section>
+    <!-- İşlem Yaşam Döngüsü Aşamaları (FinTech Treva Stage Pattern) -->
+    <section class="process-tracker">
+      <div class="tracker-step active" id="step-intent">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <span class="step-title" data-i18n="step1Title">Ajan Talebi</span>
+          <span class="step-sub" data-i18n="step1Sub">Gerekçeli Niyet</span>
         </div>
       </div>
-    </main>
+      <div class="tracker-line"></div>
+      <div class="tracker-step active" id="step-policy">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <span class="step-title" data-i18n="step2Title">Politika & Limit</span>
+          <span class="step-sub" data-i18n="step2Sub">Bütçe & Beyaz Liste</span>
+        </div>
+      </div>
+      <div class="tracker-line"></div>
+      <div class="tracker-step" id="step-hitl">
+        <div class="step-num">3</div>
+        <div class="step-info">
+          <span class="step-title" data-i18n="step3Title">İnsan Onayı (HITL)</span>
+          <span class="step-sub" data-i18n="step3Sub">Riskli / Büyük Tutar</span>
+        </div>
+      </div>
+      <div class="tracker-line"></div>
+      <div class="tracker-step active" id="step-paypal">
+        <div class="step-num">4</div>
+        <div class="step-info">
+          <span class="step-title" data-i18n="step4Title">PayPal Tahsilatı</span>
+          <span class="step-sub" data-i18n="step4Sub">Orders v2 / Payouts</span>
+        </div>
+      </div>
+    </section>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="toast-container"></div>
+    <!-- Ana Finansal Metrik Kartları -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label" data-i18n="metricAllocated">Toplam Tahsis Edilen Bütçe</span>
+          <span class="stat-chip blue">Bakiye</span>
+        </div>
+        <div class="stat-number" id="stat-allocated">$0.00</div>
+        <div class="stat-footnote" id="stat-agents-count">3 aktif AI ajanı cüzdanında</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label" data-i18n="metricSpentToday">Bugünkü Otonom Harcama</span>
+          <span class="stat-chip emerald">24s Döngü</span>
+        </div>
+        <div class="stat-number" id="stat-spent-today">$0.00</div>
+        <div class="stat-footnote" data-i18n="metricSpentSub">Politika kurallarına %100 uyumlu</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label" data-i18n="metricPendingHITL">İnsan Onay Kuyruğu</span>
+          <span class="stat-chip amber">Denetim</span>
+        </div>
+        <div class="stat-number highlight-amber" id="stat-pending">0</div>
+        <div class="stat-footnote text-amber" data-i18n="metricPendingSub">Süpervizör kararı bekliyor</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-meta">
+          <span class="stat-label" data-i18n="metricSettled">PayPal İle Kesinleşen Hacim</span>
+          <span class="stat-chip cyan">Capture</span>
+        </div>
+        <div class="stat-number" id="stat-volume">$0.00</div>
+        <div class="stat-footnote">Orders v2 & Payouts API</div>
+      </div>
+    </section>
+
+    <!-- İki Sütunlu Ana Çalışma Alanı -->
+    <div class="portal-grid">
+      
+      <!-- Sol Sütun: Simülatör ve Onay Kuyruğu -->
+      <div class="portal-col">
+        
+        <!-- Otonom Harcama Simülatörü -->
+        <div class="fin-card" id="card-simulator">
+          <div class="fin-card-header">
+            <div>
+              <h2 class="fin-card-title" data-i18n="simTitle">Otonom Ajan Harcama Simülatörü</h2>
+              <p class="fin-card-desc" data-i18n="simDesc">Yapay zeka ajanının harcama talebini ve gerekçesini test edin; politika motorunun kararını izleyin.</p>
+            </div>
+          </div>
+
+          <form id="simulator-form" class="fin-form">
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="sim-agent-select" data-i18n="simCallingAgent">Talebi Yapan Ajan</label>
+                <select id="sim-agent-select" class="fin-input">
+                  <!-- JS dinamik yükler -->
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="sim-amount" data-i18n="simAmount">Harcama Tutarı (USD)</label>
+                <div class="input-currency">
+                  <span class="currency-symbol">$</span>
+                  <input type="number" id="sim-amount" class="fin-input" value="18.50" step="0.5" min="1" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field-group">
+                <label for="sim-recipient" data-i18n="simVendor">Satıcı veya PayPal Alıcısı</label>
+                <input type="text" id="sim-recipient" class="fin-input" value="AWS" placeholder="Örn: AWS, OpenAI veya freelancer@paypal.me" required>
+              </div>
+
+              <div class="field-group">
+                <label for="sim-category" data-i18n="simCategory">Kategori</label>
+                <select id="sim-category" class="fin-input">
+                  <option value="CLOUD_COMPUTE" data-i18n="catCompute">Bulut Bilişim / GPU</option>
+                  <option value="API_QUOTA" data-i18n="catApi">API Çıkarım Kotası</option>
+                  <option value="DATASET_ACCESS" data-i18n="catDataset">Veri Seti / Rapor</option>
+                  <option value="FREELANCE_PAYOUT" data-i18n="catPayout">Freelancer Hakedişi</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="sim-reasoning" data-i18n="simReasoning">Ajanın Doğal Dil Gerekçesi (Explainability)</label>
+              <textarea id="sim-reasoning" class="fin-input textarea-fixed" rows="2" required>Model fine-tuning işlemi için AWS spot bulut sunucusu tahsis ediliyor.</textarea>
+            </div>
+
+            <div class="form-footer">
+              <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-intent">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span data-i18n="btnExecute">Otonom Harcamayı Başlat</span>
+              </button>
+
+              <div class="preset-group">
+                <span class="preset-label" data-i18n="quickScenarios">Hazır Testler:</span>
+                <button type="button" class="preset-chip" id="chip-pass" data-i18n="chipPass">Limit İçi ($15)</button>
+                <button type="button" class="preset-chip" id="chip-exceed" data-i18n="chipExceed">Limit Aşımı ($85 HITL)</button>
+                <button type="button" class="preset-chip" id="chip-unauthorized" data-i18n="chipUnknown">Yetkisiz Satıcı</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- İnsan Onayı Bekleyen İşlemler (HITL) -->
+        <div class="fin-card" id="card-hitl">
+          <div class="fin-card-header">
+            <div>
+              <h2 class="fin-card-title" data-i18n="hitlTitle">İnsan Onay Masası (HITL Queue)</h2>
+              <p class="fin-card-desc" data-i18n="hitlDesc">Güvenlik limitlerini aşan veya listede olmayan satıcı işlemleri insan denetimine düşer.</p>
+            </div>
+            <span class="count-badge" id="badge-hitl-count">0 Bekliyor</span>
+          </div>
+
+          <div id="hitl-queue-container" class="hitl-queue">
+            <!-- JS dinamik yükler -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sağ Sütun: Ajan Filosu & Denetim İzi -->
+      <div class="portal-col">
+        
+        <!-- Ajan Cüzdanları ve Limit İlerleme Çubukları -->
+        <div class="fin-card" id="card-fleet">
+          <div class="fin-card-header">
+            <div>
+              <h2 class="fin-card-title" data-i18n="fleetTitle">Aktif Ajan Filosu & Cüzdanlar</h2>
+              <p class="fin-card-desc" data-i18n="fleetDesc">Her yapay zeka ajanının anlık bakiyesi, harcama tavanı ve onaylı satıcıları.</p>
+            </div>
+          </div>
+          <div class="fleet-cards-wrap" id="fleet-container">
+            <!-- JS dinamik yükler -->
+          </div>
+        </div>
+
+        <!-- Değiştirilemez Denetim İzi & PayPal Sipariş Dökümü -->
+        <div class="fin-card" id="card-audit">
+          <div class="fin-card-header">
+            <div>
+              <h2 class="fin-card-title" data-i18n="auditTitle">İşlem Denetim Kütüğü (Audit Trail)</h2>
+              <p class="fin-card-desc" data-i18n="auditDesc">PayPal Orders v2 ve Payouts API üzerinden kesinleşen işlemlerin canlı dökümü.</p>
+            </div>
+            <button class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-audit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              <span data-i18n="btnRefresh">Yenile</span>
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="fin-table">
+              <thead>
+                <tr>
+                  <th data-i18n="colTime">Saat</th>
+                  <th data-i18n="colAgent">Ajan</th>
+                  <th data-i18n="colAmount">Tutar</th>
+                  <th data-i18n="colVendor">Satıcı / Alıcı</th>
+                  <th data-i18n="colStatus">Durum</th>
+                  <th data-i18n="colRef">PayPal Ref ID</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body">
+                <!-- JS dinamik yükler -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bildirim Toast Alanı -->
+    <div id="toast-container" class="toast-hub"></div>
+
   </div>
 
   <script src="/static/js/app.js"></script>
