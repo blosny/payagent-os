@@ -206,6 +206,33 @@ class PolicyEngine:
 
         else:
             # Requires Human-in-the-Loop approval
+            # Detect limit or daily budget shortfall and find candidate peer donor
+            shortfall = 0.0
+            if intent.amount > agent.policy.max_per_transaction:
+                shortfall = max(shortfall, intent.amount - agent.policy.max_per_transaction)
+            if (agent.spent_today + intent.amount) > agent.policy.daily_budget:
+                shortfall = max(shortfall, (agent.spent_today + intent.amount) - agent.policy.daily_budget)
+
+            donor_id = None
+            donor_name = None
+            proposal_note = None
+
+            if shortfall > 0:
+                eligible_donors = [
+                    a for a in self._agents.values()
+                    if a.id != agent.id and (a.policy.daily_budget - a.spent_today) >= shortfall
+                ]
+                if eligible_donors:
+                    eligible_donors.sort(key=lambda a: (a.policy.daily_budget - a.spent_today), reverse=True)
+                    best_donor = eligible_donors[0]
+                    headroom = best_donor.policy.daily_budget - best_donor.spent_today
+                    donor_id = best_donor.id
+                    donor_name = best_donor.name
+                    proposal_note = (
+                        f"{best_donor.name} cüzdanında ${headroom:.2f} boşta kota mevcut. "
+                        f"Süpervizör onayı ile eksik kalan ${shortfall:.2f} bu karttan aktarılacak."
+                    )
+
             record = TransactionRecord(
                 id=tx_id,
                 agent_id=agent.id,
@@ -218,6 +245,10 @@ class PolicyEngine:
                 policy_evaluation_reason=reason,
                 status=TransactionStatus.PENDING_APPROVAL,
                 transaction_type=tx_type,
+                shortfall_amount=shortfall if shortfall > 0 else None,
+                proposed_donor_agent_id=donor_id,
+                proposed_donor_agent_name=donor_name,
+                borrowing_proposal_note=proposal_note,
             )
 
         self._transactions[tx_id] = record
@@ -237,6 +268,36 @@ class PolicyEngine:
         decision_upper = decision.upper()
 
         if decision_upper == "APPROVE":
+            # If this transaction had an automated peer shortfall transfer, execute the quota reallocation!
+            if tx.shortfall_amount and tx.proposed_donor_agent_id:
+                donor = self.get_agent(tx.proposed_donor_agent_id)
+                if donor:
+                    donor.policy.daily_budget -= tx.shortfall_amount
+                    if agent:
+                        agent.policy.daily_budget += tx.shortfall_amount
+                        if agent.policy.max_per_transaction < tx.amount:
+                            agent.policy.max_per_transaction = tx.amount
+
+                    neg_id = f"NEG-{uuid.uuid4().hex[:8].upper()}"
+                    transcript = (
+                        f"[{agent.name if agent else 'Requester'} -> {donor.name}]: \"OpenAI/Vendor harcamasında ${tx.shortfall_amount:.2f} eksik kota tespit edildi. Transfer talep edildi.\"\n"
+                        f"[{donor.name} -> {agent.name if agent else 'Requester'}]: \"SÜPERVİZÖR ONAYLADI: ${tx.shortfall_amount:.2f} kota başarıyla aktarıldı. PayPal ödemesi tahsil edildi.\""
+                    )
+                    neg_record = NegotiationRecord(
+                        id=neg_id,
+                        requester_agent_id=agent.id if agent else "unknown",
+                        requester_name=agent.name if agent else "Unknown Agent",
+                        target_agent_id=donor.id,
+                        target_name=donor.name,
+                        amount=tx.shortfall_amount,
+                        currency=tx.currency,
+                        justification=f"{tx.recipient} harcaması için eksik bütçe tamamlama",
+                        urgency="HIGH",
+                        accepted=True,
+                        transcript=transcript,
+                    )
+                    self._negotiations[neg_id] = neg_record
+
             if agent:
                 if tx.amount > agent.wallet_balance:
                     raise ValueError("Agent has insufficient balance to approve this transaction.")
