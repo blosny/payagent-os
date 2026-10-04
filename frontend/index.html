@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayAgent OS — Autonomous AI Agent Financial Infrastructure</title>
+  <meta name="description" content="Policy-governed, budget-controlled autonomous payment orchestration engine for AI agents powered by PayPal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <div class="shield-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>PayAgent OS</h1>
+            <span class="brand-sub">PayPal Autonomous Agent Commerce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-status-section">
+        <div class="status-pill" id="paypal-status-pill">
+          <span class="status-dot pulse"></span>
+          <span class="status-text" id="paypal-mode-label">PayPal Sandbox: Connected</span>
+        </div>
+        <a href="/docs" target="_blank" class="nav-link" id="nav-swagger-docs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          API Docs
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-content">
+      <!-- Top Metrics Row -->
+      <section class="metrics-grid" id="section-metrics">
+        <div class="metric-card" id="metric-allocated">
+          <div class="metric-header">
+            <span class="metric-title">Total Allocated Budget</span>
+            <div class="metric-icon blue">💰</div>
+          </div>
+          <div class="metric-value" id="val-allocated">$0.00</div>
+          <div class="metric-sub" id="sub-active-agents">Across 3 active AI agents</div>
+        </div>
+
+        <div class="metric-card" id="metric-spent-today">
+          <div class="metric-header">
+            <span class="metric-title">Autonomous Spend (Today)</span>
+            <div class="metric-icon purple">⚡</div>
+          </div>
+          <div class="metric-value" id="val-spent-today">$0.00</div>
+          <div class="metric-sub" id="sub-auto-pct">100% Policy compliant</div>
+        </div>
+
+        <div class="metric-card" id="metric-pending-hitl">
+          <div class="metric-header">
+            <span class="metric-title">Human-in-the-Loop Queue</span>
+            <div class="metric-icon amber">👤</div>
+          </div>
+          <div class="metric-value" id="val-pending">0</div>
+          <div class="metric-sub text-amber" id="sub-pending-label">Pending supervisor review</div>
+        </div>
+
+        <div class="metric-card" id="metric-total-volume">
+          <div class="metric-header">
+            <span class="metric-title">Settled via PayPal</span>
+            <div class="metric-icon cyan">🛡️</div>
+          </div>
+          <div class="metric-value" id="val-volume">$0.00</div>
+          <div class="metric-sub">Orders v2 & Payouts API</div>
+        </div>
+      </section>
+
+      <!-- Two-Column Interactive Workspace -->
+      <div class="workspace-grid">
+        <!-- Left Column: Simulator & Pending Approvals -->
+        <div class="workspace-col-left">
+          
+          <!-- Interactive Autonomous Simulator -->
+          <section class="card-glass" id="section-simulator">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Simulate Autonomous Agent Purchase</h2>
+                <p class="card-desc">Trigger a real-time procurement intent from an AI agent to test policy guardrails and PayPal execution.</p>
+              </div>
+            </div>
+
+            <form id="intent-simulator-form" class="simulator-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sim-agent-select">Calling Agent</label>
+                  <select id="sim-agent-select" class="form-input">
+                    <!-- Loaded dynamically -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="sim-amount">Amount (USD)</label>
+                  <div class="input-with-prefix">
+                    <span class="prefix">$</span>
+                    <input type="number" id="sim-amount" class="form-input" value="24.50" step="0.5" min="1" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sim-recipient">Vendor or PayPal Recipient</label>
+                  <input type="text" id="sim-recipient" class="form-input" value="OpenAI" placeholder="e.g. OpenAI, AWS, or contractor@paypal.me" required>
+                </div>
+                <div class="form-group">
+                  <label for="sim-category">Procurement Category</label>
+                  <select id="sim-category" class="form-input">
+                    <option value="API_QUOTA">API Token Quota</option>
+                    <option value="CLOUD_COMPUTE">Cloud GPU / Compute</option>
+                    <option value="DATASET_ACCESS">Scientific Dataset</option>
+                    <option value="FREELANCE_PAYOUT">Freelance Milestone</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="sim-reasoning">AI Agent Reasoning Prompt (Natural Language)</label>
+                <textarea id="sim-reasoning" class="form-input" rows="2" required>Allocating 500k additional inference tokens for user sentiment analysis pipeline.</textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btn-submit-intent">
+                  <span class="btn-icon">⚡</span> Execute Autonomous Intent
+                </button>
+                <div class="quick-scenarios">
+                  <span>Quick Test:</span>
+                  <button type="button" class="btn-chip" id="chip-pass">Pass Limit ($15)</button>
+                  <button type="button" class="btn-chip" id="chip-exceed">Trigger HITL ($85)</button>
+                  <button type="button" class="btn-chip" id="chip-unauthorized">Unlisted Vendor</button>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <!-- Human-in-the-Loop Approval Queue -->
+          <section class="card-glass" id="section-hitl">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Pending Human Approvals (HITL Queue)</h2>
+                <p class="card-desc">Transactions that exceeded autonomous safety limits or targeted unapproved merchants.</p>
+              </div>
+              <span class="badge badge-amber" id="badge-hitl-count">0 Pending</span>
+            </div>
+
+            <div id="hitl-queue-container" class="hitl-list">
+              <!-- Rendered via JS -->
+              <div class="empty-state" id="hitl-empty-state">
+                <div class="empty-icon">✓</div>
+                <p>No transactions pending human review. All agents operating safely within policies.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column: Agent Fleets & Live Audit Trail -->
+        <div class="workspace-col-right">
+          <!-- Agent Fleet Cards -->
+          <section class="card-glass" id="section-fleet">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Active Agent Fleet</h2>
+                <p class="card-desc">Registered autonomous AI workers and their policy guardrails.</p>
+              </div>
+            </div>
+            <div class="fleet-grid" id="fleet-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </section>
+
+          <!-- Live Audit Log -->
+          <section class="card-glass" id="section-audit">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Immutable Audit Trail & PayPal Orders</h2>
+                <p class="card-desc">Verifiable record of every autonomous and human-approved financial transaction.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-refresh-audit">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 4v6h-6"/>
+                  <path d="M1 20v-6h6"/>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+                Refresh
+              </button>
+            </div>
+
+            <div class="audit-table-wrapper">
+              <table class="audit-table" id="audit-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Agent</th>
+                    <th>Amount</th>
+                    <th>Vendor / Receiver</th>
+                    <th>Status</th>
+                    <th>PayPal Ref</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table-body">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
