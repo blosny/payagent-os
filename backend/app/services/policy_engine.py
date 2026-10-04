@@ -8,6 +8,7 @@ from ..models.transaction import (
     TransactionStatus,
     TransactionType,
 )
+from ..models.negotiation import NegotiationRequest, NegotiationRecord
 from .paypal_service import paypal_service
 
 
@@ -15,6 +16,7 @@ class PolicyEngine:
     def __init__(self):
         self._agents: Dict[str, Agent] = {}
         self._transactions: Dict[str, TransactionRecord] = {}
+        self._negotiations: Dict[str, NegotiationRecord] = {}
         self._seed_default_agents()
 
     def _seed_default_agents(self):
@@ -276,6 +278,64 @@ class PolicyEngine:
         tx.reviewer_notes = reviewer_notes
         tx.resolved_at = datetime.now(timezone.utc)
         return tx
+
+    def list_negotiations(self) -> List[NegotiationRecord]:
+        """Lists all peer-to-peer agent budget negotiations."""
+        return sorted(self._negotiations.values(), key=lambda x: x.created_at, reverse=True)
+
+    def negotiate_budget_transfer(self, req: NegotiationRequest) -> NegotiationRecord:
+        """Processes autonomous budget negotiation and quota transfer between two AI agents."""
+        requester = self.get_agent(req.requester_agent_id)
+        target = self.get_agent(req.target_agent_id)
+
+        if not requester:
+            raise ValueError(f"Requester agent '{req.requester_agent_id}' not found.")
+        if not target:
+            raise ValueError(f"Target agent '{req.target_agent_id}' not found.")
+        if requester.id == target.id:
+            raise ValueError("An agent cannot negotiate a budget transfer with itself.")
+
+        # Headroom calculation: remaining daily budget of target agent
+        target_headroom = max(0.0, target.policy.daily_budget - target.spent_today)
+        is_accepted = target_headroom >= req.amount
+
+        neg_id = f"NEG-{uuid.uuid4().hex[:8].upper()}"
+
+        if is_accepted:
+            # Autonomous quota reallocation
+            target.policy.daily_budget -= req.amount
+            requester.policy.daily_budget += req.amount
+
+            transcript = (
+                f"[{requester.name} -> {target.name}]: \"Urgency: {req.urgency}. "
+                f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
+                f"[{target.name} -> {requester.name}]: \"Surplus verified (${target_headroom:.2f} available). "
+                f"Transfer of ${req.amount:.2f} APPROVED autonomously under Cooperative Resource Protocol.\""
+            )
+        else:
+            transcript = (
+                f"[{requester.name} -> {target.name}]: \"Urgency: {req.urgency}. "
+                f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
+                f"[{target.name} -> {requester.name}]: \"REJECTED. Only ${target_headroom:.2f} surplus available, "
+                f"which cannot satisfy the requested ${req.amount:.2f} quota.\""
+            )
+
+        record = NegotiationRecord(
+            id=neg_id,
+            requester_agent_id=requester.id,
+            requester_name=requester.name,
+            target_agent_id=target.id,
+            target_name=target.name,
+            amount=req.amount,
+            currency=req.currency,
+            justification=req.justification,
+            urgency=req.urgency,
+            accepted=is_accepted,
+            transcript=transcript,
+        )
+
+        self._negotiations[neg_id] = record
+        return record
 
 
 policy_engine = PolicyEngine()
