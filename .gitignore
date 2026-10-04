@@ -61,5 +61,10 @@ scratch/
 # Agents
 .agents
 
-# Documentation
-docs
+# Hidden Docs & Internal Guides
+.docs
+docs/API_REFERENCE.md
+docs/ARCHITECTURE.md
+docs/PAYPAL_SANDBOX_SETUP.md
+docs/POLICY_ENGINE_GUIDE.md
+docs/ROADMAP.md
