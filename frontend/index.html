@@ -287,9 +287,106 @@
               <h2 class="fin-card-title" data-i18n="fleetTitle">Aktif Ajan Filosu & Cüzdanlar</h2>
               <p class="fin-card-desc" data-i18n="fleetDesc">Her yapay zeka ajanının anlık bakiyesi, harcama tavanı ve onaylı satıcıları.</p>
             </div>
+            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-toggle-negotiation" style="gap: 0.4rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span data-i18n="btnP2PNegotiate">P2P Bütçe Müzakeresi</span>
+            </button>
           </div>
           <div class="fleet-cards-wrap" id="fleet-container">
             <!-- Dynamic via JS -->
+          </div>
+
+          <!-- P2P Budget Negotiation Drawer (Phase 6 Killer Feature) -->
+          <div id="negotiation-drawer" class="negotiation-drawer">
+            <div class="negotiation-header">
+              <div>
+                <span class="neg-badge-cyan" data-i18n="negBadge">P2P Autonomous Protocol</span>
+                <h3 class="fin-card-title" style="font-size: 0.95rem; margin-top: 0.3rem;" data-i18n="negTitle">Ajanlar Arası Bütçe Müzakeresi</h3>
+              </div>
+              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-toggle-negotiation" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                <span id="toggle-icon">−</span> <span data-i18n="btnToggle">Gizle / Göster</span>
+              </button>
+            </div>
+
+            <div id="negotiation-content-body">
+              <form id="negotiation-form" class="fin-form" style="gap: 0.75rem;">
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label for="neg-requester-select" data-i18n="negRequester">Kota İsteyen Ajan (Requester)</label>
+                    <select id="neg-requester-select" class="fin-input"></select>
+                  </div>
+                  <div class="field-group">
+                    <label for="neg-target-select" data-i18n="negTarget">Fazlası Olan Kaynak Ajan (Target)</label>
+                    <select id="neg-target-select" class="fin-input"></select>
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="field-group">
+                    <label for="neg-amount" data-i18n="negAmount">Aktarılacak Kota Tutarı (USD)</label>
+                    <div class="input-currency">
+                      <span class="currency-symbol">$</span>
+                      <input type="number" id="neg-amount" class="fin-input font-mono" value="35.00" step="1" min="1" required>
+                    </div>
+                  </div>
+                  <div class="field-group">
+                    <label for="neg-urgency" data-i18n="negUrgency">Aciliyet Seviyesi</label>
+                    <select id="neg-urgency" class="fin-input">
+                      <option value="MEDIUM">MEDIUM (Normal)</option>
+                      <option value="HIGH" selected>HIGH (Yüksek Öncelik)</option>
+                      <option value="CRITICAL">CRITICAL (Gecikemez)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label for="neg-justification" data-i18n="negJustification">Müzakere Gerekçesi (Agent Reasoning)</label>
+                  <input type="text" id="neg-justification" class="fin-input" value="Büyük veri analiz modelini çalıştırmak için acil günlük bütçe takviyesi gerekiyor." required>
+                </div>
+
+                <div class="form-footer" style="margin-top: 0.5rem;">
+                  <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation" style="font-size: 0.78rem;">
+                    <span>🤝</span>
+                    <span data-i18n="btnRunNegotiation">Otonom Müzakereyi Başlat</span>
+                  </button>
+                  <button type="button" class="preset-chip" id="chip-preset-neg" data-i18n="chipPresetNeg">⚡ Örnek: Research -> DevOps ($35)</button>
+                </div>
+              </form>
+
+              <!-- Live Multi-Agent Dialogue Chat Stream -->
+              <div class="negotiation-chat-feed" id="negotiation-chat-feed">
+                <div class="chat-bubble-agent req">
+                  <div class="chat-header-row">
+                    <div class="chat-author">
+                      <span>📊</span>
+                      <span>Market Research & Data Agent</span>
+                    </div>
+                    <span class="chat-badge chat-badge-req">Talep (HIGH)</span>
+                  </div>
+                  <div class="chat-body-text">
+                    "50.000 akademik makale analizi için DevOps ajanından <strong>$35.00</strong> günlük bütçe aktarımı talep edildi."
+                  </div>
+                </div>
+
+                <div class="chat-bubble-agent target">
+                  <div class="chat-header-row">
+                    <div class="chat-author">
+                      <span>⚙️</span>
+                      <span>DevOps Infrastructure Agent</span>
+                    </div>
+                    <span class="chat-badge chat-badge-approved">✓ ONAYLANDI (Headroom: $165.00)</span>
+                  </div>
+                  <div class="chat-body-text">
+                    "Bütçe rezervi doğrulandı ($165.00 boşta kota). $35.00 kota transferi <em>Otonom Kaynak Tahsis Protokolü</em> kapsamında onaylandı."
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

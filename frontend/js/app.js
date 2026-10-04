@@ -67,6 +67,19 @@ const i18n = {
     toastApproveSuccess: 'Ödeme süpervizör tarafından onaylandı ve PayPal ile capture edildi!',
     toastRejectSuccess: 'Ödeme talebi reddedildi.',
     toastRefreshed: 'Panel verileri yenilendi.',
+    btnP2PNegotiate: 'P2P Bütçe Müzakeresi',
+    negBadge: 'P2P Otonom Protokol',
+    negTitle: 'Ajanlar Arası Bütçe Müzakeresi',
+    negRequester: 'Kota İsteyen Ajan (Requester)',
+    negTarget: 'Fazlası Olan Kaynak Ajan (Target)',
+    negAmount: 'Aktarılacak Kota Tutarı (USD)',
+    negUrgency: 'Aciliyet Seviyesi',
+    negJustification: 'Müzakere Gerekçesi (Agent Reasoning)',
+    btnRunNegotiation: 'Otonom Müzakereyi Başlat',
+    chipPresetNeg: '⚡ Örnek: Research -> DevOps ($35)',
+    toastNegSuccess: '🤝 Bütçe Müzakeresi Başarılı: Günlük kota otonom aktarıldı!',
+    toastNegRejected: '⚠️ Müzakere Reddedildi: Kaynak ajanda yeterli kota fazlası yok.',
+    btnToggle: 'Gizle / Göster',
   },
   en: {
     tagline: 'Autonomous AI Agent Wallet & Payment Orchestration',
@@ -128,6 +141,19 @@ const i18n = {
     toastApproveSuccess: 'Payment authorized and settled via PayPal Sandbox!',
     toastRejectSuccess: 'Payment intent rejected by supervisor.',
     toastRefreshed: 'Dashboard data refreshed.',
+    btnP2PNegotiate: 'P2P Budget Negotiation',
+    negBadge: 'P2P Autonomous Protocol',
+    negTitle: 'Peer-to-Peer Budget Negotiation',
+    negRequester: 'Requester Agent (Needs Quota)',
+    negTarget: 'Target Agent (Surplus Headroom)',
+    negAmount: 'Quota Transfer Amount (USD)',
+    negUrgency: 'Urgency Level',
+    negJustification: 'Negotiation Reasoning',
+    btnRunNegotiation: 'Execute Autonomous Negotiation',
+    chipPresetNeg: '⚡ Preset: Research -> DevOps ($35)',
+    toastNegSuccess: '🤝 Negotiation Successful: Daily quota reallocated autonomously!',
+    toastNegRejected: '⚠️ Negotiation Rejected: Target agent has insufficient headroom.',
+    btnToggle: 'Toggle View',
   },
 };
 
@@ -164,6 +190,18 @@ const el = {
   chipExceed: document.getElementById('chip-exceed'),
   chipUnauthorized: document.getElementById('chip-unauthorized'),
   chipPayout: document.getElementById('chip-payout'),
+  btnToggleNegotiation: document.getElementById('btn-toggle-negotiation'),
+  toggleIcon: document.getElementById('toggle-icon'),
+  negotiationDrawer: document.getElementById('negotiation-drawer'),
+  negotiationContentBody: document.getElementById('negotiation-content-body'),
+  negotiationForm: document.getElementById('negotiation-form'),
+  negRequesterSelect: document.getElementById('neg-requester-select'),
+  negTargetSelect: document.getElementById('neg-target-select'),
+  negAmount: document.getElementById('neg-amount'),
+  negUrgency: document.getElementById('neg-urgency'),
+  negJustification: document.getElementById('neg-justification'),
+  chipPresetNeg: document.getElementById('chip-preset-neg'),
+  negotiationChatFeed: document.getElementById('negotiation-chat-feed'),
 };
 
 // Apply i18n
@@ -251,6 +289,35 @@ async function fetchAgents() {
     });
     if (currentVal && agentsList.some((a) => a.id === currentVal)) {
       el.simAgentSelect.value = currentVal;
+    }
+
+    // Populate P2P Negotiation Selects
+    if (el.negRequesterSelect && el.negTargetSelect) {
+      const currentReq = el.negRequesterSelect.value || 'agent-research';
+      const currentTarget = el.negTargetSelect.value || 'agent-devops';
+
+      el.negRequesterSelect.innerHTML = '';
+      el.negTargetSelect.innerHTML = '';
+
+      agentsList.forEach((agent) => {
+        const opt1 = document.createElement('option');
+        opt1.value = agent.id;
+        opt1.textContent = `${agent.name} (Günlük: $${agent.policy.daily_budget.toFixed(2)})`;
+        el.negRequesterSelect.appendChild(opt1);
+
+        const surplus = Math.max(0, agent.policy.daily_budget - agent.spent_today);
+        const opt2 = document.createElement('option');
+        opt2.value = agent.id;
+        opt2.textContent = `${agent.name} (Boşta Kalan: $${surplus.toFixed(2)})`;
+        el.negTargetSelect.appendChild(opt2);
+      });
+
+      if (agentsList.some((a) => a.id === currentReq)) {
+        el.negRequesterSelect.value = currentReq;
+      }
+      if (agentsList.some((a) => a.id === currentTarget)) {
+        el.negTargetSelect.value = currentTarget;
+      }
     }
 
     renderFleet();
@@ -546,6 +613,122 @@ el.chipPayout.addEventListener('click', () => {
     ? 'Grafik tasarım ve UI bileşen teslimi için serbest çalışana hakediş ödemesi.'
     : 'Milestone payment disbursement to external freelancer for UI asset delivery.';
 });
+
+// P2P Budget Negotiation Listeners (Phase 6 Killer Feature)
+if (el.btnToggleNegotiation && el.negotiationContentBody) {
+  el.btnToggleNegotiation.addEventListener('click', () => {
+    const isHidden = el.negotiationContentBody.style.display === 'none';
+    el.negotiationContentBody.style.display = isHidden ? 'block' : 'none';
+    if (el.toggleIcon) {
+      el.toggleIcon.textContent = isHidden ? '−' : '+';
+    }
+  });
+}
+
+if (el.chipPresetNeg) {
+  el.chipPresetNeg.addEventListener('click', () => {
+    if (el.negRequesterSelect) el.negRequesterSelect.value = 'agent-research';
+    if (el.negTargetSelect) el.negTargetSelect.value = 'agent-devops';
+    if (el.negAmount) el.negAmount.value = '35.00';
+    if (el.negUrgency) el.negUrgency.value = 'HIGH';
+    if (el.negJustification) {
+      el.negJustification.value = currentLang === 'tr'
+        ? '50.000 akademik makale analizi için acil günlük bütçe takviyesi gerekiyor.'
+        : 'Urgent daily budget headroom needed for processing 50k scientific papers.';
+    }
+  });
+}
+
+if (el.negotiationForm) {
+  el.negotiationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      requester_agent_id: el.negRequesterSelect.value,
+      target_agent_id: el.negTargetSelect.value,
+      amount: parseFloat(el.negAmount.value),
+      urgency: el.negUrgency.value,
+      justification: el.negJustification.value.trim(),
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/negotiations/propose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        showToast(err.detail || 'Müzakere başarısız oldu', 'error');
+        return;
+      }
+
+      const record = await res.json();
+      
+      // Render Rich Multi-Agent Chat Stream
+      if (el.negotiationChatFeed) {
+        const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const outcomeBadge = record.accepted
+          ? `<span class="chat-badge chat-badge-approved">✓ ONAYLANDI</span>`
+          : `<span class="chat-badge chat-badge-rejected">✕ REDDEDİLDİ</span>`;
+
+        el.negotiationChatFeed.innerHTML = `
+          <div class="chat-bubble-agent req">
+            <div class="chat-header-row">
+              <div class="chat-author">
+                <span>🤖</span>
+                <span>${record.requester_name}</span>
+              </div>
+              <div style="display: flex; gap: 0.4rem; align-items: center;">
+                <span class="chat-badge chat-badge-req">Talep (${record.urgency})</span>
+                <span class="chat-meta-time font-mono">${timeNow}</span>
+              </div>
+            </div>
+            <div class="chat-body-text">
+              "${record.justification}" — <strong>$${record.amount.toFixed(2)} USD</strong> günlük bütçe aktarımı talep ediliyor.
+            </div>
+          </div>
+
+          <div class="chat-bubble-agent ${record.accepted ? 'target' : 'rejected'}">
+            <div class="chat-header-row">
+              <div class="chat-author">
+                <span>🛡️</span>
+                <span>${record.target_name}</span>
+              </div>
+              <div style="display: flex; gap: 0.4rem; align-items: center;">
+                ${outcomeBadge}
+                <span class="chat-meta-time font-mono">${timeNow}</span>
+              </div>
+            </div>
+            <div class="chat-body-text font-mono" style="font-size: 0.74rem;">
+              ${record.transcript.split('\n')[1] || record.transcript}
+            </div>
+          </div>
+        `;
+      }
+
+      if (record.accepted) {
+        showToast(
+          currentLang === 'tr'
+            ? `🤝 Bütçe Aktarıldı: $${record.amount.toFixed(2)} kota ${record.target_name}'den ${record.requester_name}'e aktarıldı!`
+            : `🤝 Quota Reallocated: $${record.amount.toFixed(2)} transferred from ${record.target_name} to ${record.requester_name}!`,
+          'success'
+        );
+      } else {
+        showToast(
+          currentLang === 'tr'
+            ? `⚠️ Müzakere Reddedildi: ${record.target_name} yeterli bütçe fazlasına sahip değil.`
+            : `⚠️ Negotiation Rejected: ${record.target_name} has insufficient surplus headroom.`,
+          'warning'
+        );
+      }
+
+      await refreshAll();
+    } catch (err) {
+      showToast('Sunucu bağlantı hatası', 'error');
+    }
+  });
+}
 
 // Language Switch Buttons
 el.btnLangTr.addEventListener('click', () => applyLanguage('tr'));

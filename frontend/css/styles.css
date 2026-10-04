@@ -1090,3 +1090,130 @@ body {
 .toast-msg.success { border-left: 3px solid var(--accent-emerald); }
 .toast-msg.warning { border-left: 3px solid var(--accent-amber); }
 .toast-msg.error { border-left: 3px solid var(--accent-rose); }
+
+/* --------------------------------------------------------------------------
+   P2P Budget Negotiation Drawer & Dialogue Terminal
+   -------------------------------------------------------------------------- */
+.negotiation-drawer {
+  margin-top: 1.25rem;
+  padding: 1.2rem;
+  background: rgba(14, 14, 17, 0.85);
+  border: 1px solid rgba(0, 207, 222, 0.25);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  animation: fadeInDown 0.25s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.negotiation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.neg-badge-cyan {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+  background: rgba(0, 207, 222, 0.12);
+  color: #00cfde;
+  border: 1px solid rgba(0, 207, 222, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.negotiation-chat-feed {
+  margin-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.chat-bubble-agent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--radius-xs);
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid var(--border-subtle);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.chat-bubble-agent.req {
+  border-left: 3px solid #38bdf8;
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.chat-bubble-agent.target {
+  border-left: 3px solid #10b981;
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.chat-bubble-agent.rejected {
+  border-left: 3px solid #f43f5e;
+  background: rgba(244, 63, 94, 0.04);
+}
+
+.chat-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-author {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.chat-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.chat-badge-req {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.chat-badge-approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.chat-badge-rejected {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+.chat-body-text {
+  font-size: 0.76rem;
+  color: #d4d4d8;
+  line-height: 1.5;
+}
+
+.chat-meta-time {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+
