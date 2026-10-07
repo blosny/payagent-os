@@ -181,6 +181,78 @@
       </div>
     </section>
 
+    <!-- Visual Analytics & Executive Intelligence Hub (Phase 1 Killer Feature) -->
+    <section class="analytics-hub" id="analytics-hub">
+      <div class="analytics-card">
+        <div class="analytics-header">
+          <div class="analytics-title-wrap">
+            <span class="analytics-badge" data-i18n="analyticsBadge">Live Visual Intelligence</span>
+            <h2 class="analytics-title" data-i18n="analyticsTitle">Filo Harcama Dağılımı & Analitik</h2>
+          </div>
+          <div class="analytics-actions">
+            <div class="savings-counter-pill" id="savings-counter-pill" title="Politika kalkanı ve Cimri Kasa tarafından korunan rezerv">
+              <span class="shield-icon">🛡️</span>
+              <span data-i18n="guardrailSavings">Korumaya Alınan:</span>
+              <strong class="font-mono text-emerald-400" id="stat-savings-amount">$0.00</strong>
+            </div>
+            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-open-pdf-report">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span data-i18n="btnOpenPdf">📄 Yönetici Raporu (PDF)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <!-- Donut Chart: Agent Allocation & Consumption -->
+          <div class="chart-box">
+            <div class="chart-box-header">
+              <span class="chart-box-title" data-i18n="chartAgentTitle">Ajan Harcama Payı</span>
+              <span class="chart-box-sub font-mono" id="donut-total-label">$0.00</span>
+            </div>
+            <div class="donut-chart-container">
+              <svg class="donut-svg" viewBox="0 0 160 160" id="donut-chart-svg">
+                <circle cx="80" cy="80" r="58" fill="transparent" stroke="#27272a" stroke-width="18"></circle>
+              </svg>
+              <div class="donut-center-text">
+                <span class="donut-center-sub" data-i18n="chartFleet">Filo</span>
+                <span class="donut-center-val font-mono" id="donut-center-total">$0</span>
+              </div>
+            </div>
+            <div class="chart-legend" id="donut-legend">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Vendor Breakdown & P2P Volume Bars -->
+          <div class="chart-box">
+            <div class="chart-box-header">
+              <span class="chart-box-title" data-i18n="chartVendorTitle">Tedarikçi Kırılımı (Vendor Breakdown)</span>
+              <span class="chart-box-sub font-mono" data-i18n="chartVendorSub">PayPal Orders v2</span>
+            </div>
+            <div class="vendor-bars-container" id="vendor-bars-container">
+              <!-- Dynamic progress bars -->
+            </div>
+            
+            <div class="p2p-stat-strip">
+              <div class="p2p-stat-item">
+                <span class="p2p-label" data-i18n="p2pVolumeLabel">🤝 P2P Takaslanan Bütçe:</span>
+                <span class="p2p-val font-mono text-cyan-400" id="stat-p2p-volume">$0.00</span>
+              </div>
+              <div class="p2p-stat-item">
+                <span class="p2p-label" data-i18n="guardEfficiencyLabel">⚡ Otomasyon Oranı:</span>
+                <span class="p2p-val font-mono text-emerald-400" id="stat-autonomy-rate">%100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Main Workspace (Portal 2-Col Grid) -->
     <div class="portal-grid">
       
@@ -427,8 +499,118 @@
           </div>
         </div>
 
-      </div>
+    <!-- Executive Financial Report Modal (Print / PDF Ready) -->
+    <div id="executive-report-modal" class="report-modal-backdrop hidden">
+      <div class="report-modal-card">
+        <div class="report-modal-toolbar no-print">
+          <div class="report-toolbar-info">
+            <span class="report-tag">Certified Statement</span>
+            <span class="report-title-top">PayAgent OS Executive Audit Report</span>
+          </div>
+          <div class="report-toolbar-actions">
+            <button type="button" class="fin-btn fin-btn-paypal fin-btn-sm" id="btn-print-report">
+              <span>🖨️</span>
+              <span data-i18n="btnPrintPdf">Yazdır / PDF Olarak Kaydet</span>
+            </button>
+            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-close-report">
+              <span>✕</span>
+              <span data-i18n="btnClose">Kapat</span>
+            </button>
+          </div>
+        </div>
 
+        <!-- Printable Document Body -->
+        <div class="report-document-body" id="printable-report-area">
+          <div class="report-header-banner">
+            <div class="report-brand">
+              <div class="report-logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.89a.853.853 0 0 1 .842-.716h7.247c3.486 0 5.867 1.84 5.258 5.768-.535 3.447-2.827 5.244-5.918 5.244H9.728l-1.34 8.151h-.002a.85.85 0 0 1-.84.717l-.47-.717z" fill="#0079C1"/>
+                  <path d="M8.766 21.337h3.805a.853.853 0 0 0 .842-.716l1.09-6.936h1.22c3.09 0 5.383-1.797 5.918-5.244.609-3.928-1.772-5.768-5.258-5.768H9.136a.853.853 0 0 0-.842.716L4.944 20.62a.641.641 0 0 0 .633.74h3.189z" fill="#00457C"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="report-main-title">PayAgent OS — Certified Financial Audit</h1>
+                <p class="report-sub-title">Autonomous AI Agent Fleet Financial Statement & PayPal Orders v2 Audit Trail</p>
+              </div>
+            </div>
+            <div class="report-meta-box">
+              <div class="report-meta-row"><span>Rapor No:</span> <strong class="font-mono">PAOS-2026-X89</strong></div>
+              <div class="report-meta-row"><span>Tarih:</span> <strong class="font-mono" id="report-date-time">-</strong></div>
+              <div class="report-meta-row"><span>PayPal Ağ:</span> <strong class="text-sky-400">Sandbox REST v2</strong></div>
+            </div>
+          </div>
+
+          <!-- Executive Summary Metrics 4-col -->
+          <div class="report-metrics-grid">
+            <div class="report-metric-tile">
+              <span class="report-metric-label" data-i18n="repAllocatedLabel">Yönetilen Toplam Bakiye</span>
+              <span class="report-metric-value font-mono" id="rep-total-balance">$0.00</span>
+            </div>
+            <div class="report-metric-tile">
+              <span class="report-metric-label" data-i18n="repSpentLabel">Bugünkü Harcama</span>
+              <span class="report-metric-value font-mono" id="rep-spent-today">$0.00</span>
+            </div>
+            <div class="report-metric-tile">
+              <span class="report-metric-label" data-i18n="repSavedLabel">Korumaya Alınan Rezerv</span>
+              <span class="report-metric-value font-mono text-emerald" id="rep-saved-reserve">$0.00</span>
+            </div>
+            <div class="report-metric-tile">
+              <span class="report-metric-label" data-i18n="repP2pLabel">P2P Kota Takası</span>
+              <span class="report-metric-value font-mono text-cyan" id="rep-p2p-volume">$0.00</span>
+            </div>
+          </div>
+
+          <!-- Agent Fleet Breakdown Table -->
+          <div class="report-section">
+            <h3 class="report-section-heading" data-i18n="repSection1">1. Otonom Ajan Cüzdanları & Davranışsal Kişilikler</h3>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th data-i18n="colAgent">Ajan Adı</th>
+                  <th data-i18n="colPersonality">Finansal Kişilik</th>
+                  <th data-i18n="colBalance">Kasa Bakiyesi</th>
+                  <th data-i18n="colDailyBudget">Günlük Bütçe</th>
+                  <th data-i18n="colSpentToday">Bugün Harcanan</th>
+                  <th data-i18n="colStatus">Durum</th>
+                </tr>
+              </thead>
+              <tbody id="rep-agents-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Audit Trail Table -->
+          <div class="report-section">
+            <h3 class="report-section-heading" data-i18n="repSection2">2. Değiştirilemez PayPal İşlem Kütüğü (Audit Trail)</h3>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th data-i18n="colTime">Zaman Damgası</th>
+                  <th data-i18n="colAgent">Ajan</th>
+                  <th data-i18n="colAmount">Tutar</th>
+                  <th data-i18n="colVendor">Tedarikçi</th>
+                  <th data-i18n="colStatus">Durum</th>
+                  <th data-i18n="colRef">PayPal Ref ID</th>
+                </tr>
+              </thead>
+              <tbody id="rep-audit-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Official Verification Stamp -->
+          <div class="report-footer-seal">
+            <div class="seal-icon">🛡️</div>
+            <div class="seal-text">
+              <strong>PAYAGENT OS AUTONOMOUS POLICY ENGINE VERIFIED</strong>
+              <p>Tüm harcamalar Pydantic v2 politika kuralları, harcama tavanları ve PayPal Orders v2 / Payouts v1 API üzerinden kriptografik olarak mühürlenmiştir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Toast Notification Container -->

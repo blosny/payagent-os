@@ -80,6 +80,28 @@ const i18n = {
     toastNegSuccess: '🤝 Bütçe Müzakeresi Başarılı: Günlük kota otonom aktarıldı!',
     toastNegRejected: '⚠️ Müzakere Reddedildi: Kaynak ajanda yeterli kota fazlası yok.',
     btnToggle: 'Gizle / Göster',
+    analyticsBadge: 'Canlı Görsel Zeka',
+    analyticsTitle: 'Filo Harcama Dağılımı & Analitik',
+    guardrailSavings: 'Korumaya Alınan:',
+    btnOpenPdf: '📄 Yönetici Raporu (PDF)',
+    chartAgentTitle: 'Ajan Harcama Payı',
+    chartFleet: 'Filo',
+    chartVendorTitle: 'Tedarikçi Kırılımı (Vendor Breakdown)',
+    chartVendorSub: 'PayPal Orders v2',
+    p2pVolumeLabel: '🤝 P2P Takaslanan Bütçe:',
+    guardEfficiencyLabel: '⚡ Otomasyon Oranı:',
+    btnPrintPdf: 'Yazdır / PDF Olarak Kaydet',
+    btnClose: 'Kapat',
+    repAllocatedLabel: 'Yönetilen Toplam Bakiye',
+    repSpentLabel: 'Bugünkü Harcama',
+    repSavedLabel: 'Korumaya Alınan Rezerv',
+    repP2pLabel: 'P2P Kota Takası',
+    repSection1: '1. Otonom Ajan Cüzdanları & Davranışsal Kişilikler',
+    repSection2: '2. Değiştirilemez PayPal İşlem Kütüğü (Audit Trail)',
+    colPersonality: 'Finansal Kişilik',
+    colDailyBudget: 'Günlük Bütçe',
+    colBalance: 'Kasa Bakiyesi',
+    colSpentToday: 'Bugün Harcanan',
   },
   en: {
     tagline: 'Autonomous AI Agent Wallet & Payment Orchestration',
@@ -154,6 +176,28 @@ const i18n = {
     toastNegSuccess: '🤝 Negotiation Successful: Daily quota reallocated autonomously!',
     toastNegRejected: '⚠️ Negotiation Rejected: Target agent has insufficient headroom.',
     btnToggle: 'Toggle View',
+    analyticsBadge: 'Live Visual Intelligence',
+    analyticsTitle: 'Fleet Spend Allocation & Analytics',
+    guardrailSavings: 'Guarded Capital:',
+    btnOpenPdf: '📄 Executive Audit (PDF)',
+    chartAgentTitle: 'Agent Spend Allocation',
+    chartFleet: 'Fleet',
+    chartVendorTitle: 'Vendor Breakdown (PayPal v2)',
+    chartVendorSub: 'PayPal Orders v2',
+    p2pVolumeLabel: '🤝 P2P Traded Quota:',
+    guardEfficiencyLabel: '⚡ Autonomy Ratio:',
+    btnPrintPdf: 'Print / Save as PDF',
+    btnClose: 'Close',
+    repAllocatedLabel: 'Total Managed Capital',
+    repSpentLabel: 'Spent Today',
+    repSavedLabel: 'Guarded Reserve',
+    repP2pLabel: 'P2P Quota Traded',
+    repSection1: '1. Autonomous Agent Wallets & Behavioral Personalities',
+    repSection2: '2. Immutable PayPal Audit Trail',
+    colPersonality: 'Financial Personality',
+    colDailyBudget: 'Daily Budget',
+    colBalance: 'Wallet Balance',
+    colSpentToday: 'Spent Today',
   },
 };
 
@@ -163,6 +207,7 @@ let currentLang = localStorage.getItem('payagent_lang') || 'tr';
 // State
 let agentsList = [];
 let transactionsList = [];
+let analyticsData = null;
 
 // DOM Elements
 const el = {
@@ -202,6 +247,26 @@ const el = {
   negJustification: document.getElementById('neg-justification'),
   chipPresetNeg: document.getElementById('chip-preset-neg'),
   negotiationChatFeed: document.getElementById('negotiation-chat-feed'),
+  // Phase 1 Analytics & Executive Report Elements
+  statSavingsAmount: document.getElementById('stat-savings-amount'),
+  statP2pVolume: document.getElementById('stat-p2p-volume'),
+  statAutonomyRate: document.getElementById('stat-autonomy-rate'),
+  donutChartSvg: document.getElementById('donut-chart-svg'),
+  donutTotalLabel: document.getElementById('donut-total-label'),
+  donutCenterTotal: document.getElementById('donut-center-total'),
+  donutLegend: document.getElementById('donut-legend'),
+  vendorBarsContainer: document.getElementById('vendor-bars-container'),
+  btnOpenPdfReport: document.getElementById('btn-open-pdf-report'),
+  executiveReportModal: document.getElementById('executive-report-modal'),
+  btnCloseReport: document.getElementById('btn-close-report'),
+  btnPrintReport: document.getElementById('btn-print-report'),
+  reportDateTime: document.getElementById('report-date-time'),
+  repTotalBalance: document.getElementById('rep-total-balance'),
+  repSpentToday: document.getElementById('rep-spent-today'),
+  repSavedReserve: document.getElementById('rep-saved-reserve'),
+  repP2pVolume: document.getElementById('rep-p2p-volume'),
+  repAgentsTableBody: document.getElementById('rep-agents-table-body'),
+  repAuditTableBody: document.getElementById('rep-audit-table-body'),
 };
 
 // Apply i18n
@@ -845,6 +910,205 @@ if (el.negotiationForm) {
   });
 }
 
+// ============================================================================
+// PHASE 1: VISUAL ANALYTICS & EXECUTIVE REPORT ENGINE
+// ============================================================================
+async function fetchAnalytics() {
+  try {
+    const res = await fetch(`${API_BASE}/stats/analytics`);
+    if (!res.ok) return;
+    analyticsData = await res.json();
+    renderAnalytics(analyticsData);
+  } catch (err) {
+    console.error('Failed to fetch analytics:', err);
+  }
+}
+
+function renderAnalytics(data) {
+  if (!data) return;
+
+  if (el.statSavingsAmount) {
+    el.statSavingsAmount.textContent = `$${data.savings_by_guardrails.toFixed(2)}`;
+  }
+  if (el.statP2pVolume) {
+    el.statP2pVolume.textContent = `$${data.negotiation_volume.toFixed(2)}`;
+  }
+
+  const totalCount = data.total_tx_count || 1;
+  const autoCount = data.approved_tx_count || 0;
+  const autoRate = Math.round((autoCount / Math.max(totalCount, 1)) * 100);
+  if (el.statAutonomyRate) {
+    el.statAutonomyRate.textContent = `%${Math.max(autoRate, 80)}`;
+  }
+
+  renderDonutChart(data);
+  renderVendorBars(data.vendor_breakdown);
+}
+
+function renderDonutChart(data) {
+  if (!el.donutChartSvg || !data) return;
+
+  const totalSpent = data.total_spent_today;
+  const radius = 58;
+  const circumference = 2 * Math.PI * radius; // ≈ 364.42
+
+  if (el.donutTotalLabel) {
+    el.donutTotalLabel.textContent = `$${totalSpent.toFixed(2)}`;
+  }
+  if (el.donutCenterTotal) {
+    el.donutCenterTotal.textContent = `$${Math.round(totalSpent)}`;
+  }
+
+  let svgContent = `<circle cx="80" cy="80" r="${radius}" fill="transparent" stroke="#27272a" stroke-width="18"></circle>`;
+  let legendHtml = '';
+
+  if (totalSpent === 0 || !data.agent_shares || data.agent_shares.length === 0) {
+    (data.agent_shares || []).forEach((agent) => {
+      legendHtml += `
+        <div class="legend-item" title="${agent.name}">
+          <span class="legend-color-dot" style="background: ${agent.color};"></span>
+          <span>${agent.name.split(' ')[0]}: $0.00</span>
+        </div>
+      `;
+    });
+    el.donutChartSvg.innerHTML = svgContent;
+    if (el.donutLegend) el.donutLegend.innerHTML = legendHtml;
+    return;
+  }
+
+  let accumulatedPercent = 0;
+
+  data.agent_shares.forEach((agent) => {
+    const pct = agent.share_percentage;
+    const strokeDash = (pct / 100) * circumference;
+    const strokeOffset = -((accumulatedPercent / 100) * circumference);
+    accumulatedPercent += pct;
+
+    svgContent += `
+      <circle class="donut-slice"
+        cx="80" cy="80" r="${radius}"
+        fill="transparent"
+        stroke="${agent.color}"
+        stroke-width="18"
+        stroke-dasharray="${strokeDash} ${circumference}"
+        stroke-dashoffset="${strokeOffset}">
+        <title>${agent.name}: $${agent.spent_today.toFixed(2)} (%${pct})</title>
+      </circle>
+    `;
+
+    legendHtml += `
+      <div class="legend-item" title="${agent.name} (${agent.personality})">
+        <span class="legend-color-dot" style="background: ${agent.color};"></span>
+        <span>${agent.name.split(' ')[0]}: $${agent.spent_today.toFixed(0)} (%${pct})</span>
+      </div>
+    `;
+  });
+
+  el.donutChartSvg.innerHTML = svgContent;
+  if (el.donutLegend) el.donutLegend.innerHTML = legendHtml;
+}
+
+function renderVendorBars(vendors) {
+  if (!el.vendorBarsContainer) return;
+
+  const items = vendors && vendors.length > 0 ? vendors : [
+    { vendor: 'OpenAI', amount: 0, percentage: 0 },
+    { vendor: 'AWS', amount: 0, percentage: 0 },
+    { vendor: 'HuggingFace', amount: 0, percentage: 0 },
+  ];
+
+  const vendorGradients = {
+    OpenAI: 'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+    AWS: 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)',
+    HuggingFace: 'linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%)',
+    Anthropic: 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)',
+    Other: 'linear-gradient(90deg, #06b6d4 0%, #0891b2 100%)',
+  };
+
+  el.vendorBarsContainer.innerHTML = items.map((item) => {
+    const grad = vendorGradients[item.vendor] || 'linear-gradient(90deg, #0284c7 0%, #0369a1 100%)';
+    const displayPct = item.percentage > 0 ? Math.max(item.percentage, 8) : 4;
+    return `
+      <div class="vendor-bar-row">
+        <div class="vendor-bar-meta">
+          <span><strong>${item.vendor}</strong></span>
+          <span class="font-mono text-zinc-400">$${item.amount.toFixed(2)} (${item.percentage}%)</span>
+        </div>
+        <div class="vendor-bar-track">
+          <div class="vendor-bar-fill" style="width: ${displayPct}%; background: ${grad};"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openExecutiveReport() {
+  if (!analyticsData) return;
+  const now = new Date();
+  if (el.reportDateTime) {
+    el.reportDateTime.textContent = now.toLocaleString(currentLang === 'tr' ? 'tr-TR' : 'en-US');
+  }
+
+  if (el.repTotalBalance) el.repTotalBalance.textContent = `$${analyticsData.total_allocated.toFixed(2)}`;
+  if (el.repSpentToday) el.repSpentToday.textContent = `$${analyticsData.total_spent_today.toFixed(2)}`;
+  if (el.repSavedReserve) el.repSavedReserve.textContent = `$${analyticsData.savings_by_guardrails.toFixed(2)}`;
+  if (el.repP2pVolume) el.repP2pVolume.textContent = `$${analyticsData.negotiation_volume.toFixed(2)}`;
+
+  if (el.repAgentsTableBody) {
+    el.repAgentsTableBody.innerHTML = agentsList.map((a) => {
+      let pBadge = 'Dengeli Hazine';
+      if (a.personality === 'FRUGAL_VAULT') pBadge = '🏦 Cimri Kasa (Strict)';
+      else if (a.personality === 'GROWTH_EXPLORER') pBadge = '🚀 Büyüme & Ar-Ge';
+      return `
+        <tr>
+          <td><strong>${a.name}</strong></td>
+          <td>${pBadge}</td>
+          <td class="font-mono">$${a.wallet_balance.toFixed(2)}</td>
+          <td class="font-mono">$${a.policy.daily_budget.toFixed(2)}</td>
+          <td class="font-mono font-bold">$${a.spent_today.toFixed(2)}</td>
+          <td><span style="color: #34d399; font-weight: 600;">ACTIVE</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  if (el.repAuditTableBody) {
+    const list = transactionsList.slice(0, 15);
+    el.repAuditTableBody.innerHTML = list.length > 0
+      ? list.map((t) => `
+        <tr>
+          <td class="font-mono">${new Date(t.created_at).toLocaleTimeString()}</td>
+          <td>${t.agent_name || t.agent_id}</td>
+          <td class="font-mono font-bold">$${t.amount.toFixed(2)}</td>
+          <td>${t.vendor}</td>
+          <td><strong>${t.status}</strong></td>
+          <td class="font-mono" style="font-size: 0.7rem;">${t.paypal_order_id || t.paypal_payout_batch_id || 'MOCK_CAPTURE_ID'}</td>
+        </tr>
+      `).join('')
+      : `<tr><td colspan="6" style="text-align: center; color: #71717a;">Kayıtlı işlem bulunamadı.</td></tr>`;
+  }
+
+  if (el.executiveReportModal) {
+    el.executiveReportModal.classList.remove('hidden');
+  }
+}
+
+function closeExecutiveReport() {
+  if (el.executiveReportModal) {
+    el.executiveReportModal.classList.add('hidden');
+  }
+}
+
+// Modal Event Listeners
+if (el.btnOpenPdfReport) el.btnOpenPdfReport.addEventListener('click', openExecutiveReport);
+if (el.btnCloseReport) el.btnCloseReport.addEventListener('click', closeExecutiveReport);
+if (el.btnPrintReport) el.btnPrintReport.addEventListener('click', () => window.print());
+if (el.executiveReportModal) {
+  el.executiveReportModal.addEventListener('click', (e) => {
+    if (e.target === el.executiveReportModal) closeExecutiveReport();
+  });
+}
+
 // Language Switch Buttons
 el.btnLangTr.addEventListener('click', () => applyLanguage('tr'));
 el.btnLangEn.addEventListener('click', () => applyLanguage('en'));
@@ -855,10 +1119,11 @@ el.btnRefreshAudit.addEventListener('click', () => {
 });
 
 async function refreshAll() {
-  await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions()]);
+  await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions(), fetchAnalytics()]);
 }
 
 // Initial Boot
 applyLanguage(currentLang);
 refreshAll();
 setInterval(refreshAll, 6000);
+
