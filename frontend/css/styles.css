@@ -1750,6 +1750,7 @@ body {
   .process-tracker,
   .stats-row,
   .analytics-hub,
+  .interactive-workbench-row,
   .portal-grid,
   .toast-hub,
   .ambient-glow,
@@ -1827,6 +1828,249 @@ body {
     color: #4b5563 !important;
   }
 }
+
+/* ==========================================================================
+   INTERACTIVE WORKBENCH: STRESS SIMULATOR & CFO COPILOT
+   ========================================================================== */
+.interactive-workbench-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .interactive-workbench-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workbench-card {
+  background: rgba(18, 18, 24, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+.workbench-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.workbench-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.workbench-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.18rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.workbench-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.stress-risk-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.stress-controls-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.stress-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #a1a1aa;
+}
+
+.stress-slider {
+  width: 100%;
+  accent-color: #0284c7;
+  cursor: pointer;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.stress-projection-banner {
+  margin-top: auto;
+  background: rgba(24, 24, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xs);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.stress-kpis-strip {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stress-kpi-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.kpi-micro-label {
+  font-size: 0.62rem;
+  color: #71717a;
+  text-transform: uppercase;
+}
+
+.kpi-micro-val {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.stress-recommendation-box {
+  font-size: 0.73rem;
+  color: #d4d4d8;
+  line-height: 1.45;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+/* CFO Copilot Styles */
+.copilot-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.cfo-quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.cfo-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #a1a1aa;
+  font-size: 0.68rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cfo-chip:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.cfo-response-box {
+  background: rgba(24, 24, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xs);
+  padding: 0.85rem;
+  margin-bottom: 0.85rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cfo-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cfo-icon {
+  font-size: 1.1rem;
+}
+
+.cfo-name {
+  font-size: 0.74rem;
+  color: #ffffff;
+  display: block;
+}
+
+.cfo-time {
+  font-size: 0.62rem;
+  color: #71717a;
+}
+
+.cfo-bubble-text {
+  font-size: 0.74rem;
+  color: #d4d4d8;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.cfo-action-row {
+  margin-top: 0.4rem;
+}
+
+.cfo-query-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cfo-input {
+  font-size: 0.75rem;
+  padding: 0.45rem 0.75rem;
+}
+
 
 
 

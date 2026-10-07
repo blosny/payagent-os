@@ -102,6 +102,19 @@ const i18n = {
     colDailyBudget: 'Günlük Bütçe',
     colBalance: 'Kasa Bakiyesi',
     colSpentToday: 'Bugün Harcanan',
+    badgeWhatIf: 'What-If Finans Simülatörü',
+    stressTitle: 'Finansal Stres & Likidite Simülatörü',
+    sliderInflation: 'API Fiyat Enflasyonu:',
+    sliderTraffic: 'Trafik / İş Yükü Çarpanı:',
+    selectOutage: 'Sağlayıcı Kesintisi Simülasyonu:',
+    burnRateLabel: 'Öngörülen 24h Tüketim:',
+    exhaustionLabel: 'Likidite Tükenme Süresi:',
+    deficitLabel: 'Olası Bütçe Açığı:',
+    badgeCfo: 'AI Hazine Copilot',
+    cfoTitle: 'CFO Soru-Cevap & Finans Danışmanı',
+    cfoName: 'PayAgent OS Hazine Direktörü (CFO)',
+    cfoWelcome: 'Merhaba! Ben PayAgent OS Hazine Direktörüyüm. Ajanlarınızın harcama alışkanlıklarını, Cimri Kasa rezervlerini ve PayPal mutabakatlarını canlı izliyorum. Yukarıdaki hazır sorulardan birini seçebilir veya aşağıya serbest soru yazabilirsiniz.',
+    btnAsk: 'Sor',
   },
   en: {
     tagline: 'Autonomous AI Agent Wallet & Payment Orchestration',
@@ -198,6 +211,19 @@ const i18n = {
     colDailyBudget: 'Daily Budget',
     colBalance: 'Wallet Balance',
     colSpentToday: 'Spent Today',
+    badgeWhatIf: 'What-If Stress Simulator',
+    stressTitle: 'Financial Stress & Liquidity Simulator',
+    sliderInflation: 'API Price Inflation:',
+    sliderTraffic: 'Traffic Workload Multiplier:',
+    selectOutage: 'Provider Outage Simulation:',
+    burnRateLabel: 'Projected 24h Burn:',
+    exhaustionLabel: 'Hours Until Exhaustion:',
+    deficitLabel: 'Projected Deficit:',
+    badgeCfo: 'AI Treasury Copilot',
+    cfoTitle: 'CFO Q&A & Advisory',
+    cfoName: 'PayAgent OS Chief Financial Officer (CFO)',
+    cfoWelcome: 'Hello! I am the PayAgent OS Chief Financial Officer. I monitor fleet spending, Frugal Vault reserves, and PayPal settlements in real-time. Pick a quick prompt above or type any financial question below.',
+    btnAsk: 'Ask',
   },
 };
 
@@ -267,6 +293,24 @@ const el = {
   repP2pVolume: document.getElementById('rep-p2p-volume'),
   repAgentsTableBody: document.getElementById('rep-agents-table-body'),
   repAuditTableBody: document.getElementById('rep-audit-table-body'),
+  // Interactive Workbench Elements (Stress Simulator & CFO Copilot)
+  sliderInflation: document.getElementById('slider-inflation'),
+  sliderTraffic: document.getElementById('slider-traffic'),
+  selectOutage: document.getElementById('select-outage'),
+  valInflation: document.getElementById('val-inflation'),
+  valTraffic: document.getElementById('val-traffic'),
+  stressRiskBadge: document.getElementById('stress-risk-badge'),
+  projBurnRate: document.getElementById('proj-burn-rate'),
+  projExhaustionHours: document.getElementById('proj-exhaustion-hours'),
+  projDeficit: document.getElementById('proj-deficit'),
+  projRecommendation: document.getElementById('proj-recommendation'),
+  cfoQueryForm: document.getElementById('cfo-query-form'),
+  cfoInputQuestion: document.getElementById('cfo-input-question'),
+  cfoBubbleText: document.getElementById('cfo-bubble-text'),
+  cfoTimeStamp: document.getElementById('cfo-time-stamp'),
+  cfoActionRow: document.getElementById('cfo-action-row'),
+  cfoActionText: document.getElementById('cfo-action-text'),
+  btnCfoAction: document.getElementById('btn-cfo-action'),
 };
 
 // Apply i18n
@@ -1079,8 +1123,7 @@ function openExecutiveReport() {
         <tr>
           <td class="font-mono">${new Date(t.created_at).toLocaleTimeString()}</td>
           <td>${t.agent_name || t.agent_id}</td>
-          <td class="font-mono font-bold">$${t.amount.toFixed(2)}</td>
-          <td>${t.vendor}</td>
+          <td>${t.recipient || t.vendor || 'Other'}</td>
           <td><strong>${t.status}</strong></td>
           <td class="font-mono" style="font-size: 0.7rem;">${t.paypal_order_id || t.paypal_payout_batch_id || 'MOCK_CAPTURE_ID'}</td>
         </tr>
@@ -1109,14 +1152,124 @@ if (el.executiveReportModal) {
   });
 }
 
-// Language Switch Buttons
-el.btnLangTr.addEventListener('click', () => applyLanguage('tr'));
-el.btnLangEn.addEventListener('click', () => applyLanguage('en'));
+// ============================================================================
+// WHAT-IF STRESS SIMULATOR CONTROLLER
+// ============================================================================
+async function runStressSimulation() {
+  if (!el.sliderInflation || !el.sliderTraffic) return;
+  const inflation = parseFloat(el.sliderInflation.value) || 0;
+  const traffic = parseFloat(el.sliderTraffic.value) || 1;
+  const outage = el.selectOutage ? el.selectOutage.value : '';
 
-el.btnRefreshAudit.addEventListener('click', () => {
-  refreshAll();
-  showToast(i18n[currentLang].toastRefreshed, 'success');
+  if (el.valInflation) el.valInflation.textContent = `+${inflation}%`;
+  if (el.valTraffic) el.valTraffic.textContent = `${traffic.toFixed(1)}x`;
+
+  try {
+    const res = await fetch(`${API_BASE}/stats/simulate-stress`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        price_inflation_pct: inflation,
+        traffic_multiplier: traffic,
+        outage_vendor: outage || null,
+        fallback_vendor: 'HuggingFace',
+      }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (el.projBurnRate) el.projBurnRate.textContent = `$${data.projected_daily_burn.toFixed(2)}`;
+    if (el.projExhaustionHours) el.projExhaustionHours.textContent = `${data.hours_until_exhaustion} ${currentLang === 'tr' ? 'Saat' : 'Hours'}`;
+    if (el.projDeficit) el.projDeficit.textContent = `$${data.projected_deficit.toFixed(2)}`;
+    if (el.projRecommendation) el.projRecommendation.innerHTML = `💡 <em>${data.recommendation}</em>`;
+
+    if (el.stressRiskBadge) {
+      el.stressRiskBadge.textContent = data.risk_level;
+      if (data.risk_level === 'CRITICAL') {
+        el.stressRiskBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+        el.stressRiskBadge.style.color = '#f87171';
+        el.stressRiskBadge.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+      } else if (data.risk_level === 'ELEVATED') {
+        el.stressRiskBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+        el.stressRiskBadge.style.color = '#fbbf24';
+        el.stressRiskBadge.style.borderColor = 'rgba(245, 158, 11, 0.35)';
+      } else {
+        el.stressRiskBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+        el.stressRiskBadge.style.color = '#34d399';
+        el.stressRiskBadge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+      }
+    }
+  } catch (err) {
+    console.error('Stress simulation error:', err);
+  }
+}
+
+if (el.sliderInflation) el.sliderInflation.addEventListener('input', runStressSimulation);
+if (el.sliderTraffic) el.sliderTraffic.addEventListener('input', runStressSimulation);
+if (el.selectOutage) el.selectOutage.addEventListener('change', runStressSimulation);
+
+// ============================================================================
+// AI CFO COPILOT CONTROLLER
+// ============================================================================
+async function handleCfoQuery(question) {
+  if (!question || !question.trim()) return;
+  if (el.cfoBubbleText) el.cfoBubbleText.innerHTML = '<em>Düşünüyor ve filo metriklerini analiz ediyor...</em>';
+
+  try {
+    const res = await fetch(`${API_BASE}/stats/cfo-query`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: question.trim() }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (el.cfoBubbleText) el.cfoBubbleText.textContent = data.answer;
+    if (el.cfoTimeStamp) el.cfoTimeStamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    if (data.suggested_action && el.cfoActionRow && el.cfoActionText) {
+      el.cfoActionText.textContent = `🎯 ${data.suggested_action}`;
+      el.cfoActionRow.classList.remove('hidden');
+    }
+  } catch (err) {
+    if (el.cfoBubbleText) el.cfoBubbleText.textContent = 'CFO servisine bağlanırken hata oluştu.';
+  }
+}
+
+// Quick chips click handlers
+document.querySelectorAll('.cfo-chip').forEach((chip) => {
+  chip.addEventListener('click', () => {
+    const q = chip.getAttribute('data-q');
+    if (el.cfoInputQuestion) el.cfoInputQuestion.value = q;
+    handleCfoQuery(q);
+  });
 });
+
+if (el.cfoQueryForm) {
+  el.cfoQueryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (el.cfoInputQuestion) {
+      handleCfoQuery(el.cfoInputQuestion.value);
+    }
+  });
+}
+
+if (el.btnCfoAction) {
+  el.btnCfoAction.addEventListener('click', () => {
+    showToast('Önerilen optimizasyon aksiyonu kaydedildi.', 'success');
+  });
+}
+
+// Language Switch Buttons
+if (el.btnLangTr) el.btnLangTr.addEventListener('click', () => applyLanguage('tr'));
+if (el.btnLangEn) el.btnLangEn.addEventListener('click', () => applyLanguage('en'));
+
+if (el.btnRefreshAudit) {
+  el.btnRefreshAudit.addEventListener('click', () => {
+    refreshAll();
+    showToast(i18n[currentLang].toastRefreshed, 'success');
+  });
+}
 
 async function refreshAll() {
   await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions(), fetchAnalytics()]);
@@ -1125,5 +1278,7 @@ async function refreshAll() {
 // Initial Boot
 applyLanguage(currentLang);
 refreshAll();
+runStressSimulation();
 setInterval(refreshAll, 6000);
+
 

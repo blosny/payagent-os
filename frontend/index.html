@@ -253,6 +253,117 @@
       </div>
     </section>
 
+    <!-- Interactive Copilot & Stress Testing Workbench (Phase 1 Final Polish) -->
+    <section class="interactive-workbench-row" id="interactive-workbench">
+      <!-- Left: "What-If" Financial Stress Simulator -->
+      <div class="workbench-card">
+        <div class="workbench-header">
+          <div class="workbench-title-wrap">
+            <span class="workbench-badge badge-amber" data-i18n="badgeWhatIf">What-If Playground</span>
+            <h3 class="workbench-title" data-i18n="stressTitle">Finansal Stres & Likidite Simülatörü</h3>
+          </div>
+          <span class="stress-risk-pill font-mono" id="stress-risk-badge">STABLE</span>
+        </div>
+        
+        <div class="stress-controls-grid">
+          <div class="stress-slider-group">
+            <div class="slider-label-row">
+              <span data-i18n="sliderInflation">API Fiyat Enflasyonu:</span>
+              <strong class="font-mono text-cyan-400" id="val-inflation">+0%</strong>
+            </div>
+            <input type="range" id="slider-inflation" min="0" max="150" step="5" value="0" class="stress-slider">
+          </div>
+
+          <div class="stress-slider-group">
+            <div class="slider-label-row">
+              <span data-i18n="sliderTraffic">Trafik / İş Yükü Çarpanı:</span>
+              <strong class="font-mono text-emerald-400" id="val-traffic">1.0x</strong>
+            </div>
+            <input type="range" id="slider-traffic" min="1" max="5" step="0.5" value="1" class="stress-slider">
+          </div>
+
+          <div class="stress-slider-group">
+            <div class="slider-label-row">
+              <span data-i18n="selectOutage">Sağlayıcı Kesintisi Simülasyonu:</span>
+            </div>
+            <select id="select-outage" class="fin-input fin-input-sm">
+              <option value="">Kesinti Yok (Normal Çalışma)</option>
+              <option value="AWS">AWS Kesintisi -> HuggingFace Göçü (+%18 Maliyet)</option>
+              <option value="OpenAI">OpenAI Kesintisi -> Anthropic Göçü (+%15 Maliyet)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Real-time Stress Projection Result Banner -->
+        <div class="stress-projection-banner" id="stress-projection-banner">
+          <div class="stress-kpis-strip">
+            <div class="stress-kpi-item">
+              <span class="kpi-micro-label" data-i18n="burnRateLabel">Öngörülen 24h Tüketim:</span>
+              <span class="kpi-micro-val font-mono" id="proj-burn-rate">$0.00</span>
+            </div>
+            <div class="stress-kpi-item">
+              <span class="kpi-micro-label" data-i18n="exhaustionLabel">Likidite Tükenme Süresi:</span>
+              <span class="kpi-micro-val font-mono" id="proj-exhaustion-hours">24.0 Saat</span>
+            </div>
+            <div class="stress-kpi-item">
+              <span class="kpi-micro-label" data-i18n="deficitLabel">Olası Bütçe Açığı:</span>
+              <span class="kpi-micro-val font-mono text-amber-400" id="proj-deficit">$0.00</span>
+            </div>
+          </div>
+          <div class="stress-recommendation-box" id="proj-recommendation">
+            💡 <em>Finansal kalkan güvenli bölgede. Filo bütçesi mevcut kurallarla otonom çalışmayı sürdürebilir.</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: AI CFO Intelligence Copilot -->
+      <div class="workbench-card">
+        <div class="workbench-header">
+          <div class="workbench-title-wrap">
+            <span class="workbench-badge badge-blue" data-i18n="badgeCfo">AI Hazine Copilot</span>
+            <h3 class="workbench-title" data-i18n="cfoTitle">CFO Soru-Cevap & Finans Danışmanı</h3>
+          </div>
+          <span class="copilot-live-dot" title="Active Copilot"></span>
+        </div>
+
+        <!-- Quick Question Chips -->
+        <div class="cfo-quick-chips">
+          <button type="button" class="cfo-chip" data-q="Bugün en çok hangi ajan harcadı?">📊 En Çok Harcayan?</button>
+          <button type="button" class="cfo-chip" data-q="DevOps ajanı neden cimri davranıp borcu reddetti?">🏦 Cimri Kasa Neden Reddetti?</button>
+          <button type="button" class="cfo-chip" data-q="Bugün toplam ne kadar bütçe korundu?">🛡️ Korunan Tasarruf?</button>
+          <button type="button" class="cfo-chip" data-q="Bütçemizi optimize etmek için CFO önerin nedir?">💡 CFO Tavsiyesi</button>
+        </div>
+
+        <!-- CFO Response Message Box -->
+        <div class="cfo-response-box" id="cfo-response-box">
+          <div class="cfo-avatar-row">
+            <span class="cfo-icon">🤖</span>
+            <div>
+              <strong class="cfo-name" data-i18n="cfoName">PayAgent OS Hazine Direktörü (CFO)</strong>
+              <span class="cfo-time font-mono" id="cfo-time-stamp">Şimdi</span>
+            </div>
+          </div>
+          <div class="cfo-bubble-text" id="cfo-bubble-text" data-i18n="cfoWelcome">
+            Merhaba! Ben PayAgent OS Hazine Direktörüyüm. Ajanlarınızın harcama alışkanlıklarını, Cimri Kasa rezervlerini ve PayPal mutabakatlarını canlı izliyorum. Yukarıdaki hazır sorulardan birini seçebilir veya aşağıya serbest soru yazabilirsiniz.
+          </div>
+          <div class="cfo-action-row hidden" id="cfo-action-row">
+            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-cfo-action">
+              <span id="cfo-action-text">Aksiyon Al</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Free-form Query Input Form -->
+        <form id="cfo-query-form" class="cfo-query-form">
+          <input type="text" id="cfo-input-question" class="fin-input cfo-input" placeholder="Hazine veya harcamalar hakkında bir soru sorun..." required>
+          <button type="submit" class="fin-btn fin-btn-paypal fin-btn-sm" id="btn-send-cfo">
+            <span data-i18n="btnAsk">Sor</span>
+            <span>↵</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
     <!-- Main Workspace (Portal 2-Col Grid) -->
     <div class="portal-grid">
       
