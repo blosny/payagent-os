@@ -9,28 +9,46 @@ def engine():
 
 
 def test_successful_budget_negotiation(engine):
-    # agent-devops has daily_budget = 200.0, spent_today = 0.0 -> headroom = 200.0
-    # agent-research has daily_budget = 100.0
+    # agent-devops is FRUGAL_VAULT with min_lending_urgency = CRITICAL
     req = NegotiationRequest(
         requester_agent_id="agent-research",
         target_agent_id="agent-devops",
         amount=35.0,
         currency="USD",
-        justification="Urgent quota needed for large-scale embedding batch job.",
-        urgency="HIGH",
+        justification="Critical cluster failover requiring emergency quota.",
+        urgency="CRITICAL",
     )
 
     record = engine.negotiate_budget_transfer(req)
 
     assert record.accepted is True
     assert record.amount == 35.0
-    assert "APPROVED autonomously" in record.transcript
+    assert "APPROVED" in record.transcript
 
     # Verify agent quotas updated
     devops = engine.get_agent("agent-devops")
     research = engine.get_agent("agent-research")
     assert devops.policy.daily_budget == 165.0  # 200 - 35
     assert research.policy.daily_budget == 135.0  # 100 + 35
+
+
+def test_frugal_personality_rejects_non_critical(engine):
+    # agent-devops is FRUGAL_VAULT and requires CRITICAL; HIGH will be rejected
+    req = NegotiationRequest(
+        requester_agent_id="agent-research",
+        target_agent_id="agent-devops",
+        amount=35.0,
+        currency="USD",
+        justification="Routine embedding batch job.",
+        urgency="HIGH",
+    )
+
+    record = engine.negotiate_budget_transfer(req)
+
+    assert record.accepted is False
+    assert "REJECTED" in record.transcript
+    assert "birikim/fon eşiğim" in record.transcript
+
 
 
 def test_rejected_budget_negotiation_insufficient_headroom(engine):
