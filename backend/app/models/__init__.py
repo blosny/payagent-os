@@ -1,4 +1,4 @@
-from .agent import Agent, AgentCreate, AgentPolicy, AgentUpdate
+from .agent import Agent, AgentCreate, AgentPolicy, AgentUpdate, AgentPersonality
 from .transaction import (
     TransactionIntent,
     TransactionRecord,
@@ -13,6 +13,7 @@ __all__ = [
     "AgentCreate",
     "AgentPolicy",
     "AgentUpdate",
+    "AgentPersonality",
     "TransactionIntent",
     "TransactionRecord",
     "TransactionStatus",
