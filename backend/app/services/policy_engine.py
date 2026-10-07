@@ -1,7 +1,7 @@
 import uuid
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime, timezone
-from ..models.agent import Agent, AgentCreate, AgentPolicy
+from ..models.agent import Agent, AgentCreate, AgentPolicy, AgentPersonality
 from ..models.transaction import (
     TransactionIntent,
     TransactionRecord,
@@ -27,11 +27,14 @@ class PolicyEngine:
                 "DevOps Infrastructure Agent",
                 "Manages cloud compute, GPU clusters, and server resource scaling.",
                 1200.0,
+                AgentPersonality.FRUGAL_VAULT,
+                "Cimri Birikim Kasası — Acil durum fonudur; sadece CRITICAL arızalarda kota verir.",
                 AgentPolicy(
                     max_per_transaction=40.0,
                     daily_budget=200.0,
                     allowed_vendors=["AWS", "Cloudflare", "GitHub", "DigitalOcean", "HuggingFace"],
                     allow_unlisted_vendors=False,
+                    min_lending_urgency="CRITICAL",
                 ),
             ),
             (
@@ -39,11 +42,14 @@ class PolicyEngine:
                 "Market Research & Data Agent",
                 "Procures paid scientific datasets, API query tokens, and industry reports.",
                 600.0,
+                AgentPersonality.GROWTH_EXPLORER,
+                "Büyüme & İnovasyon — Yapay zeka modelleri ve araştırma deneyleri için fon arar.",
                 AgentPolicy(
                     max_per_transaction=25.0,
                     daily_budget=100.0,
                     allowed_vendors=["OpenAI", "Anthropic", "Statista", "Kaggle", "arXiv"],
                     allow_unlisted_vendors=False,
+                    min_lending_urgency="MEDIUM",
                 ),
             ),
             (
@@ -51,16 +57,19 @@ class PolicyEngine:
                 "Freelance Contractor Coordinator",
                 "Disburses micro-rewards and milestone payments to vetted external talent.",
                 1500.0,
+                AgentPersonality.BALANCED_COORDINATOR,
+                "Dengeli Hazine — Serbest çalışan hakedişleri ve çıktı bazlı rasyonel fon yöneticisi.",
                 AgentPolicy(
                     max_per_transaction=50.0,
                     daily_budget=300.0,
                     allowed_vendors=[],
                     allow_unlisted_vendors=True,
+                    min_lending_urgency="HIGH",
                 ),
             ),
         ]
 
-        for aid, name, desc, balance, policy in defaults:
+        for aid, name, desc, balance, personality, pers_desc, policy in defaults:
             self._agents[aid] = Agent(
                 id=aid,
                 name=name,
@@ -68,6 +77,8 @@ class PolicyEngine:
                 wallet_balance=balance,
                 spent_today=0.0,
                 currency="USD",
+                personality=personality,
+                personality_description=pers_desc,
                 policy=policy,
             )
 
@@ -87,6 +98,8 @@ class PolicyEngine:
             wallet_balance=data.wallet_balance,
             spent_today=0.0,
             currency=data.currency,
+            personality=data.personality,
+            personality_description=data.personality_description,
             policy=policy,
         )
         self._agents[agent_id] = agent
@@ -356,29 +369,43 @@ class PolicyEngine:
         if requester.id == target.id:
             raise ValueError("An agent cannot negotiate a budget transfer with itself.")
 
-        # Headroom calculation: remaining daily budget of target agent
-        target_headroom = max(0.0, target.policy.daily_budget - target.spent_today)
-        is_accepted = target_headroom >= req.amount
+        # Financial personality urgency ranks
+        urgency_ranks = {"LOW": 1, "MEDIUM": 2, "HIGH": 3, "CRITICAL": 4}
+        req_score = urgency_ranks.get(req.urgency.upper(), 2)
+        min_threshold = urgency_ranks.get(target.policy.min_lending_urgency.upper(), 3)
 
+        # Headroom calculation
+        target_headroom = max(0.0, target.policy.daily_budget - target.spent_today)
+        has_funds = target_headroom >= req.amount
+        personality_allows = req_score >= min_threshold
+
+        is_accepted = has_funds and personality_allows
         neg_id = f"NEG-{uuid.uuid4().hex[:8].upper()}"
 
-        if is_accepted:
+        if not has_funds:
+            transcript = (
+                f"[{requester.name} -> {target.name} ({target.personality.value})]: \"Urgency: {req.urgency}. "
+                f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
+                f"[{target.name} ({target.personality.value}) -> {requester.name}]: \"REJECTED (Insufficient Headroom). Only ${target_headroom:.2f} surplus available, "
+                f"which cannot satisfy the requested ${req.amount:.2f} quota.\""
+            )
+        elif not personality_allows:
+            transcript = (
+                f"[{requester.name} -> {target.name} ({target.personality.value})]: \"Urgency: {req.urgency}. "
+                f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
+                f"[{target.name} ({target.personality.value}) -> {requester.name}]: \"REJECTED ({target.personality_description}). "
+                f"Talep aciliyeti '{req.urgency}', ancak benim birikim/fon eşiğim '{target.policy.min_lending_urgency}'. Rezervlerimi koruyorum.\""
+            )
+        else:
             # Autonomous quota reallocation
             target.policy.daily_budget -= req.amount
             requester.policy.daily_budget += req.amount
 
             transcript = (
-                f"[{requester.name} -> {target.name}]: \"Urgency: {req.urgency}. "
+                f"[{requester.name} -> {target.name} ({target.personality.value})]: \"Urgency: {req.urgency}. "
                 f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
-                f"[{target.name} -> {requester.name}]: \"Surplus verified (${target_headroom:.2f} available). "
-                f"Transfer of ${req.amount:.2f} APPROVED autonomously under Cooperative Resource Protocol.\""
-            )
-        else:
-            transcript = (
-                f"[{requester.name} -> {target.name}]: \"Urgency: {req.urgency}. "
-                f"Requesting ${req.amount:.2f} daily quota transfer. Justification: {req.justification}\"\n"
-                f"[{target.name} -> {requester.name}]: \"REJECTED. Only ${target_headroom:.2f} surplus available, "
-                f"which cannot satisfy the requested ${req.amount:.2f} quota.\""
+                f"[{target.name} ({target.personality.value}) -> {requester.name}]: \"APPROVED ({target.personality_description}). "
+                f"Surplus verified (${target_headroom:.2f} available). Urgency criteria met. Transferred ${req.amount:.2f} quota under Cooperative Protocol.\""
             )
 
         record = NegotiationRecord(
