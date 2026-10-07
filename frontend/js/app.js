@@ -346,11 +346,28 @@ function renderFleet() {
     const dailyLabel = currentLang === 'tr' ? 'Günlük Kota' : 'Daily Cap';
     const spentLabel = currentLang === 'tr' ? 'Kullanılan' : 'Spent';
 
+    let persClass = 'pers-balanced';
+    let persIcon = '⚖️';
+    let persLabel = currentLang === 'tr' ? 'Dengeli Hazine' : 'Balanced';
+    if (agent.personality === 'FRUGAL_VAULT') {
+      persClass = 'pers-frugal';
+      persIcon = '🏦';
+      persLabel = currentLang === 'tr' ? 'Cimri Kasa (Zor Borç Verir)' : 'Frugal Vault (Strict)';
+    } else if (agent.personality === 'GROWTH_EXPLORER') {
+      persClass = 'pers-growth';
+      persIcon = '🚀';
+      persLabel = currentLang === 'tr' ? 'Büyüme & Ar-Ge (Cömert)' : 'Growth Explorer';
+    }
+
     card.innerHTML = `
       <div class="agent-card-top">
-        <div class="agent-title-row">
+        <div class="agent-title-row" style="flex-wrap: wrap; gap: 0.45rem;">
           <span class="fleet-status-dot" title="Active"></span>
           <span class="agent-card-title">${agent.name}</span>
+          <span class="agent-personality-badge ${persClass}" title="${agent.personality_description || ''}">
+            <span>${persIcon}</span>
+            <span>${persLabel}</span>
+          </span>
         </div>
         <span class="agent-card-balance font-mono">$${agent.wallet_balance.toFixed(2)}</span>
       </div>
@@ -706,16 +723,33 @@ if (el.btnToggleNegotiation && el.negotiationContentBody) {
   });
 }
 
-if (el.chipPresetNeg) {
-  el.chipPresetNeg.addEventListener('click', () => {
+const chipFrugalReject = document.getElementById('chip-preset-frugal-reject');
+const chipFrugalAccept = document.getElementById('chip-preset-frugal-accept');
+
+if (chipFrugalReject) {
+  chipFrugalReject.addEventListener('click', () => {
     if (el.negRequesterSelect) el.negRequesterSelect.value = 'agent-research';
     if (el.negTargetSelect) el.negTargetSelect.value = 'agent-devops';
     if (el.negAmount) el.negAmount.value = '35.00';
     if (el.negUrgency) el.negUrgency.value = 'HIGH';
     if (el.negJustification) {
       el.negJustification.value = currentLang === 'tr'
-        ? '50.000 akademik makale analizi için acil günlük bütçe takviyesi gerekiyor.'
-        : 'Urgent daily budget headroom needed for processing 50k scientific papers.';
+        ? 'Rutin model inceleme ve veri çekme işlemi için bütçe takviyesi.'
+        : 'Routine model evaluation and data extraction quota.';
+    }
+  });
+}
+
+if (chipFrugalAccept) {
+  chipFrugalAccept.addEventListener('click', () => {
+    if (el.negRequesterSelect) el.negRequesterSelect.value = 'agent-research';
+    if (el.negTargetSelect) el.negTargetSelect.value = 'agent-devops';
+    if (el.negAmount) el.negAmount.value = '35.00';
+    if (el.negUrgency) el.negUrgency.value = 'CRITICAL';
+    if (el.negJustification) {
+      el.negJustification.value = currentLang === 'tr'
+        ? 'KRİTİK ACİL DURUM: Canlı sistem kesintisi failover kümesi için acil bütçe devri!'
+        : 'CRITICAL EMERGENCY: Live cluster failover requiring mandatory budget hedge!';
     }
   });
 }

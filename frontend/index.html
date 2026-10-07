@@ -349,12 +349,13 @@
                   <input type="text" id="neg-justification" class="fin-input" value="Büyük veri analiz modelini çalıştırmak için acil günlük bütçe takviyesi gerekiyor." required>
                 </div>
 
-                <div class="form-footer" style="margin-top: 0.5rem;">
+                <div class="form-footer" style="margin-top: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
                   <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation" style="font-size: 0.78rem;">
                     <span>🤝</span>
                     <span data-i18n="btnRunNegotiation">Otonom Müzakereyi Başlat</span>
                   </button>
-                  <button type="button" class="preset-chip" id="chip-preset-neg" data-i18n="chipPresetNeg">⚡ Örnek: Research -> DevOps ($35)</button>
+                  <button type="button" class="preset-chip" id="chip-preset-frugal-reject" title="DevOps Cimri Kasa olduğu için HIGH isteği reddeder">🏦 Test 1: Cimri Reddi (HIGH)</button>
+                  <button type="button" class="preset-chip" id="chip-preset-frugal-accept" title="DevOps CRITICAL istekte kotayı onaylar">⚡ Test 2: Cimri Onayı (CRITICAL)</button>
                 </div>
               </form>
 
