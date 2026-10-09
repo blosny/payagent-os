@@ -82,7 +82,6 @@
       <div class="stat-card">
         <div class="stat-meta">
           <span class="stat-label" data-i18n="metricSpentToday">Bugünkü Harcama</span>
-          <span class="kpi-badge kpi-badge-emerald">24h</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-curr">$</span>
@@ -93,17 +92,15 @@
       <div class="stat-card">
         <div class="stat-meta">
           <span class="stat-label" data-i18n="metricPendingHITL">İnsan Onay Kuyruğu</span>
-          <span class="kpi-badge kpi-badge-amber">HITL</span>
         </div>
         <div class="stat-number-row font-mono">
-          <span class="stat-number text-amber-400" id="stat-pending">0</span>
+          <span class="stat-number text-muted" id="stat-pending">0</span>
         </div>
       </div>
 
       <div class="stat-card">
         <div class="stat-meta">
           <span class="stat-label" data-i18n="metricSettled">PayPal Hacmi</span>
-          <span class="kpi-badge kpi-badge-paypal">Settled</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-curr">$</span>
@@ -150,10 +147,7 @@
           <div class="fin-card" id="card-simulator">
             <div class="fin-card-header">
               <div>
-                <div class="card-title-wrap">
-                  <h2 class="fin-card-title" data-i18n="simTitle">Otonom Ajan Harcama Simülatörü</h2>
-                  <span class="badge-live-pulse">LIVE</span>
-                </div>
+                <h2 class="fin-card-title" data-i18n="simTitle">Otonom Ajan Harcama Simülatörü</h2>
                 <p class="fin-card-desc" data-i18n="simDesc">Yapay zeka ajanının harcama talebini ve gerekçesini test edin; politika motorunun kararını izleyin.</p>
               </div>
             </div>
@@ -309,10 +303,7 @@
       <section class="analytics-hub" id="analytics-hub">
         <div class="analytics-card">
           <div class="analytics-header">
-            <div class="analytics-title-wrap">
-              <span class="analytics-badge" data-i18n="analyticsBadge">Live Visual Intelligence</span>
-              <h2 class="analytics-title" data-i18n="analyticsTitle">Filo Harcama Dağılımı & Analitik</h2>
-            </div>
+            <h2 class="analytics-title" data-i18n="analyticsTitle">Filo Harcama Dağılımı & Analitik</h2>
             <div class="analytics-actions">
               <div class="savings-counter-pill" id="savings-counter-pill" title="Politika kalkanı ve Cimri Kasa tarafından korunan rezerv">
                 <span class="shield-icon">🛡️</span>
@@ -382,10 +373,7 @@
         <!-- Left: "What-If" Financial Stress Simulator -->
         <div class="workbench-card">
           <div class="workbench-header">
-            <div class="workbench-title-wrap">
-              <span class="workbench-badge badge-amber" data-i18n="badgeWhatIf">What-If Playground</span>
-              <h3 class="workbench-title" data-i18n="stressTitle">Finansal Stres & Likidite Simülatörü</h3>
-            </div>
+            <h3 class="workbench-title" data-i18n="stressTitle">Finansal Stres & Likidite Simülatörü</h3>
             <span class="stress-risk-pill font-mono" id="stress-risk-badge">STABLE</span>
           </div>
           
@@ -443,10 +431,7 @@
         <!-- Right: AI CFO Intelligence Copilot -->
         <div class="workbench-card">
           <div class="workbench-header">
-            <div class="workbench-title-wrap">
-              <span class="workbench-badge badge-blue" data-i18n="badgeCfo">AI Hazine Copilot</span>
-              <h3 class="workbench-title" data-i18n="cfoTitle">CFO Soru-Cevap & Finans Danışmanı</h3>
-            </div>
+            <h3 class="workbench-title" data-i18n="cfoTitle">CFO Soru-Cevap & Finans Danışmanı</h3>
             <span class="copilot-live-dot" title="Active Copilot"></span>
           </div>
 
@@ -497,18 +482,13 @@
         <!-- P2P Desk Header -->
         <div class="p2p-desk-header">
           <div class="p2p-desk-title-group">
-            <div class="neg-badge-cyan" data-i18n="negBadge">P2P Autonomous Protocol</div>
-            <h2 class="fin-card-title" style="font-size: 1.25rem; margin-top: 0.35rem;" data-i18n="negTitle">Ajanlar Arası Bütçe Müzakeresi & İç Borçlanma Masası</h2>
+            <h2 class="fin-card-title" style="font-size: 1.25rem;" data-i18n="negTitle">Ajanlar Arası Bütçe Müzakeresi & İç Borçlanma Masası</h2>
             <p class="fin-card-desc">Bir ajan günlük kotasını tükettiğinde veya acil GPU ihtiyacı doğduğunda, kardeş ajandan otonom borç transferi talep eder.</p>
           </div>
           <div class="p2p-desk-kpis">
             <div class="p2p-kpi-badge">
               <span class="p2p-kpi-sub">P2P İşlem Hacmi</span>
               <strong class="font-mono text-cyan-400" id="p2p-desk-traded-vol">$0.00</strong>
-            </div>
-            <div class="p2p-kpi-badge">
-              <span class="p2p-kpi-sub">İç Kredi Faizi</span>
-              <strong class="font-mono text-emerald-400">%0 (Kardeş Ajan)</strong>
             </div>
           </div>
         </div>
@@ -579,7 +559,6 @@
                 <h3 class="fin-card-title" style="font-size: 0.95rem;">💬 Ajanlar Arası Canlı Müzakere Akışı</h3>
                 <p class="fin-card-desc">İki otonom zekanın arka planda yürüttüğü kaynak tahsis protokolü.</p>
               </div>
-              <span class="badge-live-pulse">P2P PROTOCOL</span>
             </div>
 
             <!-- Live Dialogue Bubbles -->
@@ -597,10 +576,7 @@
         <div class="fin-card" style="margin-top: 1.25rem;" id="card-debt-ledger">
           <div class="fin-card-header">
             <div>
-              <div class="card-title-wrap">
-                <span class="badge-live-pulse">ZERO-INTEREST P2P</span>
-                <h3 class="fin-card-title" style="font-size: 1.05rem;">📜 Otonom Kardeş Borç Defteri & Geri Ödeme (Settlement Loop)</h3>
-              </div>
+              <h3 class="fin-card-title" style="font-size: 1.05rem;">📜 Otonom Kardeş Borç Defteri & Geri Ödeme (Settlement Loop)</h3>
               <p class="fin-card-desc">Acil GPU veya API kotası alan ajanlar borç defterine işlenir. Ertesi gün günlük bütçe yenilendiğinde otonom iade edilir.</p>
             </div>
             <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -648,9 +624,7 @@
         <!-- Toolkit Header Banner -->
         <div class="toolkit-header">
           <div class="toolkit-badge-row">
-            <span class="paypal-ai-badge">Official PayPal AI Toolkit</span>
-            <span class="mcp-badge">Model Context Protocol</span>
-            <span class="shield-badge">PayAgent OS Guardian Layer</span>
+            <span class="font-mono text-cyan-400" style="font-size: 0.72rem; letter-spacing: 0.04em;">⚡ paypal/AI-Toolkit · MCP Server · Guardian Middleware</span>
           </div>
           <h2 class="toolkit-title">PayPal AI Entegrasyon & Geliştirici Merkezi</h2>
           <p class="toolkit-subtitle">
@@ -796,7 +770,6 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())
             <div class="mcp-playground-box" id="mcp-playground-box">
               <div class="mcp-playground-header">
                 <div class="mcp-play-title-wrap">
-                  <span class="badge-live-pulse">LIVE PLAYGROUND</span>
                   <h4 class="mcp-play-title">MCP Tool Çağrı Denetleyicisi</h4>
                 </div>
                 <span class="mcp-status-pill font-mono" id="mcp-test-status-pill">GUARDIAN READY</span>

@@ -56,6 +56,10 @@ body {
   font-family: var(--font-mono);
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* Ambient Backlight */
 .ambient-glow {
   position: absolute;
@@ -616,13 +620,24 @@ body {
 }
 
 .count-badge {
-  background: rgba(245, 158, 11, 0.12);
-  color: var(--accent-amber);
-  border: 1px solid rgba(245, 158, 11, 0.3);
   font-size: 0.68rem;
   font-weight: 700;
-  padding: 0.2rem 0.55rem;
+  padding: 0.15rem 0.5rem;
   border-radius: var(--radius-xs);
+  transition: all 0.2s ease;
+}
+
+.count-badge-clean {
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.count-badge-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
 }
 
 /* --------------------------------------------------------------------------
@@ -1164,19 +1179,27 @@ body {
 
 .vendor-pills-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  align-items: baseline;
+  gap: 0.45rem;
   margin-top: 0.2rem;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  flex-wrap: wrap;
 }
 
-.vendor-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
-  font-size: 0.65rem;
-  font-weight: 500;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  color: var(--text-secondary);
+.vendor-meta-label {
+  color: var(--text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.vendor-meta-list {
+  color: #d4d4d8;
+  font-size: 0.68rem;
+  letter-spacing: -0.01em;
 }
 
 /* --------------------------------------------------------------------------
@@ -2641,13 +2664,36 @@ body {
 }
 
 .feature-status-pill {
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   font-family: var(--font-mono);
-  font-weight: 700;
-  padding: 0.12rem 0.4rem;
-  border-radius: 4px;
-  letter-spacing: 0.03em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.feature-status-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.feature-status-pill.status-ready::before {
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+.feature-status-pill.status-active::before {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
 
 .status-ready {

@@ -375,17 +375,30 @@ async function fetchSummary() {
     const data = await res.json();
 
     el.statAllocated.textContent = data.total_allocated_funds.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    el.statSpentToday.textContent = data.total_spent_today.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     el.statPending.textContent = data.pending_approval_count;
+    if (data.pending_approval_count > 0) {
+      el.statPending.className = 'stat-number text-amber-400';
+    } else {
+      el.statPending.className = 'stat-number text-muted';
+    }
+
     el.statVolume.textContent = data.total_volume_processed.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     
     el.statAgentsCount.textContent = currentLang === 'tr' 
       ? `${data.active_agents_count} Ajan`
       : `${data.active_agents_count} Agents`;
 
-    el.badgeHitlCount.textContent = currentLang === 'tr'
-      ? `${data.pending_approval_count} Bekliyor`
-      : `${data.pending_approval_count} Pending`;
+    if (el.badgeHitlCount) {
+      if (data.pending_approval_count > 0) {
+        el.badgeHitlCount.textContent = currentLang === 'tr'
+          ? `${data.pending_approval_count} Bekliyor`
+          : `${data.pending_approval_count} Pending`;
+        el.badgeHitlCount.className = 'count-badge count-badge-amber';
+      } else {
+        el.badgeHitlCount.textContent = currentLang === 'tr' ? '✓ Temiz' : '✓ Clean';
+        el.badgeHitlCount.className = 'count-badge count-badge-clean';
+      }
+    }
 
     if (el.tabHitlBadge) {
       if (data.pending_approval_count > 0) {
@@ -472,9 +485,15 @@ function renderFleet() {
     const pct = Math.min(100, Math.round((spent / dailyCap) * 100));
     const isWarning = pct > 75;
 
-    const vendorsHtml = agent.policy.allowed_vendors.length
-      ? agent.policy.allowed_vendors.map((v) => `<span class="vendor-pill">${v}</span>`).join('')
-      : `<span class="vendor-pill">${currentLang === 'tr' ? 'Tüm Satıcılar (Açık Payout)' : 'Open Payout'}</span>`;
+    const vendorTagLabel = currentLang === 'tr' ? 'Onaylı Satıcılar:' : 'Approved Vendors:';
+    const vendorList = agent.policy.allowed_vendors.length
+      ? agent.policy.allowed_vendors.join(' · ')
+      : (currentLang === 'tr' ? 'Tüm Satıcılar (Açık Payout)' : 'Open Payout');
+
+    const vendorsHtml = `
+      <span class="vendor-meta-label">${vendorTagLabel}</span>
+      <span class="vendor-meta-list font-mono">${vendorList}</span>
+    `;
 
     const limitLabel = currentLang === 'tr' ? 'Tekil Limit' : 'Max Per Tx';
     const dailyLabel = currentLang === 'tr' ? 'Günlük Kota' : 'Daily Cap';
