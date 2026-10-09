@@ -1379,6 +1379,73 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())`;
   });
 }
 
+// ============================================================================
+// LIVE MCP GUARDIAN INTERCEPTOR PLAYGROUND ENGINE
+// ============================================================================
+async function runMcpScenario(scenarioKey) {
+  const terminalPre = document.getElementById('mcp-terminal-pre');
+  const statusPill = document.getElementById('mcp-test-status-pill');
+  const termTime = document.getElementById('mcp-term-time');
+
+  if (statusPill) {
+    statusPill.textContent = 'INTERCEPTING...';
+    statusPill.style.color = '#38bdf8';
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/toolkit/test-scenario`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scenario: scenarioKey, agent_id: 'agent-devops' })
+    });
+
+    const data = await res.json();
+    if (termTime) termTime.textContent = new Date().toLocaleTimeString();
+
+    if (terminalPre) {
+      terminalPre.textContent = JSON.stringify(data, null, 2);
+    }
+
+    if (statusPill) {
+      if (data.guardian_verdict === 'AUTONOMOUS_APPROVED') {
+        statusPill.textContent = '✓ AUTONOMOUS APPROVED';
+        statusPill.style.color = '#34d399';
+        showToast(currentLang === 'tr' ? 'MCP Sipariş onaylandı ve PayPal Sandbox Orders v2 üzerinden icra edildi!' : 'MCP Order approved and executed via PayPal Sandbox Orders v2!', 'success');
+      } else if (data.guardian_verdict === 'HITL_HOLD_REQUIRED') {
+        statusPill.textContent = '⚠ HITL HOLD (HALTED)';
+        statusPill.style.color = '#f59e0b';
+        showToast(currentLang === 'tr' ? 'Limit aşımı! MCP çağrısı durduruldu ve İnsan Onay Kuyruğuna (HITL) iletildi.' : 'Limit exceeded! MCP tool call suspended and routed to HITL queue.', 'warning');
+      } else if (data.guardian_verdict === 'BLOCKED_BY_POLICY') {
+        statusPill.textContent = '✕ BLOCKED BY POLICY';
+        statusPill.style.color = '#f43f5e';
+        showToast(currentLang === 'tr' ? 'Yetkisiz satıcı! MCP çağrısı kalkan tarafından engellendi.' : 'Unauthorized vendor! MCP tool blocked by policy.', 'danger');
+      } else {
+        statusPill.textContent = '✓ SAFE PASSTHROUGH';
+        statusPill.style.color = '#38bdf8';
+        showToast(currentLang === 'tr' ? 'Salt okunur MCP çağrısı güvenle tamamlandı.' : 'Read-only MCP query finished safely.', 'info');
+      }
+    }
+
+    // Refresh KPIs and transaction history
+    await refreshAll();
+
+  } catch (err) {
+    if (terminalPre) terminalPre.textContent = JSON.stringify({ error: err.message }, null, 2);
+    if (statusPill) statusPill.textContent = 'ERROR';
+  }
+}
+
+const btnMcpSafe = document.getElementById('btn-mcp-safe');
+const btnMcpHitl = document.getElementById('btn-mcp-hitl');
+const btnMcpBlocked = document.getElementById('btn-mcp-blocked');
+const btnMcpReadonly = document.getElementById('btn-mcp-readonly');
+
+if (btnMcpSafe) btnMcpSafe.addEventListener('click', () => runMcpScenario('SAFE_PASS'));
+if (btnMcpHitl) btnMcpHitl.addEventListener('click', () => runMcpScenario('HITL_HOLD'));
+if (btnMcpBlocked) btnMcpBlocked.addEventListener('click', () => runMcpScenario('BLOCKED_VENDOR'));
+if (btnMcpReadonly) btnMcpReadonly.addEventListener('click', () => runMcpScenario('READONLY'));
+
+
 // Initial Boot
 initWorkspaceTabs();
 applyLanguage(currentLang);

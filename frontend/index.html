@@ -832,6 +832,42 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())
 <span class="code-comment"># LLM artık kontrolsüz harcama yapamaz;</span>
 <span class="code-comment"># limit aşımı durumunda otomatik HITL durdurur!</span></code></pre>
             </div>
+
+            <!-- Live MCP Guardian Interactive Playground Box -->
+            <div class="mcp-playground-box" id="mcp-playground-box">
+              <div class="mcp-playground-header">
+                <div class="mcp-play-title-wrap">
+                  <span class="badge-live-pulse">LIVE PLAYGROUND</span>
+                  <h4 class="mcp-play-title">MCP Tool Çağrı Denetleyicisi</h4>
+                </div>
+                <span class="mcp-status-pill font-mono" id="mcp-test-status-pill">GUARDIAN READY</span>
+              </div>
+              <p class="mcp-play-desc">
+                Resmi PayPal MCP tool çağrısının PayAgent OS kalkanına çarptığı anı canlı test edin:
+              </p>
+              
+              <div class="mcp-chips-row">
+                <button type="button" class="preset-chip chip-mcp" id="btn-mcp-safe">⚡ Limit İçi ($12.50 AWS)</button>
+                <button type="button" class="preset-chip chip-mcp" id="btn-mcp-hitl">🛡️ Limit Aşımı ($95.00 HITL)</button>
+                <button type="button" class="preset-chip chip-mcp" id="btn-mcp-blocked">🚫 Yetkisiz Satıcı</button>
+                <button type="button" class="preset-chip chip-mcp" id="btn-mcp-readonly">🔍 Read-Only Dispute</button>
+              </div>
+
+              <!-- Terminal Response Output Screen -->
+              <div class="mcp-terminal-screen">
+                <div class="mcp-terminal-top font-mono">
+                  <span class="term-dot"></span>
+                  <span class="term-title">mcp_interceptor_output.json</span>
+                  <span class="term-time font-mono" id="mcp-term-time">IDLE</span>
+                </div>
+                <pre class="mcp-terminal-code font-mono" id="mcp-terminal-pre"><code>{
+  "interceptor": "PayAgent OS Guardian v1.0",
+  "status": "Awaiting test execution...",
+  "tip": "Yukarıdaki senaryo butonlarından birine tıklayarak kalkanı test edin."
+}</code></pre>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

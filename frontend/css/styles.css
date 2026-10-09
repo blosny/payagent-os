@@ -2582,3 +2582,102 @@ body {
   font-size: 0.65rem;
   color: #a1a1aa;
 }
+
+/* ==========================================================================
+   Live MCP Playground & Terminal Box
+   ========================================================================== */
+.mcp-playground-box {
+  margin-top: 1.25rem;
+  background: rgba(14, 14, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.mcp-playground-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mcp-play-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mcp-play-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.mcp-status-pill {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.mcp-play-desc {
+  font-size: 0.72rem;
+  color: #a1a1aa;
+  line-height: 1.4;
+}
+
+.mcp-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip-mcp {
+  font-size: 0.7rem;
+  padding: 0.35rem 0.75rem;
+}
+
+.mcp-terminal-screen {
+  background: #09090c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mcp-terminal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.65rem;
+  color: #71717a;
+}
+
+.term-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+
+.mcp-terminal-code {
+  padding: 0.85rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #38bdf8;
+  max-height: 220px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
