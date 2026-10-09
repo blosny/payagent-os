@@ -181,434 +181,661 @@
       </div>
     </section>
 
-    <!-- Visual Analytics & Executive Intelligence Hub (Phase 1 Killer Feature) -->
-    <section class="analytics-hub" id="analytics-hub">
-      <div class="analytics-card">
-        <div class="analytics-header">
-          <div class="analytics-title-wrap">
-            <span class="analytics-badge" data-i18n="analyticsBadge">Live Visual Intelligence</span>
-            <h2 class="analytics-title" data-i18n="analyticsTitle">Filo Harcama Dağılımı & Analitik</h2>
-          </div>
-          <div class="analytics-actions">
-            <div class="savings-counter-pill" id="savings-counter-pill" title="Politika kalkanı ve Cimri Kasa tarafından korunan rezerv">
-              <span class="shield-icon">🛡️</span>
-              <span data-i18n="guardrailSavings">Korumaya Alınan:</span>
-              <strong class="font-mono text-emerald-400" id="stat-savings-amount">$0.00</strong>
-            </div>
-            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-open-pdf-report">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-              </svg>
-              <span data-i18n="btnOpenPdf">📄 Yönetici Raporu (PDF)</span>
-            </button>
-          </div>
-        </div>
+    <!-- Segmented Workspace Navigation Tabs (Apple / Linear Minimalist Bar) -->
+    <nav class="workspace-tabs-bar" id="workspace-tabs-bar">
+      <button type="button" class="tab-nav-btn active" data-tab="tab-fleet-ops" id="tab-btn-fleet-ops">
+        <span class="tab-btn-icon">⚡</span>
+        <span class="tab-btn-title" data-i18n="tabFleetOps">Otonom Harcama & Cüzdanlar</span>
+        <span class="tab-nav-badge hidden" id="tab-hitl-badge">0</span>
+      </button>
 
-        <div class="analytics-grid">
-          <!-- Donut Chart: Agent Allocation & Consumption -->
-          <div class="chart-box">
-            <div class="chart-box-header">
-              <span class="chart-box-title" data-i18n="chartAgentTitle">Ajan Harcama Payı</span>
-              <span class="chart-box-sub font-mono" id="donut-total-label">$0.00</span>
-            </div>
-            <div class="donut-chart-container">
-              <svg class="donut-svg" viewBox="0 0 160 160" id="donut-chart-svg">
-                <circle cx="80" cy="80" r="58" fill="transparent" stroke="#27272a" stroke-width="18"></circle>
-              </svg>
-              <div class="donut-center-text">
-                <span class="donut-center-sub" data-i18n="chartFleet">Filo</span>
-                <span class="donut-center-val font-mono" id="donut-center-total">$0</span>
-              </div>
-            </div>
-            <div class="chart-legend" id="donut-legend">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
+      <button type="button" class="tab-nav-btn" data-tab="tab-analytics" id="tab-btn-analytics">
+        <span class="tab-btn-icon">📊</span>
+        <span class="tab-btn-title" data-i18n="tabAnalytics">Hazine & Analitik Hub</span>
+      </button>
 
-          <!-- Vendor Breakdown & P2P Volume Bars -->
-          <div class="chart-box">
-            <div class="chart-box-header">
-              <span class="chart-box-title" data-i18n="chartVendorTitle">Tedarikçi Kırılımı (Vendor Breakdown)</span>
-              <span class="chart-box-sub font-mono" data-i18n="chartVendorSub">PayPal Orders v2</span>
-            </div>
-            <div class="vendor-bars-container" id="vendor-bars-container">
-              <!-- Dynamic progress bars -->
-            </div>
-            
-            <div class="p2p-stat-strip">
-              <div class="p2p-stat-item">
-                <span class="p2p-label" data-i18n="p2pVolumeLabel">🤝 P2P Takaslanan Bütçe:</span>
-                <span class="p2p-val font-mono text-cyan-400" id="stat-p2p-volume">$0.00</span>
-              </div>
-              <div class="p2p-stat-item">
-                <span class="p2p-label" data-i18n="guardEfficiencyLabel">⚡ Otomasyon Oranı:</span>
-                <span class="p2p-val font-mono text-emerald-400" id="stat-autonomy-rate">%100</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      <button type="button" class="tab-nav-btn" data-tab="tab-p2p" id="tab-btn-p2p">
+        <span class="tab-btn-icon">🤝</span>
+        <span class="tab-btn-title" data-i18n="tabP2P">P2P Müzakere & Borçlanma</span>
+      </button>
 
-    <!-- Interactive Copilot & Stress Testing Workbench (Phase 1 Final Polish) -->
-    <section class="interactive-workbench-row" id="interactive-workbench">
-      <!-- Left: "What-If" Financial Stress Simulator -->
-      <div class="workbench-card">
-        <div class="workbench-header">
-          <div class="workbench-title-wrap">
-            <span class="workbench-badge badge-amber" data-i18n="badgeWhatIf">What-If Playground</span>
-            <h3 class="workbench-title" data-i18n="stressTitle">Finansal Stres & Likidite Simülatörü</h3>
-          </div>
-          <span class="stress-risk-pill font-mono" id="stress-risk-badge">STABLE</span>
-        </div>
+      <button type="button" class="tab-nav-btn" data-tab="tab-toolkit" id="tab-btn-toolkit">
+        <span class="tab-btn-icon">🛠️</span>
+        <span class="tab-btn-title" data-i18n="tabToolkit">PayPal AI Toolkit & MCP</span>
+        <span class="tab-nav-pill-new">NEW</span>
+      </button>
+    </nav>
+
+    <!-- ======================================================================
+         TAB 1: OTONOM HARCAMA & CÜZDANLAR (OPERATIONAL FLEET & WORKSPACE)
+         ====================================================================== -->
+    <div class="tab-pane active" id="tab-fleet-ops">
+      <div class="portal-grid">
         
-        <div class="stress-controls-grid">
-          <div class="stress-slider-group">
-            <div class="slider-label-row">
-              <span data-i18n="sliderInflation">API Fiyat Enflasyonu:</span>
-              <strong class="font-mono text-cyan-400" id="val-inflation">+0%</strong>
-            </div>
-            <input type="range" id="slider-inflation" min="0" max="150" step="5" value="0" class="stress-slider">
-          </div>
-
-          <div class="stress-slider-group">
-            <div class="slider-label-row">
-              <span data-i18n="sliderTraffic">Trafik / İş Yükü Çarpanı:</span>
-              <strong class="font-mono text-emerald-400" id="val-traffic">1.0x</strong>
-            </div>
-            <input type="range" id="slider-traffic" min="1" max="5" step="0.5" value="1" class="stress-slider">
-          </div>
-
-          <div class="stress-slider-group">
-            <div class="slider-label-row">
-              <span data-i18n="selectOutage">Sağlayıcı Kesintisi Simülasyonu:</span>
-            </div>
-            <select id="select-outage" class="fin-input fin-input-sm">
-              <option value="">Kesinti Yok (Normal Çalışma)</option>
-              <option value="AWS">AWS Kesintisi -> HuggingFace Göçü (+%18 Maliyet)</option>
-              <option value="OpenAI">OpenAI Kesintisi -> Anthropic Göçü (+%15 Maliyet)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Real-time Stress Projection Result Banner -->
-        <div class="stress-projection-banner" id="stress-projection-banner">
-          <div class="stress-kpis-strip">
-            <div class="stress-kpi-item">
-              <span class="kpi-micro-label" data-i18n="burnRateLabel">Öngörülen 24h Tüketim:</span>
-              <span class="kpi-micro-val font-mono" id="proj-burn-rate">$0.00</span>
-            </div>
-            <div class="stress-kpi-item">
-              <span class="kpi-micro-label" data-i18n="exhaustionLabel">Likidite Tükenme Süresi:</span>
-              <span class="kpi-micro-val font-mono" id="proj-exhaustion-hours">24.0 Saat</span>
-            </div>
-            <div class="stress-kpi-item">
-              <span class="kpi-micro-label" data-i18n="deficitLabel">Olası Bütçe Açığı:</span>
-              <span class="kpi-micro-val font-mono text-amber-400" id="proj-deficit">$0.00</span>
-            </div>
-          </div>
-          <div class="stress-recommendation-box" id="proj-recommendation">
-            💡 <em>Finansal kalkan güvenli bölgede. Filo bütçesi mevcut kurallarla otonom çalışmayı sürdürebilir.</em>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: AI CFO Intelligence Copilot -->
-      <div class="workbench-card">
-        <div class="workbench-header">
-          <div class="workbench-title-wrap">
-            <span class="workbench-badge badge-blue" data-i18n="badgeCfo">AI Hazine Copilot</span>
-            <h3 class="workbench-title" data-i18n="cfoTitle">CFO Soru-Cevap & Finans Danışmanı</h3>
-          </div>
-          <span class="copilot-live-dot" title="Active Copilot"></span>
-        </div>
-
-        <!-- Quick Question Chips -->
-        <div class="cfo-quick-chips">
-          <button type="button" class="cfo-chip" data-q="Bugün en çok hangi ajan harcadı?">📊 En Çok Harcayan?</button>
-          <button type="button" class="cfo-chip" data-q="DevOps ajanı neden cimri davranıp borcu reddetti?">🏦 Cimri Kasa Neden Reddetti?</button>
-          <button type="button" class="cfo-chip" data-q="Bugün toplam ne kadar bütçe korundu?">🛡️ Korunan Tasarruf?</button>
-          <button type="button" class="cfo-chip" data-q="Bütçemizi optimize etmek için CFO önerin nedir?">💡 CFO Tavsiyesi</button>
-        </div>
-
-        <!-- CFO Response Message Box -->
-        <div class="cfo-response-box" id="cfo-response-box">
-          <div class="cfo-avatar-row">
-            <span class="cfo-icon">🤖</span>
-            <div>
-              <strong class="cfo-name" data-i18n="cfoName">PayAgent OS Hazine Direktörü (CFO)</strong>
-              <span class="cfo-time font-mono" id="cfo-time-stamp">Şimdi</span>
-            </div>
-          </div>
-          <div class="cfo-bubble-text" id="cfo-bubble-text" data-i18n="cfoWelcome">
-            Merhaba! Ben PayAgent OS Hazine Direktörüyüm. Ajanlarınızın harcama alışkanlıklarını, Cimri Kasa rezervlerini ve PayPal mutabakatlarını canlı izliyorum. Yukarıdaki hazır sorulardan birini seçebilir veya aşağıya serbest soru yazabilirsiniz.
-          </div>
-          <div class="cfo-action-row hidden" id="cfo-action-row">
-            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-cfo-action">
-              <span id="cfo-action-text">Aksiyon Al</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Free-form Query Input Form -->
-        <form id="cfo-query-form" class="cfo-query-form">
-          <input type="text" id="cfo-input-question" class="fin-input cfo-input" placeholder="Hazine veya harcamalar hakkında bir soru sorun..." required>
-          <button type="submit" class="fin-btn fin-btn-paypal fin-btn-sm" id="btn-send-cfo">
-            <span data-i18n="btnAsk">Sor</span>
-            <span>↵</span>
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Main Workspace (Portal 2-Col Grid) -->
-    <div class="portal-grid">
-      
-      <!-- Left Column: Simulator & HITL Queue -->
-      <div class="portal-col">
-        
-        <!-- Autonomous Intent Simulator -->
-        <div class="fin-card" id="card-simulator">
-          <div class="fin-card-header">
-            <div>
-              <div class="card-title-wrap">
-                <h2 class="fin-card-title" data-i18n="simTitle">Otonom Ajan Harcama Simülatörü</h2>
-                <span class="badge-live-pulse">LIVE</span>
-              </div>
-              <p class="fin-card-desc" data-i18n="simDesc">Yapay zeka ajanının harcama talebini ve gerekçesini test edin; politika motorunun kararını izleyin.</p>
-            </div>
-          </div>
-
-          <form id="simulator-form" class="fin-form">
-            <div class="form-grid-2">
-              <div class="field-group">
-                <label for="sim-agent-select" data-i18n="simCallingAgent">Talebi Yapan Ajan</label>
-                <select id="sim-agent-select" class="fin-input">
-                  <!-- Loaded dynamically -->
-                </select>
-              </div>
-
-              <div class="field-group">
-                <label for="sim-amount" data-i18n="simAmount">Harcama Tutarı (USD)</label>
-                <div class="input-currency">
-                  <span class="currency-symbol">$</span>
-                  <input type="number" id="sim-amount" class="fin-input font-mono" value="18.50" step="0.5" min="1" required>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-grid-2">
-              <div class="field-group">
-                <label for="sim-recipient" data-i18n="simVendor">Satıcı veya PayPal Alıcısı</label>
-                <input type="text" id="sim-recipient" class="fin-input" value="AWS" placeholder="Örn: AWS, OpenAI veya freelancer@paypal.me" required>
-              </div>
-
-              <div class="field-group">
-                <label for="sim-category" data-i18n="simCategory">Kategori</label>
-                <select id="sim-category" class="fin-input">
-                  <option value="CLOUD_COMPUTE" data-i18n="catCompute">Bulut Bilişim / GPU</option>
-                  <option value="API_QUOTA" data-i18n="catApi">API Çıkarım Kotası</option>
-                  <option value="DATASET_ACCESS" data-i18n="catDataset">Veri Seti / Rapor</option>
-                  <option value="FREELANCE_PAYOUT" data-i18n="catPayout">Freelancer Hakedişi</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field-group">
-              <label for="sim-reasoning" data-i18n="simReasoning">Ajanın Doğal Dil Gerekçesi (Explainability)</label>
-              <textarea id="sim-reasoning" class="fin-input textarea-fixed" rows="2" required>Model fine-tuning işlemi için AWS spot bulut sunucusu tahsis ediliyor.</textarea>
-            </div>
-
-            <div class="form-footer">
-              <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-intent">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                </svg>
-                <span data-i18n="btnExecute">Otonom Harcamayı Başlat</span>
-              </button>
-
-              <div class="preset-group">
-                <span class="preset-label" data-i18n="quickScenarios">Hazır Testler:</span>
-                <button type="button" class="preset-chip" id="chip-pass" data-i18n="chipPass">Limit İçi ($15)</button>
-                <button type="button" class="preset-chip" id="chip-exceed" data-i18n="chipExceed">Limit Aşımı ($85 HITL)</button>
-                <button type="button" class="preset-chip" id="chip-unauthorized" data-i18n="chipUnknown">Yetkisiz Satıcı</button>
-                <button type="button" class="preset-chip" id="chip-payout" data-i18n="chipPayout">Freelance Payout ($35)</button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <!-- Human-in-the-Loop Review Queue (Hero Feature!) -->
-        <div class="fin-card card-hitl-wrap" id="card-hitl">
-          <div class="fin-card-header">
-            <div>
-              <div class="card-title-wrap">
-                <h2 class="fin-card-title text-amber-300" data-i18n="hitlTitle">İnsan Onay Masası (HITL Queue)</h2>
-                <span class="count-badge" id="badge-hitl-count">0 Bekliyor</span>
-              </div>
-              <p class="fin-card-desc" data-i18n="hitlDesc">Güvenlik limitlerini aşan veya listede olmayan satıcı işlemleri insan denetimine düşer.</p>
-            </div>
-          </div>
-
-          <div id="hitl-queue-container" class="hitl-queue">
-            <!-- Dynamic via JS -->
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Agent Fleet & Audit Trail -->
-      <div class="portal-col">
-        
-        <!-- Active Agent Fleet & Limits -->
-        <div class="fin-card" id="card-fleet">
-          <div class="fin-card-header">
-            <div>
-              <h2 class="fin-card-title" data-i18n="fleetTitle">Aktif Ajan Filosu & Cüzdanlar</h2>
-              <p class="fin-card-desc" data-i18n="fleetDesc">Her yapay zeka ajanının anlık bakiyesi, harcama tavanı ve onaylı satıcıları.</p>
-            </div>
-            <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-toggle-negotiation" style="gap: 0.4rem;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              <span data-i18n="btnP2PNegotiate">P2P Bütçe Müzakeresi</span>
-            </button>
-          </div>
-          <div class="fleet-cards-wrap" id="fleet-container">
-            <!-- Dynamic via JS -->
-          </div>
-
-          <!-- P2P Budget Negotiation Drawer (Phase 6 Killer Feature) -->
-          <div id="negotiation-drawer" class="negotiation-drawer">
-            <div class="negotiation-header">
+        <!-- Left Column: Simulator & HITL Queue -->
+        <div class="portal-col">
+          
+          <!-- Autonomous Intent Simulator -->
+          <div class="fin-card" id="card-simulator">
+            <div class="fin-card-header">
               <div>
-                <span class="neg-badge-cyan" data-i18n="negBadge">P2P Autonomous Protocol</span>
-                <h3 class="fin-card-title" style="font-size: 0.95rem; margin-top: 0.3rem;" data-i18n="negTitle">Ajanlar Arası Bütçe Müzakeresi</h3>
+                <div class="card-title-wrap">
+                  <h2 class="fin-card-title" data-i18n="simTitle">Otonom Ajan Harcama Simülatörü</h2>
+                  <span class="badge-live-pulse">LIVE</span>
+                </div>
+                <p class="fin-card-desc" data-i18n="simDesc">Yapay zeka ajanının harcama talebini ve gerekçesini test edin; politika motorunun kararını izleyin.</p>
               </div>
-              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-toggle-negotiation" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
-                <span id="toggle-icon">−</span> <span data-i18n="btnToggle">Gizle / Göster</span>
-              </button>
             </div>
 
-            <div id="negotiation-content-body">
-              <form id="negotiation-form" class="fin-form" style="gap: 0.75rem;">
-                <div class="form-grid-2">
-                  <div class="field-group">
-                    <label for="neg-requester-select" data-i18n="negRequester">Kota İsteyen Ajan (Requester)</label>
-                    <select id="neg-requester-select" class="fin-input"></select>
-                  </div>
-                  <div class="field-group">
-                    <label for="neg-target-select" data-i18n="negTarget">Fazlası Olan Kaynak Ajan (Target)</label>
-                    <select id="neg-target-select" class="fin-input"></select>
-                  </div>
-                </div>
-
-                <div class="form-grid-2">
-                  <div class="field-group">
-                    <label for="neg-amount" data-i18n="negAmount">Aktarılacak Kota Tutarı (USD)</label>
-                    <div class="input-currency">
-                      <span class="currency-symbol">$</span>
-                      <input type="number" id="neg-amount" class="fin-input font-mono" value="35.00" step="1" min="1" required>
-                    </div>
-                  </div>
-                  <div class="field-group">
-                    <label for="neg-urgency" data-i18n="negUrgency">Aciliyet Seviyesi</label>
-                    <select id="neg-urgency" class="fin-input">
-                      <option value="MEDIUM">MEDIUM (Normal)</option>
-                      <option value="HIGH" selected>HIGH (Yüksek Öncelik)</option>
-                      <option value="CRITICAL">CRITICAL (Gecikemez)</option>
-                    </select>
-                  </div>
+            <form id="simulator-form" class="fin-form">
+              <div class="form-grid-2">
+                <div class="field-group">
+                  <label for="sim-agent-select" data-i18n="simCallingAgent">Talebi Yapan Ajan</label>
+                  <select id="sim-agent-select" class="fin-input">
+                    <!-- Loaded dynamically -->
+                  </select>
                 </div>
 
                 <div class="field-group">
-                  <label for="neg-justification" data-i18n="negJustification">Müzakere Gerekçesi (Agent Reasoning)</label>
-                  <input type="text" id="neg-justification" class="fin-input" value="Büyük veri analiz modelini çalıştırmak için acil günlük bütçe takviyesi gerekiyor." required>
-                </div>
-
-                <div class="form-footer" style="margin-top: 0.5rem; flex-wrap: wrap; gap: 0.4rem;">
-                  <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation" style="font-size: 0.78rem;">
-                    <span>🤝</span>
-                    <span data-i18n="btnRunNegotiation">Otonom Müzakereyi Başlat</span>
-                  </button>
-                  <button type="button" class="preset-chip" id="chip-preset-frugal-reject" title="DevOps Cimri Kasa olduğu için HIGH isteği reddeder">🏦 Test 1: Cimri Reddi (HIGH)</button>
-                  <button type="button" class="preset-chip" id="chip-preset-frugal-accept" title="DevOps CRITICAL istekte kotayı onaylar">⚡ Test 2: Cimri Onayı (CRITICAL)</button>
-                </div>
-              </form>
-
-              <!-- Live Multi-Agent Dialogue Chat Stream -->
-              <div class="negotiation-chat-feed" id="negotiation-chat-feed">
-                <div class="chat-bubble-agent req">
-                  <div class="chat-header-row">
-                    <div class="chat-author">
-                      <span>📊</span>
-                      <span>Market Research & Data Agent</span>
-                    </div>
-                    <span class="chat-badge chat-badge-req">Talep (HIGH)</span>
-                  </div>
-                  <div class="chat-body-text">
-                    "50.000 akademik makale analizi için DevOps ajanından <strong>$35.00</strong> günlük bütçe aktarımı talep edildi."
+                  <label for="sim-amount" data-i18n="simAmount">Harcama Tutarı (USD)</label>
+                  <div class="input-currency">
+                    <span class="currency-symbol">$</span>
+                    <input type="number" id="sim-amount" class="fin-input font-mono" value="18.50" step="0.5" min="1" required>
                   </div>
                 </div>
+              </div>
 
-                <div class="chat-bubble-agent target">
-                  <div class="chat-header-row">
-                    <div class="chat-author">
-                      <span>⚙️</span>
-                      <span>DevOps Infrastructure Agent</span>
-                    </div>
-                    <span class="chat-badge chat-badge-approved">✓ ONAYLANDI (Headroom: $165.00)</span>
-                  </div>
-                  <div class="chat-body-text">
-                    "Bütçe rezervi doğrulandı ($165.00 boşta kota). $35.00 kota transferi <em>Otonom Kaynak Tahsis Protokolü</em> kapsamında onaylandı."
-                  </div>
+              <div class="form-grid-2">
+                <div class="field-group">
+                  <label for="sim-recipient" data-i18n="simVendor">Satıcı veya PayPal Alıcısı</label>
+                  <input type="text" id="sim-recipient" class="fin-input" value="AWS" placeholder="Örn: AWS, OpenAI veya freelancer@paypal.me" required>
+                </div>
+
+                <div class="field-group">
+                  <label for="sim-category" data-i18n="simCategory">Kategori</label>
+                  <select id="sim-category" class="fin-input">
+                    <option value="CLOUD_COMPUTE" data-i18n="catCompute">Bulut Bilişim / GPU</option>
+                    <option value="API_QUOTA" data-i18n="catApi">API Çıkarım Kotası</option>
+                    <option value="DATASET_ACCESS" data-i18n="catDataset">Veri Seti / Rapor</option>
+                    <option value="FREELANCE_PAYOUT" data-i18n="catPayout">Freelancer Hakedişi</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="sim-reasoning" data-i18n="simReasoning">Ajanın Doğal Dil Gerekçesi (Explainability)</label>
+                <textarea id="sim-reasoning" class="fin-input textarea-fixed" rows="2" required>Model fine-tuning işlemi için AWS spot bulut sunucusu tahsis ediliyor.</textarea>
+              </div>
+
+              <div class="form-footer">
+                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-intent">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                  <span data-i18n="btnExecute">Otonom Harcamayı Başlat</span>
+                </button>
+
+                <div class="preset-group">
+                  <span class="preset-label" data-i18n="quickScenarios">Hazır Testler:</span>
+                  <button type="button" class="preset-chip" id="chip-pass" data-i18n="chipPass">Limit İçi ($15)</button>
+                  <button type="button" class="preset-chip" id="chip-exceed" data-i18n="chipExceed">Limit Aşımı ($85 HITL)</button>
+                  <button type="button" class="preset-chip" id="chip-unauthorized" data-i18n="chipUnknown">Yetkisiz Satıcı</button>
+                  <button type="button" class="preset-chip" id="chip-payout" data-i18n="chipPayout">Freelance Payout ($35)</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Human-in-the-Loop Review Queue (Hero Feature!) -->
+          <div class="fin-card card-hitl-wrap" id="card-hitl">
+            <div class="fin-card-header">
+              <div>
+                <div class="card-title-wrap">
+                  <h2 class="fin-card-title text-amber-300" data-i18n="hitlTitle">İnsan Onay Masası (HITL Queue)</h2>
+                  <span class="count-badge" id="badge-hitl-count">0 Bekliyor</span>
+                </div>
+                <p class="fin-card-desc" data-i18n="hitlDesc">Güvenlik limitlerini aşan veya listede olmayan satıcı işlemleri insan denetimine düşer.</p>
+              </div>
+            </div>
+
+            <div id="hitl-queue-container" class="hitl-queue">
+              <!-- Dynamic via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Agent Fleet & Audit Trail -->
+        <div class="portal-col">
+          
+          <!-- Active Agent Fleet & Limits -->
+          <div class="fin-card" id="card-fleet">
+            <div class="fin-card-header">
+              <div>
+                <h2 class="fin-card-title" data-i18n="fleetTitle">Aktif Ajan Filosu & Cüzdanlar</h2>
+                <p class="fin-card-desc" data-i18n="fleetDesc">Her yapay zeka ajanının anlık bakiyesi, harcama tavanı ve onaylı satıcıları.</p>
+              </div>
+              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-goto-p2p" style="gap: 0.4rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span data-i18n="btnP2PNegotiate">P2P Müzakere Masası ➔</span>
+              </button>
+            </div>
+            <div class="fleet-cards-wrap" id="fleet-container">
+              <!-- Dynamic via JS -->
+            </div>
+          </div>
+
+          <!-- Immutable Audit Trail Table -->
+          <div class="fin-card" id="card-audit">
+            <div class="fin-card-header">
+              <div>
+                <h2 class="fin-card-title" data-i18n="auditTitle">İşlem Denetim Kütüğü (Audit Trail)</h2>
+                <p class="fin-card-desc" data-i18n="auditDesc">PayPal Orders v2 ve Payouts API üzerinden kesinleşen işlemlerin canlı dökümü.</p>
+              </div>
+              <button class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-audit">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <span data-i18n="btnRefresh">Yenile</span>
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="fin-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="colTime">Saat</th>
+                    <th data-i18n="colAgent">Ajan</th>
+                    <th data-i18n="colAmount">Tutar</th>
+                    <th data-i18n="colVendor">Satıcı / Alıcı</th>
+                    <th data-i18n="colStatus">Durum</th>
+                    <th data-i18n="colRef">PayPal Ref ID</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table-body">
+                  <!-- Dynamic via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         TAB 2: HAZİNE & ANALİTİK HUB (VISUAL INTELLIGENCE & PDF EXPORT)
+         ====================================================================== -->
+    <div class="tab-pane hidden-tab" id="tab-analytics">
+      <!-- Visual Analytics & Executive Intelligence Hub -->
+      <section class="analytics-hub" id="analytics-hub">
+        <div class="analytics-card">
+          <div class="analytics-header">
+            <div class="analytics-title-wrap">
+              <span class="analytics-badge" data-i18n="analyticsBadge">Live Visual Intelligence</span>
+              <h2 class="analytics-title" data-i18n="analyticsTitle">Filo Harcama Dağılımı & Analitik</h2>
+            </div>
+            <div class="analytics-actions">
+              <div class="savings-counter-pill" id="savings-counter-pill" title="Politika kalkanı ve Cimri Kasa tarafından korunan rezerv">
+                <span class="shield-icon">🛡️</span>
+                <span data-i18n="guardrailSavings">Korumaya Alınan:</span>
+                <strong class="font-mono text-emerald-400" id="stat-savings-amount">$0.00</strong>
+              </div>
+              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-open-pdf-report">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span data-i18n="btnOpenPdf">📄 Yönetici Raporu (PDF)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="analytics-grid">
+            <!-- Donut Chart: Agent Allocation & Consumption -->
+            <div class="chart-box">
+              <div class="chart-box-header">
+                <span class="chart-box-title" data-i18n="chartAgentTitle">Ajan Harcama Payı</span>
+                <span class="chart-box-sub font-mono" id="donut-total-label">$0.00</span>
+              </div>
+              <div class="donut-chart-container">
+                <svg class="donut-svg" viewBox="0 0 160 160" id="donut-chart-svg">
+                  <circle cx="80" cy="80" r="58" fill="transparent" stroke="#27272a" stroke-width="18"></circle>
+                </svg>
+                <div class="donut-center-text">
+                  <span class="donut-center-sub" data-i18n="chartFleet">Filo</span>
+                  <span class="donut-center-val font-mono" id="donut-center-total">$0</span>
+                </div>
+              </div>
+              <div class="chart-legend" id="donut-legend">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Vendor Breakdown & P2P Volume Bars -->
+            <div class="chart-box">
+              <div class="chart-box-header">
+                <span class="chart-box-title" data-i18n="chartVendorTitle">Tedarikçi Kırılımı (Vendor Breakdown)</span>
+                <span class="chart-box-sub font-mono" data-i18n="chartVendorSub">PayPal Orders v2</span>
+              </div>
+              <div class="vendor-bars-container" id="vendor-bars-container">
+                <!-- Dynamic progress bars -->
+              </div>
+              
+              <div class="p2p-stat-strip">
+                <div class="p2p-stat-item">
+                  <span class="p2p-label" data-i18n="p2pVolumeLabel">🤝 P2P Takaslanan Bütçe:</span>
+                  <span class="p2p-val font-mono text-cyan-400" id="stat-p2p-volume">$0.00</span>
+                </div>
+                <div class="p2p-stat-item">
+                  <span class="p2p-label" data-i18n="guardEfficiencyLabel">⚡ Otomasyon Oranı:</span>
+                  <span class="p2p-val font-mono text-emerald-400" id="stat-autonomy-rate">%100</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Immutable Audit Trail Table -->
-        <div class="fin-card" id="card-audit">
-          <div class="fin-card-header">
-            <div>
-              <h2 class="fin-card-title" data-i18n="auditTitle">İşlem Denetim Kütüğü (Audit Trail)</h2>
-              <p class="fin-card-desc" data-i18n="auditDesc">PayPal Orders v2 ve Payouts API üzerinden kesinleşen işlemlerin canlı dökümü.</p>
+      <!-- Interactive Copilot & Stress Testing Workbench -->
+      <section class="interactive-workbench-row" id="interactive-workbench" style="margin-top: 1.5rem;">
+        <!-- Left: "What-If" Financial Stress Simulator -->
+        <div class="workbench-card">
+          <div class="workbench-header">
+            <div class="workbench-title-wrap">
+              <span class="workbench-badge badge-amber" data-i18n="badgeWhatIf">What-If Playground</span>
+              <h3 class="workbench-title" data-i18n="stressTitle">Finansal Stres & Likidite Simülatörü</h3>
             </div>
-            <button class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-audit">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <polyline points="1 20 1 14 7 14"></polyline>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-              </svg>
-              <span data-i18n="btnRefresh">Yenile</span>
-            </button>
+            <span class="stress-risk-pill font-mono" id="stress-risk-badge">STABLE</span>
+          </div>
+          
+          <div class="stress-controls-grid">
+            <div class="stress-slider-group">
+              <div class="slider-label-row">
+                <span data-i18n="sliderInflation">API Fiyat Enflasyonu:</span>
+                <strong class="font-mono text-cyan-400" id="val-inflation">+0%</strong>
+              </div>
+              <input type="range" id="slider-inflation" min="0" max="150" step="5" value="0" class="stress-slider">
+            </div>
+
+            <div class="stress-slider-group">
+              <div class="slider-label-row">
+                <span data-i18n="sliderTraffic">Trafik / İş Yükü Çarpanı:</span>
+                <strong class="font-mono text-emerald-400" id="val-traffic">1.0x</strong>
+              </div>
+              <input type="range" id="slider-traffic" min="1" max="5" step="0.5" value="1" class="stress-slider">
+            </div>
+
+            <div class="stress-slider-group">
+              <div class="slider-label-row">
+                <span data-i18n="selectOutage">Sağlayıcı Kesintisi Simülasyonu:</span>
+              </div>
+              <select id="select-outage" class="fin-input fin-input-sm">
+                <option value="">Kesinti Yok (Normal Çalışma)</option>
+                <option value="AWS">AWS Kesintisi -> HuggingFace Göçü (+%18 Maliyet)</option>
+                <option value="OpenAI">OpenAI Kesintisi -> Anthropic Göçü (+%15 Maliyet)</option>
+              </select>
+            </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="fin-table">
-              <thead>
-                <tr>
-                  <th data-i18n="colTime">Saat</th>
-                  <th data-i18n="colAgent">Ajan</th>
-                  <th data-i18n="colAmount">Tutar</th>
-                  <th data-i18n="colVendor">Satıcı / Alıcı</th>
-                  <th data-i18n="colStatus">Durum</th>
-                  <th data-i18n="colRef">PayPal Ref ID</th>
-                </tr>
-              </thead>
-              <tbody id="audit-table-body">
-                <!-- Dynamic via JS -->
-              </tbody>
-            </table>
+          <!-- Real-time Stress Projection Result Banner -->
+          <div class="stress-projection-banner" id="stress-projection-banner">
+            <div class="stress-kpis-strip">
+              <div class="stress-kpi-item">
+                <span class="kpi-micro-label" data-i18n="burnRateLabel">Öngörülen 24h Tüketim:</span>
+                <span class="kpi-micro-val font-mono" id="proj-burn-rate">$0.00</span>
+              </div>
+              <div class="stress-kpi-item">
+                <span class="kpi-micro-label" data-i18n="exhaustionLabel">Likidite Tükenme Süresi:</span>
+                <span class="kpi-micro-val font-mono" id="proj-exhaustion-hours">24.0 Saat</span>
+              </div>
+              <div class="stress-kpi-item">
+                <span class="kpi-micro-label" data-i18n="deficitLabel">Olası Bütçe Açığı:</span>
+                <span class="kpi-micro-val font-mono text-amber-400" id="proj-deficit">$0.00</span>
+              </div>
+            </div>
+            <div class="stress-recommendation-box" id="proj-recommendation">
+              💡 <em>Finansal kalkan güvenli bölgede. Filo bütçesi mevcut kurallarla otonom çalışmayı sürdürebilir.</em>
+            </div>
           </div>
         </div>
+
+        <!-- Right: AI CFO Intelligence Copilot -->
+        <div class="workbench-card">
+          <div class="workbench-header">
+            <div class="workbench-title-wrap">
+              <span class="workbench-badge badge-blue" data-i18n="badgeCfo">AI Hazine Copilot</span>
+              <h3 class="workbench-title" data-i18n="cfoTitle">CFO Soru-Cevap & Finans Danışmanı</h3>
+            </div>
+            <span class="copilot-live-dot" title="Active Copilot"></span>
+          </div>
+
+          <!-- Quick Question Chips -->
+          <div class="cfo-quick-chips">
+            <button type="button" class="cfo-chip" data-q="Bugün en çok hangi ajan harcadı?">📊 En Çok Harcayan?</button>
+            <button type="button" class="cfo-chip" data-q="DevOps ajanı neden cimri davranıp borcu reddetti?">🏦 Cimri Kasa Neden Reddetti?</button>
+            <button type="button" class="cfo-chip" data-q="Bugün toplam ne kadar bütçe korundu?">🛡️ Korunan Tasarruf?</button>
+            <button type="button" class="cfo-chip" data-q="Bütçemizi optimize etmek için CFO önerin nedir?">💡 CFO Tavsiyesi</button>
+          </div>
+
+          <!-- CFO Response Message Box -->
+          <div class="cfo-response-box" id="cfo-response-box">
+            <div class="cfo-avatar-row">
+              <span class="cfo-icon">🤖</span>
+              <div>
+                <strong class="cfo-name" data-i18n="cfoName">PayAgent OS Hazine Direktörü (CFO)</strong>
+                <span class="cfo-time font-mono" id="cfo-time-stamp">Şimdi</span>
+              </div>
+            </div>
+            <div class="cfo-bubble-text" id="cfo-bubble-text" data-i18n="cfoWelcome">
+              Merhaba! Ben PayAgent OS Hazine Direktörüyüm. Ajanlarınızın harcama alışkanlıklarını, Cimri Kasa rezervlerini ve PayPal mutabakatlarını canlı izliyorum. Yukarıdaki hazır sorulardan birini seçebilir veya aşağıya serbest soru yazabilirsiniz.
+            </div>
+            <div class="cfo-action-row hidden" id="cfo-action-row">
+              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-cfo-action">
+                <span id="cfo-action-text">Aksiyon Al</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Free-form Query Input Form -->
+          <form id="cfo-query-form" class="cfo-query-form">
+            <input type="text" id="cfo-input-question" class="fin-input cfo-input" placeholder="Hazine veya harcamalar hakkında bir soru sorun..." required>
+            <button type="submit" class="fin-btn fin-btn-paypal fin-btn-sm" id="btn-send-cfo">
+              <span data-i18n="btnAsk">Sor</span>
+              <span>↵</span>
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================================================================
+         TAB 3: P2P MÜZAKERE & BORÇLANMA (AUTONOMOUS PEER-TO-PEER SETTLEMENT)
+         ====================================================================== -->
+    <div class="tab-pane hidden-tab" id="tab-p2p">
+      <div class="p2p-desk-container">
+        <!-- P2P Desk Header -->
+        <div class="p2p-desk-header">
+          <div class="p2p-desk-title-group">
+            <div class="neg-badge-cyan" data-i18n="negBadge">P2P Autonomous Protocol</div>
+            <h2 class="fin-card-title" style="font-size: 1.25rem; margin-top: 0.35rem;" data-i18n="negTitle">Ajanlar Arası Bütçe Müzakeresi & İç Borçlanma Masası</h2>
+            <p class="fin-card-desc">Bir ajan günlük kotasını tükettiğinde veya acil GPU ihtiyacı doğduğunda, kardeş ajandan otonom borç transferi talep eder.</p>
+          </div>
+          <div class="p2p-desk-kpis">
+            <div class="p2p-kpi-badge">
+              <span class="p2p-kpi-sub">P2P İşlem Hacmi</span>
+              <strong class="font-mono text-cyan-400" id="p2p-desk-traded-vol">$0.00</strong>
+            </div>
+            <div class="p2p-kpi-badge">
+              <span class="p2p-kpi-sub">İç Kredi Faizi</span>
+              <strong class="font-mono text-emerald-400">%0 (Kardeş Ajan)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="p2p-desk-grid">
+          <!-- Left: Negotiation Form -->
+          <div class="fin-card" style="margin: 0;">
+            <div class="fin-card-header">
+              <div>
+                <h3 class="fin-card-title" style="font-size: 0.95rem;">🎯 Kota Transfer & Borçlanma Talebi</h3>
+                <p class="fin-card-desc">Talebi yapan ajanın önceliği ve kaynak ajanın finansal kişiliği sonucu belirler.</p>
+              </div>
+            </div>
+
+            <form id="negotiation-form" class="fin-form" style="gap: 0.85rem;">
+              <div class="form-grid-2">
+                <div class="field-group">
+                  <label for="neg-requester-select" data-i18n="negRequester">Kota İsteyen Ajan (Requester)</label>
+                  <select id="neg-requester-select" class="fin-input"></select>
+                </div>
+                <div class="field-group">
+                  <label for="neg-target-select" data-i18n="negTarget">Fazlası Olan Kaynak Ajan (Target)</label>
+                  <select id="neg-target-select" class="fin-input"></select>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="field-group">
+                  <label for="neg-amount" data-i18n="negAmount">Aktarılacak Kota Tutarı (USD)</label>
+                  <div class="input-currency">
+                    <span class="currency-symbol">$</span>
+                    <input type="number" id="neg-amount" class="fin-input font-mono" value="35.00" step="1" min="1" required>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="neg-urgency" data-i18n="negUrgency">Aciliyet Seviyesi</label>
+                  <select id="neg-urgency" class="fin-input">
+                    <option value="MEDIUM">MEDIUM (Normal)</option>
+                    <option value="HIGH" selected>HIGH (Yüksek Öncelik)</option>
+                    <option value="CRITICAL">CRITICAL (Gecikemez)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="neg-justification" data-i18n="negJustification">Müzakere Gerekçesi (Agent Reasoning)</label>
+                <input type="text" id="neg-justification" class="fin-input" value="Büyük veri analiz modelini çalıştırmak için acil günlük bütçe takviyesi gerekiyor." required>
+              </div>
+
+              <div class="form-footer" style="margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation">
+                  <span>🤝</span>
+                  <span data-i18n="btnRunNegotiation">Otonom Müzakereyi Başlat</span>
+                </button>
+                <button type="button" class="preset-chip" id="chip-preset-frugal-reject" title="DevOps Cimri Kasa olduğu için HIGH isteği reddeder">🏦 Test 1: Cimri Reddi (HIGH)</button>
+                <button type="button" class="preset-chip" id="chip-preset-frugal-accept" title="DevOps CRITICAL istekte kotayı onaylar">⚡ Test 2: Cimri Onayı (CRITICAL)</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right: Live Multi-Agent Dialogue & Protocol Stream -->
+          <div class="fin-card" style="margin: 0; display: flex; flex-direction: column;">
+            <div class="fin-card-header">
+              <div>
+                <h3 class="fin-card-title" style="font-size: 0.95rem;">💬 Ajanlar Arası Canlı Müzakere Akışı</h3>
+                <p class="fin-card-desc">İki otonom zekanın arka planda yürüttüğü kaynak tahsis protokolü.</p>
+              </div>
+              <span class="badge-live-pulse">P2P PROTOCOL</span>
+            </div>
+
+            <!-- Live Dialogue Bubbles -->
+            <div class="negotiation-chat-feed" id="negotiation-chat-feed" style="flex: 1; min-height: 280px;">
+              <div class="chat-bubble-agent req">
+                <div class="chat-header-row">
+                  <div class="chat-author">
+                    <span>📊</span>
+                    <span>Market Research & Data Agent</span>
+                  </div>
+                  <span class="chat-badge chat-badge-req">Talep (HIGH)</span>
+                </div>
+                <div class="chat-body-text">
+                  "50.000 akademik makale analizi için DevOps ajanından <strong>$35.00</strong> günlük bütçe aktarımı talep edildi."
+                </div>
+              </div>
+
+              <div class="chat-bubble-agent target">
+                <div class="chat-header-row">
+                  <div class="chat-author">
+                    <span>⚙️</span>
+                    <span>DevOps Infrastructure Agent</span>
+                  </div>
+                  <span class="chat-badge chat-badge-approved">✓ ONAYLANDI (Headroom: $165.00)</span>
+                </div>
+                <div class="chat-body-text">
+                  "Bütçe rezervi doğrulandı ($165.00 boşta kota). $35.00 kota transferi <em>Otonom Kaynak Tahsis Protokolü</em> kapsamında onaylandı."
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         TAB 4: PAYPAL AI TOOLKIT & MCP (OFFICIAL REPO & DEVELOPER GATEWAY)
+         ====================================================================== -->
+    <div class="tab-pane hidden-tab" id="tab-toolkit">
+      <div class="toolkit-container">
+        <!-- Toolkit Header Banner -->
+        <div class="toolkit-header">
+          <div class="toolkit-badge-row">
+            <span class="paypal-ai-badge">Official PayPal AI Toolkit</span>
+            <span class="mcp-badge">Model Context Protocol</span>
+            <span class="shield-badge">PayAgent OS Guardian Layer</span>
+          </div>
+          <h2 class="toolkit-title">PayPal AI Entegrasyon & Geliştirici Merkezi</h2>
+          <p class="toolkit-subtitle">
+            PayPal'ın resmi <code>paypal/AI-Toolkit</code> kütüphanesi, resmi Sandbox MCP Sunucusu ve PayAgent OS Kurumsal Politika Kalkanı mimarisi.
+          </p>
+        </div>
+
+        <!-- 2-Column Split Layout (Wide Dashboard View: Left Cards & Links, Right Code Showcase) -->
+        <div class="toolkit-split-layout">
+          <!-- Left Column: Feature Status Cards + Quick Resource Links -->
+          <div class="toolkit-col-main">
+            <div class="toolkit-cards-grid">
+              <!-- Card 1: Official PayPal MCP Server -->
+              <div class="toolkit-feature-card">
+                <div class="feature-card-header">
+                  <div class="feature-icon-title">
+                    <span class="feature-card-icon">⚡</span>
+                    <h3 class="feature-title">Official Sandbox MCP Server</h3>
+                  </div>
+                  <span class="feature-status-pill status-ready">SSE CONNECTED</span>
+                </div>
+                <p class="feature-desc">
+                  PayPal resmi Model Context Protocol adresi üzerinden yapay zeka ajanlarına doğrudan araç çağrısı desteği sunar.
+                </p>
+                <div class="feature-endpoint font-mono">https://mcp.sandbox.paypal.com/sse</div>
+                <ul class="feature-specs">
+                  <li>✓ Claude Code & Cursor entegrasyonu</li>
+                  <li>✓ Bearer Token yetkilendirmesi</li>
+                  <li>✓ Orders v2, Payouts & Invoices</li>
+                </ul>
+              </div>
+
+              <!-- Card 2: PayAgent OS Guardian Middleware -->
+              <div class="toolkit-feature-card border-guard">
+                <div class="feature-card-header">
+                  <div class="feature-icon-title">
+                    <span class="feature-card-icon">🛡️</span>
+                    <h3 class="feature-title">PayAgent OS Guardian Layer</h3>
+                  </div>
+                  <span class="feature-status-pill status-active">ACTIVE INTERCEPTOR</span>
+                </div>
+                <p class="feature-desc">
+                  Ajanın yaptığı her resmi PayPal çağrısını araya girerek denetler; yetkisiz harcamayı ve limit aşımını durdurur.
+                </p>
+                <div class="feature-endpoint font-mono">PolicyEngine.evaluate(intent)</div>
+                <ul class="feature-specs">
+                  <li>✓ Per-tx & Daily quota kontrolü</li>
+                  <li>✓ Vendor Allowlist doğrulama</li>
+                  <li>✓ Human-in-the-Loop (HITL) durdurması</li>
+                </ul>
+              </div>
+
+              <!-- Card 3: Cloned Skills & Prompts -->
+              <div class="toolkit-feature-card">
+                <div class="feature-card-header">
+                  <div class="feature-icon-title">
+                    <span class="feature-card-icon">🧠</span>
+                    <h3 class="feature-title">PayPal AI Toolkit Skills</h3>
+                  </div>
+                  <span class="feature-status-pill status-ready">INSTALLED</span>
+                </div>
+                <p class="feature-desc">
+                  PayPal geliştirici ekibinin resmi olarak sağladığı en iyi uygulama (best practices) ve yönlendirici kuralları.
+                </p>
+                <div class="feature-endpoint font-mono">paypal-ai-toolkit/AI-Toolkit/skills</div>
+                <ul class="feature-specs">
+                  <li>✓ <code>paypal-best-practices</code></li>
+                  <li>✓ <code>paypal-routing</code> yönergeleri</li>
+                  <li>✓ LangChain & CrewAI uyumlu</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- External Official Resources Links Strip (Directly Visible Under Cards) -->
+            <div class="toolkit-links-strip">
+              <a href="https://github.com/paypal/AI-Toolkit" target="_blank" class="resource-link-card">
+                <span class="res-icon">🐙</span>
+                <div class="res-info">
+                  <strong>paypal/AI-Toolkit (GitHub)</strong>
+                  <span>Resmi açık kaynak PayPal AI kütüphanesi</span>
+                </div>
+              </a>
+              <a href="https://www.postman.com/paypal" target="_blank" class="resource-link-card">
+                <span class="res-icon">🚀</span>
+                <div class="res-info">
+                  <strong>PayPal Public Workspace (Postman)</strong>
+                  <span>715k+ görüntülenme, güncel API koleksiyonları</span>
+                </div>
+              </a>
+              <a href="https://developer.paypal.com/ai-tools/get-started" target="_blank" class="resource-link-card">
+                <span class="res-icon">📖</span>
+                <div class="res-info">
+                  <strong>PayPal AI Developer Docs</strong>
+                  <span>Agent toolkit, MCP server & prompt rehberi</span>
+                </div>
+              </a>
+              <a href="https://www.sandbox.paypal.com" target="_blank" class="resource-link-card">
+                <span class="res-icon">💳</span>
+                <div class="res-info">
+                  <strong>PayPal Sandbox Portal</strong>
+                  <span>Canlı test hesapları ve bakiye takibi</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Code Showcase Box -->
+          <div class="toolkit-col-code">
+            <div class="code-showcase-box">
+              <div class="code-box-header">
+                <div class="code-dots">
+                  <span class="dot dot-red"></span>
+                  <span class="dot dot-yellow"></span>
+                  <span class="dot dot-green"></span>
+                </div>
+                <span class="code-box-title font-mono">agent_with_guardian.py</span>
+                <button type="button" class="copy-code-btn" id="btn-copy-toolkit-code">Kodu Kopyala</button>
+              </div>
+              <pre class="code-box-pre font-mono"><code><span class="code-keyword">from</span> payagent_os <span class="code-keyword">import</span> PolicyEngine, PayAgentGuardian
+<span class="code-keyword">from</span> paypal_ai_toolkit <span class="code-keyword">import</span> PayPalAgentToolkit
+
+<span class="code-comment"># 1. PayPal resmi AI Toolkit'i başlat</span>
+toolkit = PayPalAgentToolkit(sandbox=<span class="code-literal">True</span>)
+
+<span class="code-comment"># 2. PayAgent OS kurumsal koruma kalkanını bağla</span>
+guardian = PayAgentGuardian(
+    policy_engine=PolicyEngine(
+        max_per_tx=<span class="code-literal">50.0</span>,
+        daily_limit=<span class="code-literal">150.0</span>
+    ),
+    hitl_threshold=<span class="code-literal">50.0</span>,
+    allowlist=[<span class="code-string">"AWS"</span>, <span class="code-string">"OpenAI"</span>, <span class="code-string">"HuggingFace"</span>]
+)
+
+<span class="code-comment"># 3. Otonom yapay zeka ajanına güvenli cüzdan sağla</span>
+safe_tools = guardian.wrap_tools(toolkit.get_tools())
+
+<span class="code-comment"># LLM artık kontrolsüz harcama yapamaz;</span>
+<span class="code-comment"># limit aşımı durumunda otomatik HITL durdurur!</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Executive Financial Report Modal (Print / PDF Ready) -->
     <div id="executive-report-modal" class="report-modal-backdrop hidden">

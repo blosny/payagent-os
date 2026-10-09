@@ -115,6 +115,10 @@ const i18n = {
     cfoName: 'PayAgent OS Hazine Direktörü (CFO)',
     cfoWelcome: 'Merhaba! Ben PayAgent OS Hazine Direktörüyüm. Ajanlarınızın harcama alışkanlıklarını, Cimri Kasa rezervlerini ve PayPal mutabakatlarını canlı izliyorum. Yukarıdaki hazır sorulardan birini seçebilir veya aşağıya serbest soru yazabilirsiniz.',
     btnAsk: 'Sor',
+    tabFleetOps: 'Otonom Harcama & Cüzdanlar',
+    tabAnalytics: 'Hazine & Analitik Hub',
+    tabP2P: 'P2P Müzakere & Borçlanma',
+    tabToolkit: 'PayPal AI Toolkit & MCP',
   },
   en: {
     tagline: 'Autonomous AI Agent Wallet & Payment Orchestration',
@@ -224,6 +228,10 @@ const i18n = {
     cfoName: 'PayAgent OS Chief Financial Officer (CFO)',
     cfoWelcome: 'Hello! I am the PayAgent OS Chief Financial Officer. I monitor fleet spending, Frugal Vault reserves, and PayPal settlements in real-time. Pick a quick prompt above or type any financial question below.',
     btnAsk: 'Ask',
+    tabFleetOps: 'Autonomous Spend & Wallets',
+    tabAnalytics: 'Treasury & Analytics Hub',
+    tabP2P: 'P2P Negotiation & Debt',
+    tabToolkit: 'PayPal AI Toolkit & MCP',
   },
 };
 
@@ -237,6 +245,10 @@ let analyticsData = null;
 
 // DOM Elements
 const el = {
+  tabHitlBadge: document.getElementById('tab-hitl-badge'),
+  btnGotoP2p: document.getElementById('btn-goto-p2p'),
+  p2pDeskTradedVol: document.getElementById('p2p-desk-traded-vol'),
+  btnCopyToolkitCode: document.getElementById('btn-copy-toolkit-code'),
   btnLangTr: document.getElementById('btn-lang-tr'),
   btnLangEn: document.getElementById('btn-lang-en'),
   paypalConnLabel: document.getElementById('paypal-conn-label'),
@@ -370,6 +382,15 @@ async function fetchSummary() {
     el.badgeHitlCount.textContent = currentLang === 'tr'
       ? `${data.pending_approval_count} Bekliyor`
       : `${data.pending_approval_count} Pending`;
+
+    if (el.tabHitlBadge) {
+      if (data.pending_approval_count > 0) {
+        el.tabHitlBadge.textContent = data.pending_approval_count;
+        el.tabHitlBadge.classList.remove('hidden');
+      } else {
+        el.tabHitlBadge.classList.add('hidden');
+      }
+    }
 
     if (data.is_live_sandbox) {
       el.paypalConnLabel.textContent = currentLang === 'tr' ? 'PayPal Sandbox: Canlı Bağlı' : 'PayPal Sandbox: Connected';
@@ -977,6 +998,9 @@ function renderAnalytics(data) {
   if (el.statP2pVolume) {
     el.statP2pVolume.textContent = `$${data.negotiation_volume.toFixed(2)}`;
   }
+  if (el.p2pDeskTradedVol) {
+    el.p2pDeskTradedVol.textContent = `$${data.negotiation_volume.toFixed(2)}`;
+  }
 
   const totalCount = data.total_tx_count || 1;
   const autoCount = data.approved_tx_count || 0;
@@ -1275,7 +1299,88 @@ async function refreshAll() {
   await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions(), fetchAnalytics()]);
 }
 
+// ============================================================================
+// WORKSPACE TAB NAVIGATION ENGINE
+// ============================================================================
+function initWorkspaceTabs() {
+  const tabButtons = document.querySelectorAll('.tab-nav-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  function activateTab(tabId) {
+    tabButtons.forEach((btn) => {
+      if (btn.getAttribute('data-tab') === tabId) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    tabPanes.forEach((pane) => {
+      if (pane.id === tabId) {
+        pane.classList.remove('hidden-tab');
+        pane.classList.add('active');
+      } else {
+        pane.classList.add('hidden-tab');
+        pane.classList.remove('active');
+      }
+    });
+
+    localStorage.setItem('payagent_active_tab', tabId);
+  }
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+      activateTab(tabId);
+    });
+  });
+
+  if (el.btnGotoP2p) {
+    el.btnGotoP2p.addEventListener('click', () => {
+      activateTab('tab-p2p');
+    });
+  }
+
+  // Restore saved tab or default to tab-fleet-ops
+  const savedTab = localStorage.getItem('payagent_active_tab') || 'tab-fleet-ops';
+  if (document.getElementById(savedTab)) {
+    activateTab(savedTab);
+  }
+}
+
+// Copy Code Snippet Listener
+if (el.btnCopyToolkitCode) {
+  el.btnCopyToolkitCode.addEventListener('click', () => {
+    const code = `from payagent_os import PolicyEngine, PayAgentGuardian
+from paypal_ai_toolkit import PayPalAgentToolkit
+
+# 1. PayPal resmi AI Toolkit'i başlat
+toolkit = PayPalAgentToolkit(sandbox=True)
+
+# 2. PayAgent OS kurumsal koruma kalkanını bağla (Drop-In Middleware)
+guardian = PayAgentGuardian(
+    policy_engine=PolicyEngine(max_per_tx=50.0, daily_limit=150.0),
+    hitl_threshold=50.0,
+    allowlist=["AWS", "OpenAI", "HuggingFace"]
+)
+
+# 3. Otonom yapay zeka ajanına güvenli cüzdan sağla
+safe_tools = guardian.wrap_tools(toolkit.get_tools())`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast(currentLang === 'tr' ? 'Entegrasyon Python kodu panoya kopyalandı!' : 'Integration Python snippet copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast(currentLang === 'tr' ? 'Kopyalama başarısız oldu.' : 'Failed to copy snippet.', 'warning');
+      });
+    } else {
+      showToast(currentLang === 'tr' ? 'Entegrasyon Python kodu seçildi.' : 'Integration snippet selected.', 'info');
+    }
+  });
+}
+
 // Initial Boot
+initWorkspaceTabs();
 applyLanguage(currentLang);
 refreshAll();
 runStressSimulation();

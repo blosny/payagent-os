@@ -1,4 +1,4 @@
-# PayAgent OS
+# PayPal PayAgent OS
 
 > **Autonomous AI Agent Financial Wallet & Policy-Guided PayPal Orchestration Engine**
 > 
@@ -76,8 +76,8 @@ graph TD
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/blosny/payagent-os.git
-cd payagent-os
+git clone https://github.com/blosny/paypal-payagent-os.git
+cd paypal-payagent-os
 
 # Create virtual environment
 python -m venv venv
