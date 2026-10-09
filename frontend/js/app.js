@@ -1295,9 +1295,112 @@ if (el.btnRefreshAudit) {
   });
 }
 
-async function refreshAll() {
-  await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions(), fetchAnalytics()]);
+// ============================================================================
+// AUTONOMOUS PEER DEBT LEDGER & SETTLEMENT ENGINE
+// ============================================================================
+async function fetchDebts() {
+  const tbody = document.getElementById('debt-table-body');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/negotiations/debts`);
+    if (!res.ok) return;
+    const debts = await res.json();
+
+    if (!debts || debts.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; color: #71717a; padding: 1.5rem;">
+            Aktif borç kaydı bulunmuyor. Tüm ajanlar kendi bütçesi dahilinde veya borçsuz çalışıyor.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = debts.map(d => {
+      const isSettled = d.status === 'SETTLED';
+      const statusBadge = isSettled
+        ? `<span class="badge-approved" style="font-size: 0.65rem;">✓ SETTLED</span>`
+        : `<span class="badge-pending" style="font-size: 0.65rem;">⏳ OUTSTANDING</span>`;
+
+      const actionBtn = isSettled
+        ? `<span style="font-size: 0.7rem; color: #10b981;">✓ Kapatıldı</span>`
+        : `<button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.68rem;" onclick="settleSingleDebt('${d.id}')">
+            <span>💸</span> Geri Öde
+          </button>`;
+
+      return `
+        <tr>
+          <td class="font-mono" style="font-size: 0.72rem; color: #38bdf8;">${d.id}</td>
+          <td><strong>${d.debtor_name}</strong></td>
+          <td>${d.creditor_name}</td>
+          <td class="font-mono">$${d.principal_amount.toFixed(2)}</td>
+          <td class="font-mono font-bold" style="color: ${isSettled ? '#10b981' : '#f59e0b'};">$${d.remaining_balance.toFixed(2)}</td>
+          <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${d.reason}">${d.reason}</td>
+          <td>${statusBadge}</td>
+          <td>${actionBtn}</td>
+        </tr>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.error('Error fetching debts:', err);
+  }
 }
+
+window.settleSingleDebt = async function(debtId) {
+  try {
+    const res = await fetch(`${API_BASE}/negotiations/debts/settle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ debt_id: debtId })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(data.message || 'Borç başarıyla kapatıldı.', 'success');
+      await refreshAll();
+    } else {
+      showToast(data.detail || 'Borç ödenirken hata oluştu.', 'warning');
+    }
+  } catch (err) {
+    showToast('Bağlantı hatası.', 'danger');
+  }
+};
+
+const btnTriggerRollover = document.getElementById('btn-trigger-rollover');
+if (btnTriggerRollover) {
+  btnTriggerRollover.addEventListener('click', async () => {
+    try {
+      btnTriggerRollover.disabled = true;
+      btnTriggerRollover.innerHTML = '<span>⏳</span> <span>Mutabakat Yapılıyor...</span>';
+
+      const res = await fetch(`${API_BASE}/negotiations/debts/rollover`, { method: 'POST' });
+      const data = await res.json();
+
+      showToast(data.message || 'Gün sonu devri ve borç mutabakatı tamamlandı!', 'success');
+      await refreshAll();
+    } catch (err) {
+      showToast('Rollover sırasında hata oluştu.', 'danger');
+    } finally {
+      btnTriggerRollover.disabled = false;
+      btnTriggerRollover.innerHTML = '<span>⚡</span> <span>24h Kota Yenile & Otonom Borçları Kapat</span>';
+    }
+  });
+}
+
+const btnRefreshDebts = document.getElementById('btn-refresh-debts');
+if (btnRefreshDebts) {
+  btnRefreshDebts.addEventListener('click', () => {
+    fetchDebts();
+    showToast('Borç defteri güncellendi.', 'info');
+  });
+}
+
+async function refreshAll() {
+  await Promise.all([fetchSummary(), fetchAgents(), fetchTransactions(), fetchAnalytics(), fetchDebts()]);
+}
+
 
 // ============================================================================
 // WORKSPACE TAB NAVIGATION ENGINE

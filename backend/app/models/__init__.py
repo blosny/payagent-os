@@ -7,6 +7,7 @@ from .transaction import (
     ApprovalAction,
 )
 from .negotiation import NegotiationRequest, NegotiationRecord
+from .debt import DebtRecord, DebtStatus, SettleDebtRequest, SettlementResult
 
 __all__ = [
     "Agent",
@@ -21,4 +22,9 @@ __all__ = [
     "ApprovalAction",
     "NegotiationRequest",
     "NegotiationRecord",
+    "DebtRecord",
+    "DebtStatus",
+    "SettleDebtRequest",
+    "SettlementResult",
 ]
+

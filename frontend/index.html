@@ -678,8 +678,53 @@
             </div>
           </div>
         </div>
+
+        <!-- Autonomous Peer Debt Ledger & Settlement Section -->
+        <div class="fin-card" style="margin-top: 1.25rem;" id="card-debt-ledger">
+          <div class="fin-card-header">
+            <div>
+              <div class="card-title-wrap">
+                <span class="badge-live-pulse">ZERO-INTEREST P2P</span>
+                <h3 class="fin-card-title" style="font-size: 1.05rem;">📜 Otonom Kardeş Borç Defteri & Geri Ödeme (Settlement Loop)</h3>
+              </div>
+              <p class="fin-card-desc">Acil GPU veya API kotası alan ajanlar borç defterine işlenir. Ertesi gün günlük bütçe yenilendiğinde otonom iade edilir.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <button type="button" class="fin-btn fin-btn-paypal fin-btn-sm" id="btn-trigger-rollover">
+                <span>⚡</span>
+                <span>24h Kota Yenile & Otonom Borçları Kapat</span>
+              </button>
+              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-debts">
+                <span>🔄</span>
+                <span>Yenile</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="fin-table">
+              <thead>
+                <tr>
+                  <th>Borç ID</th>
+                  <th>Borçlu Ajan</th>
+                  <th>Alacaklı Kasa</th>
+                  <th>İlk Tutar</th>
+                  <th>Kalan Borç</th>
+                  <th>Gerekçe</th>
+                  <th>Durum</th>
+                  <th>Aksiyon</th>
+                </tr>
+              </thead>
+              <tbody id="debt-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
+
 
     <!-- ======================================================================
          TAB 4: PAYPAL AI TOOLKIT & MCP (OFFICIAL REPO & DEVELOPER GATEWAY)
