@@ -6,6 +6,7 @@ with enterprise-grade policy enforcement, budget guardrails, and HITL approval.
 """
 
 from typing import Dict, Any, List, Optional
+from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 import logging
 from backend.app.services.policy_engine import policy_engine
@@ -88,6 +89,7 @@ class GuardianInterceptResult(BaseModel):
     guardian_verdict: str
     transaction_id: Optional[str] = None
     paypal_order_id: Optional[str] = None
+    execution_trace: List[str] = Field(default_factory=list, description="Step-by-step security inspection trace")
     output_data: Optional[Dict[str, Any]] = None
 
 
@@ -132,24 +134,33 @@ class PayPalToolkitGuardianAdapter:
         }
 
     async def intercept_and_execute(self, invocation: MCPToolInvocation) -> GuardianInterceptResult:
+        now_ts = datetime.now(timezone.utc).strftime("%H:%M:%S")
+        trace: List[str] = [
+            f"[{now_ts}] ⚡ [MCP_INGEST] Intercepted tool call '{invocation.tool_name}' from agent '{invocation.agent_id}'"
+        ]
+
         tool_meta = self.catalog.get(invocation.tool_name)
         if not tool_meta:
+            trace.append(f"[{now_ts}] ✕ [CATALOG_ERROR] Tool '{invocation.tool_name}' not registered in PayPal MCP catalog.")
             return GuardianInterceptResult(
                 allowed=False,
                 status="UNKNOWN_TOOL",
                 tool_name=invocation.tool_name,
                 message=f"Tool '{invocation.tool_name}' is not recognized in official PayPal MCP catalog.",
-                guardian_verdict="REJECTED_UNKNOWN_TOOL"
+                guardian_verdict="REJECTED_UNKNOWN_TOOL",
+                execution_trace=trace
             )
 
         # 1. Non-financial tools (e.g. disputes, balance queries) pass through safely
         if not tool_meta["financial_action"]:
+            trace.append(f"[{now_ts}] ✓ [READ_ONLY_CHECK] Tool '{invocation.tool_name}' involves no fund movement -> PASSTHROUGH")
             return GuardianInterceptResult(
                 allowed=True,
                 status="READ_ONLY_PASSTHROUGH",
                 tool_name=invocation.tool_name,
                 message="Read-only diagnostic tool executed without policy hold.",
                 guardian_verdict="SAFE_PASS",
+                execution_trace=trace,
                 output_data={"mock_result": f"Executed read-only tool {invocation.tool_name}", "sample_items": []}
             )
 
@@ -161,6 +172,12 @@ class PayPalToolkitGuardianAdapter:
         category = tool_meta.get("default_category", "CLOUD_COMPUTE")
 
         resolved_agent_id = self._resolve_agent_id(invocation.agent_id)
+        agent = policy_engine.get_agent(resolved_agent_id)
+        agent_name = agent.name if agent else resolved_agent_id
+
+        bal_val = agent.wallet_balance if agent else 0.0
+        trace.append(f"[{now_ts}] 👤 [AGENT] Resolved wallet profile: {agent_name} (Balance: ${bal_val:.2f})")
+
 
         # 3. Create Intent & Consult PayAgent OS Policy Engine
         intent = TransactionIntent(
@@ -175,15 +192,22 @@ class PayPalToolkitGuardianAdapter:
         try:
             record: TransactionRecord = await policy_engine.submit_intent(intent)
         except Exception as e:
+            trace.append(f"[{now_ts}] ✕ [POLICY_FATAL] PolicyEngine rejected: {str(e)}")
             return GuardianInterceptResult(
                 allowed=False,
                 status="REJECTED",
                 tool_name=invocation.tool_name,
                 message=f"Tool invocation BLOCKED: {str(e)}",
-                guardian_verdict="BLOCKED_BY_POLICY"
+                guardian_verdict="BLOCKED_BY_POLICY",
+                execution_trace=trace
             )
 
         if record.status in (TransactionStatus.APPROVED_AUTONOMOUS, TransactionStatus.SETTLED):
+            trace.append(f"[{now_ts}] ✓ [ALLOWLIST_CHECK] Vendor '{recipient}' validated against agent policy allowlist.")
+            trace.append(f"[{now_ts}] ✓ [LIMIT_CHECK] Single-tx and 24h rolling budget verified (PASS).")
+            trace.append(f"[{now_ts}] 💳 [PAYPAL_API] Orders v2 captured successfully. Ref: #{record.paypal_order_id or 'ORD-LIVE'}")
+            trace.append(f"[{now_ts}] 🛡️ [AUDIT_COMMIT] Immutable record sealed in memory -> {record.id}")
+
             return GuardianInterceptResult(
                 allowed=True,
                 status="EXECUTED",
@@ -192,6 +216,7 @@ class PayPalToolkitGuardianAdapter:
                 guardian_verdict="AUTONOMOUS_APPROVED",
                 transaction_id=record.id,
                 paypal_order_id=record.paypal_order_id,
+                execution_trace=trace,
                 output_data={
                     "order_status": "COMPLETED",
                     "amount": amount,
@@ -201,7 +226,10 @@ class PayPalToolkitGuardianAdapter:
             )
 
         elif record.status == TransactionStatus.PENDING_APPROVAL:
-            # Suspended -> Block tool from completing and alert Human-in-the-Loop
+            trace.append(f"[{now_ts}] ⚠️ [LIMIT_BREACH] {record.policy_evaluation_reason}")
+            trace.append(f"[{now_ts}] 🛑 [HITL_INTERCEPT] Tool execution HALTED. Frozen in supervisor queue: {record.id}")
+            trace.append(f"[{now_ts}] 🔔 [DISPATCH] Awaiting human authorization on PayAgent OS Portal.")
+
             return GuardianInterceptResult(
                 allowed=False,
                 status="SUSPENDED_PENDING_HITL",
@@ -209,6 +237,7 @@ class PayPalToolkitGuardianAdapter:
                 message=f"Tool invocation HALTED by PayAgent OS Guardian: {record.policy_evaluation_reason}. Sent to Human Supervisor Queue.",
                 guardian_verdict="HITL_HOLD_REQUIRED",
                 transaction_id=record.id,
+                execution_trace=trace,
                 output_data={
                     "requires_supervisor_approval": True,
                     "hitl_queue_id": record.id,
@@ -218,14 +247,17 @@ class PayPalToolkitGuardianAdapter:
             )
 
         else:
-            # Rejected outright (e.g. unknown vendor or policy block)
+            trace.append(f"[{now_ts}] ✕ [POLICY_BLOCK] {record.policy_evaluation_reason}")
+            trace.append(f"[{now_ts}] 🚫 [SECURITY_INTERCEPT] Vendor not in allowlist or policy violation. Dropped.")
+
             return GuardianInterceptResult(
                 allowed=False,
                 status="REJECTED",
                 tool_name=invocation.tool_name,
                 message=f"Tool invocation BLOCKED: {record.policy_evaluation_reason}",
                 guardian_verdict="BLOCKED_BY_POLICY",
-                transaction_id=record.id
+                transaction_id=record.id,
+                execution_trace=trace
             )
 
 

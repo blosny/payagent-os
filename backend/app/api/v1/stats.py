@@ -114,12 +114,12 @@ async def get_analytics_breakdown():
     ]
     rejected_volume = sum(t.amount for t in rejected_txs)
     frugal_rejections = [
-        n for n in negotiations if not n.approved and "Cimri" in (n.transcript or "")
+        n for n in negotiations if not n.accepted and "Cimri" in (n.transcript or "")
     ]
     frugal_saved = sum(n.amount for n in frugal_rejections)
 
     # P2P Negotiation volume
-    approved_neg = [n for n in negotiations if n.approved]
+    approved_neg = [n for n in negotiations if n.accepted]
     negotiation_volume = sum(n.amount for n in approved_neg)
 
     return {

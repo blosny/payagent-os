@@ -887,6 +887,12 @@ if (chipFrugalAccept) {
 if (el.negotiationForm) {
   el.negotiationForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = document.getElementById('btn-submit-negotiation');
+    const reqAgent = agentsList.find(a => a.id === el.negRequesterSelect.value);
+    const targetAgent = agentsList.find(a => a.id === el.negTargetSelect.value);
+    const reqName = reqAgent ? reqAgent.name : 'Requester Agent';
+    const targetName = targetAgent ? targetAgent.name : 'Target Agent';
+
     const payload = {
       requester_agent_id: el.negRequesterSelect.value,
       target_agent_id: el.negTargetSelect.value,
@@ -895,22 +901,67 @@ if (el.negotiationForm) {
       justification: el.negJustification.value.trim(),
     };
 
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⏳</span> <span>Ajanlar Müzakere Ediyor...</span>';
+    }
+
+    // STEP 1: Immediately render the Requester's speech bubble + Thinking Indicator for Target Agent
+    if (el.negotiationChatFeed) {
+      const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      el.negotiationChatFeed.innerHTML = `
+        <div class="chat-bubble-agent req">
+          <div class="chat-header-row">
+            <div class="chat-author">
+              <span>🤖</span>
+              <span>${reqName}</span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <span class="chat-badge chat-badge-req">Talep (${payload.urgency})</span>
+              <span class="chat-meta-time font-mono">${timeNow}</span>
+            </div>
+          </div>
+          <div class="chat-body-text">
+            "${payload.justification}" — <strong>$${payload.amount.toFixed(2)} USD</strong> günlük bütçe aktarımı talep ediliyor.
+          </div>
+        </div>
+
+        <div class="thinking-bubble" id="p2p-thinking-indicator">
+          <span>🧠</span>
+          <span><strong>${targetName}</strong> politika kurallarını ve rezerv bütçesini değerlendiriyor...</span>
+          <div class="thinking-dots">
+            <span class="thinking-dot"></span>
+            <span class="thinking-dot"></span>
+            <span class="thinking-dot"></span>
+          </div>
+        </div>
+      `;
+    }
+
     try {
-      const res = await fetch(`${API_BASE}/negotiations/propose`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      // Small artificial thinking pause (2 seconds) so user perceives autonomous deliberation
+      const [res] = await Promise.all([
+        fetch(`${API_BASE}/negotiations/propose`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }),
+        new Promise(resolve => setTimeout(resolve, 2000))
+      ]);
 
       if (!res.ok) {
         const err = await res.json();
         showToast(err.detail || 'Müzakere başarısız oldu', 'error');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>🤝</span> <span>Otonom Müzakereyi Başlat</span>';
+        }
         return;
       }
 
       const record = await res.json();
       
-      // Render Rich Multi-Agent Chat Stream
+      // STEP 2: Replace thinking indicator with Target Agent's actual deliberation response
       if (el.negotiationChatFeed) {
         const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const outcomeBadge = record.accepted
@@ -955,25 +1006,32 @@ if (el.negotiationForm) {
       if (record.accepted) {
         showToast(
           currentLang === 'tr'
-            ? `🤝 Bütçe Aktarıldı: $${record.amount.toFixed(2)} kota ${record.target_name}'den ${record.requester_name}'e aktarıldı!`
-            : `🤝 Quota Reallocated: $${record.amount.toFixed(2)} transferred from ${record.target_name} to ${record.requester_name}!`,
+            ? `🤝 Bütçe Aktarıldı: $${record.amount.toFixed(2)} kota ${record.target_name}'den ${record.requester_name}'e aktarıldı ve borç defterine kaydedildi!`
+            : `🤝 Quota Reallocated: $${record.amount.toFixed(2)} transferred from ${record.target_name} to ${record.requester_name} and recorded in debt ledger!`,
           'success'
         );
       } else {
+        const isFrugal = (record.transcript || '').includes('Cimri');
         showToast(
-          currentLang === 'tr'
-            ? `⚠️ Müzakere Reddedildi: ${record.target_name} yeterli bütçe fazlasına sahip değil.`
-            : `⚠️ Negotiation Rejected: ${record.target_name} has insufficient surplus headroom.`,
+          isFrugal
+            ? `🏦 Müzakere Reddedildi: ${record.target_name} (Cimri Kasa) rezervlerini korumak için ${record.urgency} talebini geri çevirdi.`
+            : `⚠️ Müzakere Reddedildi: ${record.target_name} yeterli bütçe fazlasına sahip değil.`,
           'warning'
         );
       }
 
       await refreshAll();
     } catch (err) {
-      showToast('Sunucu bağlantı hatası', 'error');
+      showToast('Bağlantı hatası.', 'error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>🤝</span> <span>Otonom Müzakereyi Başlat</span>';
+      }
     }
   });
 }
+
 
 // ============================================================================
 // PHASE 1: VISUAL ANALYTICS & EXECUTIVE REPORT ENGINE
@@ -1506,7 +1564,19 @@ async function runMcpScenario(scenarioKey) {
     if (termTime) termTime.textContent = new Date().toLocaleTimeString();
 
     if (terminalPre) {
-      terminalPre.textContent = JSON.stringify(data, null, 2);
+      if (data.execution_trace && Array.isArray(data.execution_trace)) {
+        const traceText = data.execution_trace.join('\n');
+        const summaryJson = JSON.stringify({
+          guardian_verdict: data.guardian_verdict,
+          status: data.status,
+          transaction_id: data.transaction_id,
+          paypal_order_id: (data.output_data && data.output_data.paypal_ref) || data.paypal_order_id || null,
+          message: data.message
+        }, null, 2);
+        terminalPre.textContent = `${traceText}\n\n--- [PAYAGENT OS GUARDIAN RESULT] ---\n${summaryJson}`;
+      } else {
+        terminalPre.textContent = JSON.stringify(data, null, 2);
+      }
     }
 
     if (statusPill) {

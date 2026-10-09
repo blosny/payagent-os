@@ -268,7 +268,7 @@
               </div>
 
               <div class="form-footer">
-                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-intent">
+                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-intent" style="width: 100%;">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                   </svg>
@@ -276,7 +276,7 @@
                 </button>
 
                 <div class="preset-group">
-                  <span class="preset-label" data-i18n="quickScenarios">Hazır Testler:</span>
+                  <span class="preset-label" data-i18n="quickScenarios">💡 Örnek Senaryo Doldur:</span>
                   <button type="button" class="preset-chip" id="chip-pass" data-i18n="chipPass">Limit İçi ($15)</button>
                   <button type="button" class="preset-chip" id="chip-exceed" data-i18n="chipExceed">Limit Aşımı ($85 HITL)</button>
                   <button type="button" class="preset-chip" id="chip-unauthorized" data-i18n="chipUnknown">Yetkisiz Satıcı</button>
@@ -627,13 +627,16 @@
                 <input type="text" id="neg-justification" class="fin-input" value="Büyük veri analiz modelini çalıştırmak için acil günlük bütçe takviyesi gerekiyor." required>
               </div>
 
-              <div class="form-footer" style="margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation">
+              <div class="form-footer">
+                <button type="submit" class="fin-btn fin-btn-paypal" id="btn-submit-negotiation" style="width: 100%;">
                   <span>🤝</span>
                   <span data-i18n="btnRunNegotiation">Otonom Müzakereyi Başlat</span>
                 </button>
-                <button type="button" class="preset-chip" id="chip-preset-frugal-reject" title="DevOps Cimri Kasa olduğu için HIGH isteği reddeder">🏦 Test 1: Cimri Reddi (HIGH)</button>
-                <button type="button" class="preset-chip" id="chip-preset-frugal-accept" title="DevOps CRITICAL istekte kotayı onaylar">⚡ Test 2: Cimri Onayı (CRITICAL)</button>
+                <div class="preset-group">
+                  <span class="preset-label">💡 Örnek Senaryo Doldur:</span>
+                  <button type="button" class="preset-chip" id="chip-preset-frugal-reject" title="DevOps Cimri Kasa olduğu için HIGH isteği reddeder">🏦 Senaryo 1: Cimri Reddi (HIGH)</button>
+                  <button type="button" class="preset-chip" id="chip-preset-frugal-accept" title="DevOps CRITICAL istekte kotayı onaylar">⚡ Senaryo 2: Cimri Onayı (CRITICAL)</button>
+                </div>
               </div>
             </form>
           </div>
