@@ -84,6 +84,7 @@ const i18n = {
     btnToggle: 'Gizle / Göster',
     analyticsBadge: 'Canlı Görsel Zeka',
     analyticsTitle: 'Filo Harcama Dağılımı & Analitik',
+    chartsEmptyHint: '💡 Henüz harcama gerçekleşmedi. Otonom Harcama sekmesinden bir senaryo çalıştırarak grafikleri canlandırabilirsiniz.',
     guardrailSavings: 'Korumaya Alınan:',
     btnOpenPdf: '📄 Yönetici Raporu (PDF)',
     chartAgentTitle: 'Ajan Harcama Payı',
@@ -199,6 +200,7 @@ const i18n = {
     btnToggle: 'Toggle View',
     analyticsBadge: 'Live Visual Intelligence',
     analyticsTitle: 'Fleet Spend Allocation & Analytics',
+    chartsEmptyHint: '💡 No transactions yet. Trigger a scenario from the Autonomous Spend tab to populate analytics.',
     guardrailSavings: 'Guarded Capital:',
     btnOpenPdf: '📄 Executive Audit (PDF)',
     chartAgentTitle: 'Agent Spend Allocation',
@@ -1095,6 +1097,15 @@ function renderAnalytics(data) {
 
   renderDonutChart(data);
   renderVendorBars(data.vendor_breakdown);
+
+  const emptyHintEl = document.getElementById('charts-empty-hint');
+  if (emptyHintEl) {
+    if (!data.total_spent_today || data.total_spent_today === 0) {
+      emptyHintEl.classList.remove('hidden');
+    } else {
+      emptyHintEl.classList.add('hidden');
+    }
+  }
 }
 
 function renderDonutChart(data) {
@@ -1391,10 +1402,24 @@ async function fetchDebts() {
     if (!res.ok) return;
     const debts = await res.json();
 
+    const activeDebts = debts ? debts.filter(d => d.status !== 'SETTLED') : [];
+    const btnRollover = document.getElementById('btn-trigger-rollover');
+    if (btnRollover) {
+      if (activeDebts.length === 0) {
+        btnRollover.disabled = true;
+        btnRollover.classList.add('btn-disabled-context');
+        btnRollover.title = currentLang === 'tr' ? 'Ödenecek aktif borç bulunmuyor' : 'No outstanding debts to settle';
+      } else {
+        btnRollover.disabled = false;
+        btnRollover.classList.remove('btn-disabled-context');
+        btnRollover.title = '';
+      }
+    }
+
     if (!debts || debts.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="8" style="text-align: center; color: #71717a; padding: 1.5rem;">
+          <td colspan="8" class="empty-table-cell">
             Aktif borç kaydı bulunmuyor. Tüm ajanlar kendi bütçesi dahilinde veya borçsuz çalışıyor.
           </td>
         </tr>

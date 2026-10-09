@@ -230,7 +230,7 @@
 
         </div>
 
-        <!-- Right Column: Agent Fleet & Audit Trail -->
+        <!-- Right Column: Agent Fleet -->
         <div class="portal-col">
           
           <!-- Active Agent Fleet & Limits -->
@@ -240,57 +240,48 @@
                 <h2 class="fin-card-title" data-i18n="fleetTitle">Aktif Ajan Filosu & Cüzdanlar</h2>
                 <p class="fin-card-desc" data-i18n="fleetDesc">Her yapay zeka ajanının anlık bakiyesi, harcama tavanı ve onaylı satıcıları.</p>
               </div>
-              <button type="button" class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-goto-p2p" style="gap: 0.4rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                <span data-i18n="btnP2PNegotiate">P2P Müzakere Masası ➔</span>
-              </button>
             </div>
             <div class="fleet-cards-wrap" id="fleet-container">
               <!-- Dynamic via JS -->
             </div>
           </div>
 
-          <!-- Immutable Audit Trail Table -->
-          <div class="fin-card" id="card-audit">
-            <div class="fin-card-header">
-              <div>
-                <h2 class="fin-card-title" data-i18n="auditTitle">İşlem Denetim Kütüğü (Audit Trail)</h2>
-                <p class="fin-card-desc" data-i18n="auditDesc">PayPal Orders v2 ve Payouts API üzerinden kesinleşen işlemlerin canlı dökümü.</p>
-              </div>
-              <button class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-audit">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="23 4 23 10 17 10"></polyline>
-                  <polyline points="1 20 1 14 7 14"></polyline>
-                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                </svg>
-                <span data-i18n="btnRefresh">Yenile</span>
-              </button>
-            </div>
+        </div>
+      </div>
 
-            <div class="table-responsive">
-              <table class="fin-table">
-                <thead>
-                  <tr>
-                    <th data-i18n="colTime">Saat</th>
-                    <th data-i18n="colAgent">Ajan</th>
-                    <th data-i18n="colAmount">Tutar</th>
-                    <th data-i18n="colVendor">Satıcı / Alıcı</th>
-                    <th data-i18n="colStatus">Durum</th>
-                    <th data-i18n="colRef">PayPal Ref ID</th>
-                  </tr>
-                </thead>
-                <tbody id="audit-table-body">
-                  <!-- Dynamic via JS -->
-                </tbody>
-              </table>
-            </div>
+      <!-- Immutable Audit Trail Table (Full-Width Bottom Ledger) -->
+      <div class="fin-card" id="card-audit" style="margin-top: 1.15rem;">
+        <div class="fin-card-header">
+          <div>
+            <h2 class="fin-card-title" data-i18n="auditTitle">İşlem Denetim Kütüğü (Audit Trail)</h2>
+            <p class="fin-card-desc" data-i18n="auditDesc">PayPal Orders v2 ve Payouts API üzerinden kesinleşen işlemlerin canlı dökümü.</p>
           </div>
+          <button class="fin-btn fin-btn-secondary fin-btn-sm" id="btn-refresh-audit">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span data-i18n="btnRefresh">Yenile</span>
+          </button>
+        </div>
 
+        <div class="table-responsive">
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th data-i18n="colTime">Saat</th>
+                <th data-i18n="colAgent">Ajan</th>
+                <th data-i18n="colAmount">Tutar</th>
+                <th data-i18n="colVendor">Satıcı / Alıcı</th>
+                <th data-i18n="colStatus">Durum</th>
+                <th data-i18n="colRef">PayPal Ref ID</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body">
+              <!-- Dynamic via JS -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -364,6 +355,10 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="charts-empty-hint hidden" id="charts-empty-hint" data-i18n="chartsEmptyHint">
+            💡 Henüz harcama gerçekleşmedi. Otonom Harcama sekmesinden bir senaryo çalıştırarak grafikleri canlandırabilirsiniz.
           </div>
         </div>
       </section>

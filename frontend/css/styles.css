@@ -2490,6 +2490,35 @@ body {
   line-height: 1.45;
 }
 
+.charts-empty-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px dashed rgba(56, 189, 248, 0.2);
+  border-radius: var(--radius-xs);
+  padding: 0.65rem 1rem;
+  font-size: 0.74rem;
+  color: #a1a1aa;
+  margin-top: 1.15rem;
+  text-align: center;
+}
+
+.btn-disabled-context {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(0.6);
+}
+
+.empty-table-cell {
+  text-align: center;
+  color: #71717a;
+  padding: 1.5rem 1rem;
+  font-size: 0.75rem;
+}
+
 @media (max-width: 980px) {
   .p2p-desk-grid {
     grid-template-columns: 1fr;
