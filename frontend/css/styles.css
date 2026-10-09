@@ -361,12 +361,18 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Top KPI Cards (Defined Typographic Scale)
+   Top KPI Cards (Defined Compact Typographic Scale)
    -------------------------------------------------------------------------- */
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 900px) {
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .stat-card {
@@ -374,11 +380,14 @@ body {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.85rem;
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s ease, transform 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stat-card::before {
@@ -388,7 +397,7 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .stat-card:hover {
@@ -400,25 +409,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.2rem;
 }
 
-/* Defined Label Scale: text-xs uppercase tracking-wider text-zinc-400 */
+/* Defined Label Scale: compact text-xs uppercase */
 .stat-label {
-  font-size: 0.66rem;
+  font-size: 0.64rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .kpi-badge {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  padding: 0.12rem 0.4rem;
+  padding: 0.1rem 0.35rem;
   border-radius: var(--radius-xs);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .kpi-badge-blue { background: rgba(0, 112, 186, 0.12); color: #38bdf8; border: 1px solid rgba(0, 112, 186, 0.25); }
@@ -429,22 +438,23 @@ body {
 .stat-number-row {
   display: flex;
   align-items: baseline;
-  gap: 0.2rem;
-  margin-bottom: 0.2rem;
+  gap: 0.15rem;
+  margin-bottom: 0;
 }
 
 .stat-curr {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-muted);
 }
 
-/* Defined Value Scale: Compact & readable */
+/* Defined Value Scale: Ultra-Compact & readable */
 .stat-number {
-  font-size: 1.55rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #ffffff;
+  line-height: 1.2;
 }
 
 .stat-number.val-emerald {
@@ -455,7 +465,7 @@ body {
 .text-sky-400 { color: #38bdf8; }
 
 .stat-footnote {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
 }
 
@@ -552,7 +562,7 @@ body {
 .portal-col {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.15rem;
 }
 
 .fin-card {
@@ -561,7 +571,7 @@ body {
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1.45rem;
+  padding: 1.1rem 1.25rem;
   position: relative;
 }
 
@@ -569,8 +579,8 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.85rem;
+  margin-bottom: 0.95rem;
+  padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -976,16 +986,26 @@ body {
 }
 
 .empty-placeholder {
-  text-align: center;
-  padding: 2.5rem 1rem;
-  color: var(--text-muted);
-  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px dashed rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-xs);
+  color: #a1a1aa;
+  font-size: 0.74rem;
+  text-align: left;
 }
 
 .empty-icon {
-  font-size: 1.25rem;
+  font-size: 0.95rem;
   color: var(--accent-emerald);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .borrowing-proposal-banner {
@@ -2393,6 +2413,58 @@ body {
   grid-template-columns: 1.1fr 1fr;
   gap: 1.25rem;
   align-items: stretch;
+}
+
+.neg-badge-cyan {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  background: rgba(0, 207, 222, 0.12);
+  border: 1px solid rgba(0, 207, 222, 0.35);
+  color: #00cfde;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  margin-bottom: 0.35rem;
+}
+
+.empty-feed-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 220px;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: #a1a1aa;
+}
+
+.empty-feed-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+  opacity: 0.8;
+}
+
+.empty-feed-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+.empty-feed-sub {
+  font-size: 0.74rem;
+  color: #71717a;
+  max-width: 380px;
+  line-height: 1.45;
 }
 
 @media (max-width: 980px) {

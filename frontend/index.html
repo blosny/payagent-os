@@ -66,118 +66,49 @@
       </div>
     </header>
 
-    <!-- Visual Execution Pipeline (Linear Stage Stepper with Glowing Connectors) -->
-    <section class="process-tracker">
-      <div class="tracker-step active" id="step-intent">
-        <div class="step-icon-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </div>
-        <div class="step-info">
-          <span class="step-title" data-i18n="step1Title">Ajan Talebi</span>
-          <span class="step-sub" data-i18n="step1Sub">Gerekçeli Niyet</span>
-        </div>
-      </div>
-      
-      <div class="pipeline-connector">
-        <div class="pulse-beam"></div>
-      </div>
-
-      <div class="tracker-step active" id="step-policy">
-        <div class="step-icon-wrap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-        </div>
-        <div class="step-info">
-          <span class="step-title" data-i18n="step2Title">Politika & Limit</span>
-          <span class="step-sub" data-i18n="step2Sub">Bütçe & Beyaz Liste</span>
-        </div>
-      </div>
-
-      <div class="pipeline-connector">
-        <div class="pulse-beam"></div>
-      </div>
-
-      <div class="tracker-step" id="step-hitl">
-        <div class="step-icon-wrap hitl-pulse">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </div>
-        <div class="step-info">
-          <span class="step-title" data-i18n="step3Title">İnsan Onayı (HITL)</span>
-          <span class="step-sub" data-i18n="step3Sub">Riskli / Büyük Tutar</span>
-        </div>
-      </div>
-
-      <div class="pipeline-connector">
-        <div class="pulse-beam"></div>
-      </div>
-
-      <div class="tracker-step active" id="step-paypal">
-        <div class="step-icon-wrap paypal-glow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
-        </div>
-        <div class="step-info">
-          <span class="step-title" data-i18n="step4Title">PayPal Tahsilatı</span>
-          <span class="step-sub" data-i18n="step4Sub">Orders v2 / Payouts</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Top KPI Cards (Vercel / Stripe High-Contrast Financial Numbers) -->
-    <section class="stats-row">
+    <!-- Quick KPI Metrics Bar (High-Density Linear/Stripe Header Strip) -->
+    <section class="stats-row" id="stats-row">
       <div class="stat-card">
         <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricAllocated">Toplam Tahsis Edilen Bütçe</span>
-          <span class="kpi-badge kpi-badge-blue">Allocated</span>
+          <span class="stat-label" data-i18n="metricAllocated">Tahsis Edilen Bütçe</span>
+          <span class="stat-footnote" id="stat-agents-count">3 Ajan</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-curr">$</span>
           <span class="stat-number" id="stat-allocated">0.00</span>
         </div>
-        <div class="stat-footnote" id="stat-agents-count">3 aktif AI ajanı cüzdanında</div>
       </div>
 
       <div class="stat-card">
         <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricSpentToday">Bugünkü Otonom Harcama</span>
-          <span class="kpi-badge kpi-badge-emerald">24h Rolling</span>
+          <span class="stat-label" data-i18n="metricSpentToday">Bugünkü Harcama</span>
+          <span class="kpi-badge kpi-badge-emerald">24h</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-curr">$</span>
           <span class="stat-number" id="stat-spent-today">0.00</span>
         </div>
-        <div class="stat-footnote" data-i18n="metricSpentSub">Politika kurallarına %100 uyumlu</div>
       </div>
 
       <div class="stat-card">
         <div class="stat-meta">
           <span class="stat-label" data-i18n="metricPendingHITL">İnsan Onay Kuyruğu</span>
-          <span class="kpi-badge kpi-badge-amber">Supervisor</span>
+          <span class="kpi-badge kpi-badge-amber">HITL</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-number text-amber-400" id="stat-pending">0</span>
         </div>
-        <div class="stat-footnote text-amber" data-i18n="metricPendingSub">Süpervizör kararı bekliyor</div>
       </div>
 
       <div class="stat-card">
         <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricSettled">PayPal İle Kesinleşen Hacim</span>
+          <span class="stat-label" data-i18n="metricSettled">PayPal Hacmi</span>
           <span class="kpi-badge kpi-badge-paypal">Settled</span>
         </div>
         <div class="stat-number-row font-mono">
           <span class="stat-curr">$</span>
           <span class="stat-number text-sky-400" id="stat-volume">0.00</span>
         </div>
-        <div class="stat-footnote">Orders v2 & Payouts API</div>
       </div>
     </section>
 
@@ -438,7 +369,7 @@
                 </div>
                 <div class="p2p-stat-item">
                   <span class="p2p-label" data-i18n="guardEfficiencyLabel">⚡ Otomasyon Oranı:</span>
-                  <span class="p2p-val font-mono text-emerald-400" id="stat-autonomy-rate">%100</span>
+                  <span class="p2p-val font-mono text-emerald-400" id="stat-autonomy-rate">—</span>
                 </div>
               </div>
             </div>
@@ -653,30 +584,10 @@
 
             <!-- Live Dialogue Bubbles -->
             <div class="negotiation-chat-feed" id="negotiation-chat-feed" style="flex: 1; min-height: 280px;">
-              <div class="chat-bubble-agent req">
-                <div class="chat-header-row">
-                  <div class="chat-author">
-                    <span>📊</span>
-                    <span>Market Research & Data Agent</span>
-                  </div>
-                  <span class="chat-badge chat-badge-req">Talep (HIGH)</span>
-                </div>
-                <div class="chat-body-text">
-                  "50.000 akademik makale analizi için DevOps ajanından <strong>$35.00</strong> günlük bütçe aktarımı talep edildi."
-                </div>
-              </div>
-
-              <div class="chat-bubble-agent target">
-                <div class="chat-header-row">
-                  <div class="chat-author">
-                    <span>⚙️</span>
-                    <span>DevOps Infrastructure Agent</span>
-                  </div>
-                  <span class="chat-badge chat-badge-approved">✓ ONAYLANDI (Headroom: $165.00)</span>
-                </div>
-                <div class="chat-body-text">
-                  "Bütçe rezervi doğrulandı ($165.00 boşta kota). $35.00 kota transferi <em>Otonom Kaynak Tahsis Protokolü</em> kapsamında onaylandı."
-                </div>
+              <div class="empty-feed-placeholder">
+                <span class="empty-feed-icon">💬</span>
+                <p class="empty-feed-title" data-i18n="negEmptyTitle">Henüz aktif müzakere kaydı yok</p>
+                <p class="empty-feed-sub" data-i18n="negEmptySub">Sol taraftaki formdan veya hazır senaryolardan bir talep başlatın; iki yapay zeka ajanının karar sürecini canlı izleyin.</p>
               </div>
             </div>
           </div>

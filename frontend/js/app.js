@@ -18,12 +18,12 @@ const i18n = {
     step3Sub: 'Riskli / Büyük Tutar',
     step4Title: 'PayPal Tahsilatı',
     step4Sub: 'Orders v2 / Payouts',
-    metricAllocated: 'Toplam Tahsis Edilen Bütçe',
-    metricSpentToday: 'Bugünkü Otonom Harcama',
+    metricAllocated: 'Tahsis Edilen Bütçe',
+    metricSpentToday: 'Bugünkü Harcama',
     metricSpentSub: 'Politika kurallarına %100 uyumlu',
     metricPendingHITL: 'İnsan Onay Kuyruğu',
     metricPendingSub: 'Süpervizör kararı bekliyor',
-    metricSettled: 'PayPal İle Kesinleşen Hacim',
+    metricSettled: 'PayPal Hacmi',
     simTitle: 'Otonom Ajan Harcama Simülatörü',
     simDesc: 'Yapay zeka ajanının harcama talebini ve gerekçesini test edin; politika motorunun kararını izleyin.',
     simCallingAgent: 'Talebi Yapan Ajan',
@@ -36,7 +36,7 @@ const i18n = {
     catDataset: 'Veri Seti / Rapor',
     catPayout: 'Freelancer Hakedişi',
     btnExecute: 'Otonom Harcamayı Başlat',
-    quickScenarios: 'Hazır Testler:',
+    quickScenarios: '💡 Örnek Senaryo Doldur:',
     chipPass: 'Limit İçi ($15)',
     chipExceed: 'Limit Aşımı ($85 HITL)',
     chipUnknown: 'Yetkisiz Satıcı',
@@ -79,6 +79,8 @@ const i18n = {
     chipPresetNeg: '⚡ Örnek: Research -> DevOps ($35)',
     toastNegSuccess: '🤝 Bütçe Müzakeresi Başarılı: Günlük kota otonom aktarıldı!',
     toastNegRejected: '⚠️ Müzakere Reddedildi: Kaynak ajanda yeterli kota fazlası yok.',
+    negEmptyTitle: 'Henüz aktif müzakere kaydı yok',
+    negEmptySub: 'Sol taraftaki formdan veya hazır senaryolardan bir talep başlatın; iki yapay zeka ajanının karar sürecini canlı izleyin.',
     btnToggle: 'Gizle / Göster',
     analyticsBadge: 'Canlı Görsel Zeka',
     analyticsTitle: 'Filo Harcama Dağılımı & Analitik',
@@ -131,12 +133,12 @@ const i18n = {
     step3Sub: 'High-Value / Risk',
     step4Title: 'PayPal Settlement',
     step4Sub: 'Orders v2 / Payouts',
-    metricAllocated: 'Total Allocated Budget',
-    metricSpentToday: 'Autonomous Spend (Today)',
+    metricAllocated: 'Allocated Budget',
+    metricSpentToday: 'Spent Today',
     metricSpentSub: '100% Policy compliant',
-    metricPendingHITL: 'Human-in-the-Loop Queue',
+    metricPendingHITL: 'Approval Queue',
     metricPendingSub: 'Awaiting supervisor decision',
-    metricSettled: 'Settled via PayPal',
+    metricSettled: 'PayPal Volume',
     simTitle: 'Simulate Autonomous Agent Purchase',
     simDesc: 'Trigger a procurement intent from an AI agent to evaluate guardrail rules and PayPal execution.',
     simCallingAgent: 'Calling Agent',
@@ -149,7 +151,7 @@ const i18n = {
     catDataset: 'Dataset / Report',
     catPayout: 'Freelance Milestone',
     btnExecute: 'Execute Autonomous Intent',
-    quickScenarios: 'Quick Tests:',
+    quickScenarios: '💡 Preset Scenarios:',
     chipPass: 'Within Limit ($15)',
     chipExceed: 'Exceed Limit ($85 HITL)',
     chipUnknown: 'Unlisted Vendor',
@@ -192,6 +194,8 @@ const i18n = {
     chipPresetNeg: '⚡ Preset: Research -> DevOps ($35)',
     toastNegSuccess: '🤝 Negotiation Successful: Daily quota reallocated autonomously!',
     toastNegRejected: '⚠️ Negotiation Rejected: Target agent has insufficient headroom.',
+    negEmptyTitle: 'No active negotiation records yet',
+    negEmptySub: 'Trigger a request from the form on the left or select a preset scenario to observe the decision process.',
     btnToggle: 'Toggle View',
     analyticsBadge: 'Live Visual Intelligence',
     analyticsTitle: 'Fleet Spend Allocation & Analytics',
@@ -376,8 +380,8 @@ async function fetchSummary() {
     el.statVolume.textContent = data.total_volume_processed.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     
     el.statAgentsCount.textContent = currentLang === 'tr' 
-      ? `${data.active_agents_count} aktif AI ajanı cüzdanında`
-      : `Across ${data.active_agents_count} active AI agents`;
+      ? `${data.active_agents_count} Ajan`
+      : `${data.active_agents_count} Agents`;
 
     el.badgeHitlCount.textContent = currentLang === 'tr'
       ? `${data.pending_approval_count} Bekliyor`
@@ -542,8 +546,8 @@ function renderHITLQueue() {
   if (pending.length === 0) {
     el.hitlContainer.innerHTML = `
       <div class="empty-placeholder">
-        <div class="empty-icon">✓</div>
-        <p>${i18n[currentLang].noPending}</p>
+        <span class="empty-icon">✓</span>
+        <span>${i18n[currentLang].noPending}</span>
       </div>
     `;
     return;
@@ -1060,11 +1064,14 @@ function renderAnalytics(data) {
     el.p2pDeskTradedVol.textContent = `$${data.negotiation_volume.toFixed(2)}`;
   }
 
-  const totalCount = data.total_tx_count || 1;
-  const autoCount = data.approved_tx_count || 0;
-  const autoRate = Math.round((autoCount / Math.max(totalCount, 1)) * 100);
   if (el.statAutonomyRate) {
-    el.statAutonomyRate.textContent = `%${Math.max(autoRate, 80)}`;
+    if (!data.total_tx_count || data.total_tx_count === 0) {
+      el.statAutonomyRate.textContent = '—';
+    } else {
+      const autoCount = data.approved_tx_count || 0;
+      const autoRate = Math.round((autoCount / data.total_tx_count) * 100);
+      el.statAutonomyRate.textContent = `%${autoRate}`;
+    }
   }
 
   renderDonutChart(data);
