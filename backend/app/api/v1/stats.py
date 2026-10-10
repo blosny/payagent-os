@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter
 from ...services.policy_engine import policy_engine
+from ...services.arbitrage_engine import arbitrage_engine
 from ...models.transaction import TransactionStatus
 from ...config import settings
 
@@ -122,11 +123,15 @@ async def get_analytics_breakdown():
     approved_neg = [n for n in negotiations if n.accepted]
     negotiation_volume = sum(n.amount for n in approved_neg)
 
+    # Arbitrage Alpha Saved
+    arbitrage_saved = arbitrage_engine.get_total_arbitrage_saved()
+
     return {
         "total_allocated": round(total_allocated, 2),
         "total_spent_today": round(total_spent_today, 2),
         "total_daily_budget": round(total_daily_budget, 2),
-        "savings_by_guardrails": round(rejected_volume + frugal_saved, 2),
+        "savings_by_guardrails": round(rejected_volume + frugal_saved + arbitrage_saved, 2),
+        "arbitrage_saved": round(arbitrage_saved, 2),
         "negotiation_volume": round(negotiation_volume, 2),
         "active_negotiations_count": len(negotiations),
         "vendor_breakdown": vendor_breakdown,
@@ -286,17 +291,33 @@ async def ask_cfo_copilot(req: CfoQueryRequest):
         )
         suggested = "Aciliyeti CRITICAL yaparak tekrar dene"
 
-    elif any(k in q for k in ["tasarruf", "ne kadar kurtardık", "korunan", "saving"]):
-        neg_rejections = [n for n in negotiations if not n.approved]
-        frugal_saved = sum(n.amount for n in neg_rejections)
-        rejected_txs = [t for t in all_txs if t.status == TransactionStatus.REJECTED]
-        rule_saved = sum(t.amount for t in rejected_txs)
-        total_saved = frugal_saved + rule_saved
+    elif any(k in q for k in ["arbitraj", "ihale", "spot", "gpu", "tedarikçi", "bidding", "bids"]):
+        arb_saved = arbitrage_engine.get_total_arbitrage_saved()
+        history = arbitrage_engine.list_executions()
         answer = (
-            f"🛡️ PayAgent OS Politika Kalkanı ve Cimri Kasa disiplini sayesinde bugüne kadar "
-            f"toplam **${total_saved:.2f} USD** şirket sermayesi korunmuştur. "
-            f"Bunun ${frugal_saved:.2f}'si gereksiz P2P borçlanmaların engellenmesi, "
-            f"${rule_saved:.2f}'si ise yetkisiz satıcı ve tavan aşımı engellemeleridir."
+            f"⚡ **Dinamik Tedarikçi İhale & Spot Arbitraj Motoru:**\n"
+            f"Ajanlarımız GPU ve compute kiralarken AWS, Cloudflare, HuggingFace, RunPod ve DeepInfra spot piyasasını otonom tarar. "
+            f"Şu ana kadar **{len(history)}** adet otonom ihale sonuçlandırıldı ve doğrudan şirket hazinesine "
+            f"**${arb_saved:.2f} USD spot arbitraj tasarrufu (Alpha)** kazandırıldı."
+        )
+        suggested = "Spot fiyat tahtasını incele"
+
+    elif any(k in q for k in ["tasarruf", "ne kadar kurtardık", "korunan", "saving"]):
+        neg_rejections = [n for n in negotiations if not n.accepted]
+        frugal_saved = sum(n.amount for n in neg_rejections)
+        rejected_txs = [
+            t for t in all_txs
+            if t.status in [TransactionStatus.REJECTED_BY_POLICY, TransactionStatus.REJECTED_BY_HUMAN]
+        ]
+        rule_saved = sum(t.amount for t in rejected_txs)
+        arb_saved = arbitrage_engine.get_total_arbitrage_saved()
+        total_saved = frugal_saved + rule_saved + arb_saved
+        answer = (
+            f"🛡️ PayAgent OS Politika Kalkanı, Cimri Kasa ve Spot İhale Arbitrajı sayesinde "
+            f"toplam **${total_saved:.2f} USD** şirket sermayesi korunmuştur:\n"
+            f"• **${arb_saved:.2f} USD:** Spot tedarikçi ihale arbitrajı (en ucuz bulut/GPU yönlendirmesi)\n"
+            f"• **${frugal_saved:.2f} USD:** Cimri Kasa disiplini (gereksiz P2P borçlanma engeli)\n"
+            f"• **${rule_saved:.2f} USD:** Politika motoru ve HITL kalkanı (limit/satıcı ihlalleri engeli)"
         )
         suggested = "Yönetici PDF raporunu indir"
 
