@@ -72,6 +72,13 @@ from .roi import (
     PayPalDealCoupon,
     ROIMultiplierMetric,
 )
+from .tenant import (
+    Department,
+    DepartmentTransferRequest,
+    DepartmentTransferResult,
+    TenantSummary,
+)
+
 
 __all__ = [
     "Agent",
@@ -136,4 +143,9 @@ __all__ = [
     "TelegramAlertNotification",
     "PayPalDealCoupon",
     "ROIMultiplierMetric",
+    "Department",
+    "DepartmentTransferRequest",
+    "DepartmentTransferResult",
+    "TenantSummary",
 ]
+

@@ -326,6 +326,25 @@
 
       </section>
 
+      <!-- Departmental Agent Hierarchy & Multi-Tenant Treasury (Phase 7 Innovation) -->
+      <div class="cc-card" id="card-departments" style="margin-bottom: 2rem;">
+        <div class="cc-card-header">
+          <span class="cc-card-title">
+            <span style="color: #818cf8;">🏢</span>
+            <span data-i18n="deptTitle">DEPARTMENTAL AGENT HIERARCHY & MULTI-TENANT TREASURY</span>
+          </span>
+          <button type="button" class="preset-chip" onclick="window.openDeptTransferModal()" style="font-size: 0.75rem;">
+            ⇄ Transfer Department Quota
+          </button>
+        </div>
+        <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.85rem;" data-i18n="deptDesc">
+          Agents are organized into departmental tenant trees with dedicated budget ceilings, supervisors, and inter-departmental quota rebalancing.
+        </p>
+        <div id="departments-list-grid" class="department-grid">
+          <!-- Loaded dynamically via command_center.js -->
+        </div>
+      </div>
+
       <div class="portal-grid">
         
         <!-- Left Column: Simulator & HITL Queue -->
@@ -1634,6 +1653,59 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())
         <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
           <button type="button" class="fin-btn fin-btn-paypal" id="btn-save-fico-config" style="width:100%; justify-content:center; padding:0.6rem;" data-i18n="btnFicoSave">
             ✓ Save Model Parameters
+          </button>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL: INTER-DEPARTMENTAL BUDGET TRANSFER
+         ====================================================================== -->
+    <div class="settings-modal-backdrop" id="dept-transfer-modal">
+      <div class="settings-modal-card">
+        <div class="settings-modal-header">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size: 1.25rem;">🏢</span>
+            <h3 style="margin:0; font-size:1rem; font-weight:700; color:#f8fafc;" data-i18n="deptModalTitle">Inter-Departmental Budget Transfer</h3>
+          </div>
+          <button type="button" onclick="window.closeDeptTransferModal()" style="background:none; border:none; color:#94a3b8; font-size:1.25rem; cursor:pointer;">✕</button>
+        </div>
+
+        <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:1rem;" data-i18n="deptModalDesc">
+          Rebalance tenant capital between departments with audit logging and supervisor sign-off.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1rem;">
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="deptFrom">Source Department</label>
+            <select id="dept-transfer-from" class="fin-input">
+              <option value="dept-eng">Engineering ($1,800)</option>
+              <option value="dept-research">Research Lab ($1,000)</option>
+              <option value="dept-growth">Growth & Mkt ($400)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="deptTo">Destination Department</label>
+            <select id="dept-transfer-to" class="fin-input">
+              <option value="dept-research">Research Lab ($1,000)</option>
+              <option value="dept-eng">Engineering ($1,800)</option>
+              <option value="dept-growth">Growth & Mkt ($400)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group" style="margin-bottom:1rem;">
+          <label style="font-size:0.75rem;" data-i18n="deptAmount">Transfer Amount (USD)</label>
+          <input type="number" id="dept-transfer-amount" class="fin-input font-mono" value="100.00" step="10" min="1">
+        </div>
+
+        <div class="field-group" style="margin-bottom:1.25rem;">
+          <label style="font-size:0.75rem;" data-i18n="deptReason">Rebalancing Reason / Justification</label>
+          <input type="text" id="dept-transfer-reason" class="fin-input" value="Emergency GPU quota rebalancing for LLM model training">
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+          <button type="button" class="fin-btn fin-btn-paypal" onclick="window.submitDeptTransfer()" style="width:100%; justify-content:center; padding:0.6rem;" data-i18n="btnDeptTransfer">
+            ✓ Execute Department Transfer
           </button>
         </div>
       </div>

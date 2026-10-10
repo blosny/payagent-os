@@ -14,6 +14,7 @@ export async function initCommandCenter() {
     loadFICOScores(),
     loadROIMetrics(),
     loadTelegramSettings(),
+    loadDepartments(),
   ]);
 
   setupVoiceBriefing();
@@ -473,4 +474,110 @@ window.rejectSimulatedHitl = function() {
   if (pendingEl) pendingEl.innerText = '0';
   showToast('✕ Transaction rejected. DevOps agent notified to use smaller instance.', 'warning');
 };
+
+// --------------------------------------------------------------------------
+// 7. Multi-Tenant Department Hierarchy & Quota Management
+// --------------------------------------------------------------------------
+export async function loadDepartments() {
+  const container = document.getElementById('departments-list-grid');
+  if (!container) return;
+
+  try {
+    const res = await fetch('/api/v1/tenants/departments');
+    if (!res.ok) throw new Error('Failed to load departments');
+    const depts = await res.json();
+
+    container.innerHTML = depts.map(dept => {
+      const pct = Math.min(100, Math.round((dept.spent_today / (dept.allocated_budget || 1)) * 100));
+
+      const agentChips = dept.assigned_agent_ids.map(id => `
+        <span class="dept-agent-chip">🤖 ${id.replace('agent-', '')}</span>
+      `).join('');
+
+      return `
+        <div class="dept-card" id="dept-card-${dept.id}">
+          <div>
+            <div class="dept-card-top">
+              <span class="dept-name">${dept.name}</span>
+              <span class="dept-badge">${dept.code}</span>
+            </div>
+            <div class="dept-lead">👤 Lead: ${dept.lead_name}</div>
+            
+            <div class="dept-bar-wrap">
+              <div class="dept-bar-fill" style="width: ${pct}%;"></div>
+            </div>
+
+            <div class="dept-meta-row">
+              <span>Spent Today: <strong style="color: #f8fafc;">$${dept.spent_today.toFixed(2)}</strong></span>
+              <span>Allocated: <strong style="color: #38bdf8;">$${dept.allocated_budget.toFixed(2)}</strong></span>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.6875rem; color: #64748b; margin-bottom: 0.35rem;">Assigned AI Fleet:</div>
+            <div class="dept-agents-row">${agentChips}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.error('Error loading departments:', err);
+    container.innerHTML = `<div style="color: #64748b; font-size: 0.8rem; padding: 1rem;">Department hierarchy offline</div>`;
+  }
+}
+
+window.openDeptTransferModal = function() {
+  const modal = document.getElementById('dept-transfer-modal');
+  if (modal) modal.classList.add('active');
+};
+
+window.closeDeptTransferModal = function() {
+  const modal = document.getElementById('dept-transfer-modal');
+  if (modal) modal.classList.remove('active');
+};
+
+window.submitDeptTransfer = async function() {
+  const fromDept = document.getElementById('dept-transfer-from')?.value;
+  const toDept = document.getElementById('dept-transfer-to')?.value;
+  const amount = parseFloat(document.getElementById('dept-transfer-amount')?.value);
+  const reason = document.getElementById('dept-transfer-reason')?.value;
+
+  if (!fromDept || !toDept || isNaN(amount) || amount <= 0) {
+    showToast('Please specify valid departments and transfer amount', 'warning');
+    return;
+  }
+
+  if (fromDept === toDept) {
+    showToast('Source and destination departments cannot be the same', 'warning');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/v1/tenants/transfer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from_dept_id: fromDept,
+        to_dept_id: toDept,
+        amount: amount,
+        reason: reason || 'Departmental budget rebalance',
+        authorized_by: 'Elena Rostova (CFO)',
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.detail || 'Transfer failed');
+    }
+
+    const data = await res.json();
+    showToast(`✓ Transferred $${data.amount.toFixed(2)} from ${data.from_dept_name} to ${data.to_dept_name}!`, 'success');
+    window.closeDeptTransferModal();
+    await loadDepartments();
+  } catch (err) {
+    showToast(`Transfer error: ${err.message}`, 'error');
+  }
+};
+
 
