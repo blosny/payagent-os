@@ -127,6 +127,12 @@
         <span class="tab-btn-title" data-i18n="tabP2P">P2P Müzakere & Borçlanma</span>
       </button>
 
+      <button type="button" class="tab-nav-btn" data-tab="tab-arbitrage" id="tab-btn-arbitrage">
+        <span class="tab-btn-icon">🎯</span>
+        <span class="tab-btn-title" data-i18n="tabArbitrage">Spot İhale & Arbitraj</span>
+        <span class="tab-nav-pill-new">ALPHA</span>
+      </button>
+
       <button type="button" class="tab-nav-btn" data-tab="tab-toolkit" id="tab-btn-toolkit">
         <span class="tab-btn-icon">🛠️</span>
         <span class="tab-btn-title" data-i18n="tabToolkit">PayPal AI Toolkit & MCP</span>
@@ -612,7 +618,260 @@
 
 
     <!-- ======================================================================
-         TAB 4: PAYPAL AI TOOLKIT & MCP (OFFICIAL REPO & DEVELOPER GATEWAY)
+         TAB 4: SPOT İHALE & ARBİTRAJ (SPOT BIDDING & CLOUD ARBITRAGE DESK)
+         ====================================================================== -->
+    <div class="tab-pane hidden-tab" id="tab-arbitrage">
+      <div class="arbitrage-container">
+        
+        <!-- Header Banner -->
+        <div class="arbitrage-header">
+          <div class="arb-header-left">
+            <div class="arb-badge-row">
+              <span class="font-mono text-emerald-400" style="font-size: 0.72rem; letter-spacing: 0.04em;">⚡ AUTONOMOUS MULTI-VENDOR SPOT ENGINE · PAYPAL ORDERS V2</span>
+            </div>
+            <h2 class="arbitrage-title" data-i18n="arbTitle">Dinamik Tedarikçi İhale & Spot Arbitraj Masası</h2>
+            <p class="arbitrage-subtitle" data-i18n="arbSubtitle">
+              Ajanlar GPU, Fine-Tuning ve API kiralarken AWS, Cloudflare, HuggingFace, RunPod ve DeepInfra piyasasını anlık tarar; en ucuz teklifi otonom seçip PayPal ile öder ve aradaki farkı hazineye kâr yazar.
+            </p>
+          </div>
+          <div class="arb-header-right">
+            <div class="arb-alpha-box">
+              <span class="arb-alpha-label" data-i18n="arbAlphaLabel">KÜMÜLATİF ARBİTRAJ ALPHASI</span>
+              <div class="arb-alpha-value font-mono">
+                <span class="text-emerald-400">$</span>
+                <span id="arb-total-saved-val">0.00</span>
+              </div>
+              <span class="arb-alpha-sub" id="arb-auctions-count">0 Otonom İhale İcra Edildi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Live Market Spot Rates Board -->
+        <div class="spot-board-section">
+          <div class="spot-board-top">
+            <div class="spot-board-title-wrap">
+              <h3 class="spot-board-title" data-i18n="spotBoardTitle">Canlı Bulut & AI Compute Spot Tahtası</h3>
+              <span class="spot-board-refresh-time font-mono" id="spot-board-time">CANLI PİYASA</span>
+            </div>
+            <button type="button" class="btn-spot-refresh" id="btn-refresh-spot-rates">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Piyasa Fiyatlarını Yenile</span>
+            </button>
+          </div>
+
+          <div class="spot-categories-grid" id="spot-categories-grid">
+            <!-- Rendered dynamically by fetchSpotRates() -->
+          </div>
+        </div>
+
+        <!-- 2. Interactive Bidding Playground: 2 Columns -->
+        <div class="bidding-playground-grid">
+          
+          <!-- Left Column: Solicit Bids Form -->
+          <div class="fin-card card-solicit">
+            <div class="card-header-clean">
+              <div class="card-title-group">
+                <span class="card-icon">🎯</span>
+                <h3 class="card-title" data-i18n="biddingFormTitle">Otonom Spot İhale Başlatıcı</h3>
+              </div>
+            </div>
+            <p class="card-subtitle" data-i18n="biddingFormSubtitle">
+              Yapay zeka ajanının compute ihtiyacını belirleyin; piyasadaki sağlayıcılardan canlı teklif toplayıp yarıştırın.
+            </p>
+
+            <form id="bidding-form" class="fin-form" onsubmit="event.preventDefault();">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label class="form-label" data-i18n="biddingAgent">Talep Eden Ajan</label>
+                  <select class="fin-input fin-select" id="bid-agent-select">
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label" data-i18n="biddingWorkload">İş Yükü Kategorisi</label>
+                  <select class="fin-input fin-select" id="bid-workload-select">
+                    <option value="gpu_inference">GPU Çıkarımı (LLM Inference)</option>
+                    <option value="model_fine_tuning">Model Fine-Tuning Kümesi</option>
+                    <option value="bulk_embeddings">Toplu Vektör Gömme (Embeddings)</option>
+                    <option value="serverless_compute">Sunucusuz Hesaplama (Micro-Tasks)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label class="form-label" data-i18n="biddingUnits">Miktar / Süre</label>
+                  <input type="number" step="0.5" min="0.5" max="50" class="fin-input font-mono" id="bid-units-input" value="3.5">
+                  <span class="field-hint" id="bid-unit-hint">GPU-Saat veya 1M Token</span>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label" data-i18n="biddingStrategy">Optimizasyon Stratejisi</label>
+                  <select class="fin-input fin-select" id="bid-strategy-select">
+                    <option value="COST_FIRST">En Düşük Fiyat (Maksimum Arbitraj)</option>
+                    <option value="SPEED_FIRST">En Düşük Gecikme (Hız Odaklı)</option>
+                    <option value="BALANCED">Dengeli (Fiyat + SLA Güvenilirlik)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" data-i18n="biddingDesc">İş Yükü Açıklaması (Prompt / Telemetri)</label>
+                <textarea class="fin-input fin-textarea" id="bid-desc-input" rows="2">DeepSeek-R1 / Llama-3-70B model çıkarımı ile pazar araştırması duygu analizi.</textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="fin-btn fin-btn-paypal w-full" id="btn-solicit-bids">
+                  <span class="btn-icon">🚀</span>
+                  <span data-i18n="btnStartBidding">Canlı İhaleyi Başlat & Teklifleri Topla</span>
+                </button>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="quick-chips">
+                <span class="chips-label">💡 Hazır Senaryolar:</span>
+                <button type="button" class="preset-chip chip-bid" id="chip-bid-gpu">⚡ 3.5h GPU Spot ($2.15/h)</button>
+                <button type="button" class="preset-chip chip-bid" id="chip-bid-embed">🔍 10M Token Gömme ($0.08/M)</button>
+                <button type="button" class="preset-chip chip-bid" id="chip-bid-train">🔥 2x H100 Fine-Tune ($7.40/h)</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right Column: Live Auction Winner & Execution Screen -->
+          <div class="fin-card card-auction-result" id="card-auction-result">
+            <div class="card-header-clean">
+              <div class="card-title-group">
+                <span class="card-icon">🏆</span>
+                <h3 class="card-title" data-i18n="auctionResultTitle">İhale Karar Tahtası & Arbitraj Sonucu</h3>
+              </div>
+              <span class="auction-status-badge font-mono" id="auction-status-badge">BEKLEMEDE</span>
+            </div>
+
+            <!-- Empty State Placeholder -->
+            <div class="auction-empty-state" id="auction-empty-state">
+              <div class="empty-icon-wrap">⚖️</div>
+              <h4 class="empty-title">Henüz Aktif İhale Başlatılmadı</h4>
+              <p class="empty-desc">
+                Sol taraftaki formdan veya hazır senaryo düğmelerinden bir iş yükü seçerek ihaleyi başlatın. Sağlayıcı teklifleri anlık olarak burada yarışacaktır.
+              </p>
+            </div>
+
+            <!-- Dynamic Bids Content (Initially Hidden) -->
+            <div class="auction-active-content hidden" id="auction-active-content">
+              
+              <!-- Alpha Savings Highlight Banner -->
+              <div class="alpha-banner-box" id="alpha-banner-box">
+                <div class="alpha-banner-left">
+                  <span class="alpha-sparkle">🎉</span>
+                  <div>
+                    <strong class="alpha-banner-title">KURTARILAN HAZİNE TASARRUFU (ALPHA)</strong>
+                    <p class="alpha-banner-desc" id="alpha-banner-desc">En pahalı sağlayıcıya kıyasla sağlanan net kâr.</p>
+                  </div>
+                </div>
+                <div class="alpha-banner-right font-mono">
+                  <span class="alpha-plus">+</span>
+                  <span class="alpha-sum" id="alpha-saved-sum">$0.00</span>
+                  <span class="alpha-pct" id="alpha-saved-pct">(%0)</span>
+                </div>
+              </div>
+
+              <!-- Providers Quotes Grid -->
+              <div class="quotes-grid" id="quotes-grid">
+                <!-- Injected via JavaScript -->
+              </div>
+
+              <!-- Explainability Decision Note -->
+              <div class="rationale-box">
+                <div class="rationale-header">
+                  <span class="rationale-icon">🧠</span>
+                  <span class="rationale-title">Ajanın Otonom Karar Gerekçesi (Explainability)</span>
+                </div>
+                <p class="rationale-text font-mono" id="rationale-text">-</p>
+              </div>
+
+              <!-- Autonomous PayPal Execution Action -->
+              <div class="auction-exec-row">
+                <button type="button" class="fin-btn fin-btn-paypal fin-btn-lg flex-1" id="btn-execute-winning-bid">
+                  <span class="btn-icon">💳</span>
+                  <span id="btn-exec-label">Kazananı PayPal ile Otonom Satın Al</span>
+                </button>
+              </div>
+
+              <!-- Execution Receipt / Success Box -->
+              <div class="exec-receipt-box hidden font-mono" id="exec-receipt-box">
+                <!-- Rendered upon completion -->
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 3. Bottom Row: Day/Night Liquidity Rebalancer & Execution History -->
+        <div class="arbitrage-bottom-grid">
+          
+          <!-- Card: Autonomous Liquidity Rebalancer -->
+          <div class="fin-card card-rebalancer">
+            <div class="card-header-clean">
+              <div class="card-title-group">
+                <span class="card-icon">🌙</span>
+                <h3 class="card-title">Gece-Gündüz Likidite Dengeleyici (Autonomous Rebalancer)</h3>
+              </div>
+            </div>
+            <p class="card-subtitle">
+              Gündüz çalışan DevOps ajanının kullanılmayan atıl kotasını, gece saatlerinde ağır batch model eğitecek Araştırma ajanına otonom aktararak sermayeyi verimli kullanır.
+            </p>
+            <div class="rebalance-action-box">
+              <div class="rebalance-info-col">
+                <div class="rebalance-flow-graphic font-mono">
+                  <span class="reb-agent">DevOps Altyapı</span>
+                  <span class="reb-arrow">── $35.00 Kotası ➔</span>
+                  <span class="reb-agent">Pazar & Veri Ar-Ge</span>
+                </div>
+                <p class="rebalance-note">Atıl sermaye gece eğitim kümesine aktarılır; şirket dış fonlama yapmaz.</p>
+              </div>
+              <button type="button" class="fin-btn fin-btn-secondary" id="btn-run-rebalance">
+                <span>🔄</span>
+                <span>Likiditeyi Şimdi Dengele</span>
+              </button>
+            </div>
+            <div id="rebalance-status-msg" class="rebalance-status-msg hidden font-mono"></div>
+          </div>
+
+          <!-- Card: Recent Arbitrage History Table -->
+          <div class="fin-card card-arb-history">
+            <div class="card-header-clean">
+              <div class="card-title-group">
+                <span class="card-icon">📜</span>
+                <h3 class="card-title">Son Spot İhale & Tasarruf Kayıtları</h3>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="fin-table">
+                <thead>
+                  <tr>
+                    <th>Zaman</th>
+                    <th>Ajan</th>
+                    <th>Kazanan Sağlayıcı</th>
+                    <th>Ödenen</th>
+                    <th>Kurtarılan Tasarruf</th>
+                    <th>PayPal Sipariş ID</th>
+                  </tr>
+                </thead>
+                <tbody id="arb-history-table-body">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ======================================================================
+         TAB 5: PAYPAL AI TOOLKIT & MCP (OFFICIAL REPO & DEVELOPER GATEWAY)
          ====================================================================== -->
     <div class="tab-pane hidden-tab" id="tab-toolkit">
       <div class="toolkit-container">

@@ -1,0 +1,44 @@
+name: PayAgent OS CI / CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  test-and-validate:
+    name: Test & Policy Validation (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install pytest pytest-asyncio httpx
+
+      - name: Run Test Suite (Policy Engine, PayPal Dual-Mode, Arbitrage & MCP)
+        env:
+          ENVIRONMENT: "development"
+          PAYPAL_MODE: "sandbox"
+        run: |
+          pytest tests/ -v --tb=short
+
+      - name: Validate FastAPI App Import & Dual-Mode Boot
+        run: |
+          python -c "from backend.app.main import app; print('PayAgent OS FastAPI App Initialized Successfully!')"

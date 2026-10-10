@@ -1,78 +1,112 @@
 # PayPal PayAgent OS
 
-> **Autonomous AI Agent Financial Wallet & Policy-Guided PayPal Orchestration Engine**
+> **Autonomous AI Agent Financial Wallet, Policy-Guided Guardrails & Cloud Arbitrage Engine**
 > 
 > *Built for the **PayPal AI Hackathon 2026** on Devpost.*
 
+[![CI/CD Pipeline](https://github.com/blosny/paypal-payagent-os/actions/workflows/ci.yml/badge.svg)](https://github.com/blosny/paypal-payagent-os/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.11+](https://img.shields.io/badge/Python-3.11+-brightgreen.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-teal.svg)](https://fastapi.tiangolo.com/)
 [![PayPal: REST API v2](https://img.shields.io/badge/PayPal-REST%20API%20v2-003087.svg)](https://developer.paypal.com/)
-[![Devpost Hackathon](https://img.shields.io/badge/Devpost-PayPal%20AI%20Hackathon-blue.svg)](https://devpost.com/)
+[![PayPal AI Toolkit](https://img.shields.io/badge/PayPal-AI%20Toolkit%20%26%20MCP-0079C1.svg)](https://github.com/paypal/AI-Toolkit)
+[![Test Suite: 30/30 Passed](https://img.shields.io/badge/Tests-30%2F30%20Passed-success.svg)](tests/)
 
 ---
 
-## Overview & The Problem
+## 🌟 The Core Vision & Problem
 
-The agentic AI economy is rapidly arriving. Autonomous AI agents are writing code, configuring cloud environments, aggregating market research, and contracting micro-services.
+The agentic AI era is here: autonomous agents (Claude Code, Cursor, Devin, CrewAI, AutoGen) are provisioning cloud clusters, executing model fine-tuning, purchasing research datasets, and orchestrating contractors.
 
-However, **AI agents lack a secure, native financial execution layer**:
-1. Giving an AI an unrestricted credit card is a major security and financial risk.
-2. Requiring human approval for every single $0.50 API call or micro-procurement destroys agent autonomy.
-3. Lack of an auditable financial trail leaves developers blind to why an agent made a payment.
-
----
-
-## Solution: PayAgent OS
-
-**PayAgent OS** turns PayPal into a programmable, policy-governed financial infrastructure for autonomous AI agents.
-
-- **Autonomous Execution:** Agents self-execute routine, verified purchases within pre-approved thresholds.
-- **Guardrail Policy Engine:** Enforces per-transaction caps, daily rolling budgets, vendor allowlists, and anomaly scoring.
-- **Human-in-the-Loop (HITL):** High-value or anomalous transactions automatically pause into a live approval queue.
-- **Explainability & Audit Trail:** Every transaction records the agent's identity, reasoning prompt, target vendor, and policy decision.
-- **Direct PayPal Integration:** Powered by PayPal's Orders v2 API, Captures API, and Payouts API.
+However, **organizations cannot safely give AI agents unrestricted corporate credit cards**:
+1. **Uncontrolled Burn:** A single runaway loop or prompt injection can rack up a $50,000 AWS/API bill overnight.
+2. **Autonomy Bottleneck:** Requiring human approval for every $1.00 routine compute task paralyzes agent efficiency.
+3. **Black-Box Payments:** Unaudited transactions leave financial supervisors blind to *why* funds were spent.
+4. **Static Pricing Inefficiency:** Agents purchase compute from a single hardcoded vendor, missing live spot market discounts.
 
 ---
 
-## Architecture
+## 🛡️ The 4 Core Pillars of PayAgent OS
+
+PayAgent OS turns PayPal into an autonomous, safe, and intelligent financial operating system:
+
+### 1. 🛡️ Enterprise Financial Guardrails & HITL State Machine
+- **Dual-Threshold Control:** Routine micro-transactions within policy caps execute autonomously in seconds.
+- **Human-in-the-Loop (HITL) Safety Gate:** Budget overruns, unrecognized vendors, or anomalous requests are frozen in a live supervisor queue for one-click authorization or reasoned rejection.
+- **Complete Audit Trail:** Every transaction records the agent's identity, reasoning prompt, recipient, and cryptographic PayPal order ID.
+
+### 2. 🔌 Official PayPal AI Toolkit & Sandbox MCP Guardian Layer
+- **Seamless Drop-In Adapter:** Directly wraps PayPal's official [`paypal/AI-Toolkit`](https://github.com/paypal/AI-Toolkit) and official Sandbox Model Context Protocol (MCP) server (`https://mcp.sandbox.paypal.com/sse`).
+- **Active Interceptor:** When LangChain, CrewAI, or Cursor agents call official PayPal tools (`paypal_create_order`, `paypal_create_payout`), PayAgent OS intercepts and enforces enterprise policy rules *before* financial commitment.
+
+### 3. 🤝 Autonomous Capital Market (P2P Negotiation & Debt Settlement)
+- **Behavioral Finance Personalities:** Agents possess distinct financial behaviors:
+  - `FRUGAL_VAULT` (*Cimri Birikim Kasası*): Strictly preserves capital; only approves emergency requests marked `CRITICAL`.
+  - `GROWTH_EXPLORER` (*Ar-Ge & Büyüme*): Generously fuels innovation and model testing.
+  - `BALANCED_COORDINATOR` (*Dengeli Hazine*): Rational risk analyzer for freelance payouts.
+- **Internal Debt Settlement Loop:** Borrowed compute quotas are registered into an autonomous debt ledger and repaid upon daily quota reset.
+
+### 4. ⚡ Autonomous Cloud/GPU Spot Bidding & Arbitrage Engine
+- **Live Market Surveillance:** Real-time spot price board tracking AWS Bedrock, Cloudflare Workers AI, HuggingFace Endpoints, RunPod GPU Spot, and DeepInfra.
+- **Dynamic Auction Solicitation:** Solicits competitive quotes based on agent workload (GPU Inference, Fine-Tuning, Embeddings, Serverless) and strategy (`COST_FIRST`, `SPEED_FIRST`, `BALANCED`).
+- **Arbitrage Alpha Capture:** Automatically routes procurement to the winning provider via PayPal Orders v2 Sandbox, capturing net dollar savings (`saved_amount`) directly into the corporate treasury.
+- **Day/Night Liquidity Rebalancer:** Automatically shifts idle daytime quotas to nocturnal batch-training agents.
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 graph TD
-    subgraph "AI Agents"
-        Agent["Autonomous Agent\n(DevOps / Research / Content)"]
+    subgraph "Autonomous AI Agents"
+        AgentDevOps["DevOps Infrastructure Agent\n(Frugal Vault)"]
+        AgentResearch["Market Research & Data Agent\n(Growth Explorer)"]
+        AgentPayout["Contractor Coordinator Agent\n(Balanced Hazine)"]
     end
 
-    subgraph "PayAgent OS Core"
-        API["FastAPI Gateway"]
-        Policy["Policy & Guardrail Engine\n- Budget Cap\n- Allowlist\n- Anomaly Check"]
-        HITL["Human-in-the-Loop Queue\n(Pending Approval)"]
-        PayPalSvc["PayPal REST Client\n(OAuth2, Orders, Payouts)"]
-        Audit[("Audit Trail\n& Explanations")]
+    subgraph "PayAgent OS Core Layer"
+        APIGateway["FastAPI Gateway & OpenAPI"]
+        PolicyEngine["Policy & Guardrail Engine\n- Per-Tx & Daily Caps\n- Vendor Allowlist"]
+        HITL["Human-in-the-Loop Queue\n(Supervisor Decision Gate)"]
+        ArbitrageEngine["Spot Bidding & Arbitrage Motor\n(AWS · Cloudflare · HF · RunPod)"]
+        DebtLedger["Autonomous Debt Settlement Loop\n(24h Rollover & Repayment)"]
+        GuardianAdapter["PayPal AI Toolkit & MCP Guardian\n(Official Interceptor Layer)"]
     end
 
-    subgraph "PayPal Sandbox"
-        PayPalAPI["PayPal Global Payments API"]
+    subgraph "PayPal Infrastructure (Sandbox & Production)"
+        PayPalOrders["PayPal Orders v2 & Capture API"]
+        PayPalPayouts["PayPal Payouts v1 API"]
+        PayPalMCP["PayPal Official Sandbox MCP Server\n(https://mcp.sandbox.paypal.com/sse)"]
     end
 
-    subgraph "Human Operator"
-        Dashboard["Supervisor Web Dashboard"]
+    subgraph "Supervisor & CFO Cockpit"
+        Dashboard["Web Dashboard (Dark Glassmorphism)"]
+        ExecutivePDF["Certified A4 Financial Audit PDF"]
+        StressSim["'What-If' Stress & Liquidity Simulator"]
+        CFOCopilot["AI Hazine Direktörü (CFO Q&A)"]
     end
 
-    Agent -->|Payment Intent| API
-    API --> Policy
-    Policy -->|Within Budget| PayPalSvc
-    Policy -->|Exceeds Limit / Flagged| HITL
-    HITL -->|Notification| Dashboard
-    Dashboard -->|Approve / Reject| HITL
-    HITL -->|Approved| PayPalSvc
-    PayPalSvc --> PayPalAPI
-    PayPalSvc --> Audit
+    AgentDevOps --> APIGateway
+    AgentResearch --> APIGateway
+    AgentPayout --> APIGateway
+
+    APIGateway --> PolicyEngine
+    PolicyEngine -->|Within Limit| ArbitrageEngine
+    PolicyEngine -->|Limit Exceeded| HITL
+    HITL --> Dashboard
+    ArbitrageEngine --> GuardianAdapter
+    GuardianAdapter --> PayPalOrders
+    GuardianAdapter --> PayPalPayouts
+    GuardianAdapter --> PayPalMCP
+
+    Dashboard --> ExecutivePDF
+    Dashboard --> StressSim
+    Dashboard --> CFOCopilot
 ```
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
 ### 1. Clone & Setup
 ```bash
@@ -84,7 +118,7 @@ python -m venv venv
 
 # Windows
 .\venv\Scripts\Activate.ps1
-# Linux/macOS
+# Linux / macOS
 source venv/bin/activate
 
 # Install dependencies
@@ -101,36 +135,39 @@ PAYPAL_CLIENT_ID=your_sandbox_client_id
 PAYPAL_CLIENT_SECRET=your_sandbox_client_secret
 PAYPAL_MODE=sandbox
 ```
-*(Note: If no credentials are provided, PayAgent OS automatically runs in safe **Simulation Mode** for instant local evaluation).*
+*(Note: If credentials are not provided, PayAgent OS automatically engages **Simulation Mode** for full local testing).*
 
 ### 3. Run Application
 ```bash
-python backend/app/main.py
+uvicorn backend.app.main:app --reload --port 8000
 ```
-Visit:
+Open:
 - **Interactive Dashboard:** `http://localhost:8000`
-- **Swagger API Docs:** `http://localhost:8000/docs`
+- **Swagger REST API Docs:** `http://localhost:8000/docs`
 
 ### 4. Run Test Suite
 ```bash
-pytest
+pytest tests/ -v
 ```
+*(All 30 unit, policy, toolkit and arbitrage tests pass in under 1 second).*
 
 ---
 
-## PayPal APIs Utilized
-- **OAuth 2.0 Client Credentials:** Secure token generation and lifecycle management (`POST /v1/oauth2/token`).
-- **Orders v2 API:** Order creation with line-item breakdowns (`POST /v2/checkout/orders`).
-- **Capture API:** Immediate authorized settlement (`POST /v2/checkout/orders/{id}/capture`).
-- **Payouts API:** Programmatic disbursement to contractors and external agents (`POST /v1/payments/payouts`).
+## 📜 PayPal Technologies Utilized
+- **PayPal Orders v2 API:** `POST /v2/checkout/orders`
+- **PayPal Capture API:** `POST /v2/checkout/orders/{id}/capture`
+- **PayPal Payouts API:** `POST /v1/payments/payouts`
+- **PayPal OAuth 2.0 Client Credentials:** `POST /v1/oauth2/token`
+- **Official PayPal AI Toolkit (`paypal/AI-Toolkit`):** Integrated via Guardian Adapter.
+- **PayPal Sandbox MCP Server:** SSE endpoint `https://mcp.sandbox.paypal.com/sse`.
 
 ---
 
-## Author
-- **Taha Buğra Çiçek** — Fırat University Computer Engineering
+## 👨‍💻 Author
+- **Taha Buğra Çiçek** — Fırat University, Computer Engineering (Senior)
 - GitHub: [@blosny](https://github.com/blosny)
 
 ---
 
-## License
+## 📄 License
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
