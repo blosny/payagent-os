@@ -54,6 +54,8 @@ class TransactionRecord(BaseModel):
     proposed_donor_agent_id: Optional[str] = None
     proposed_donor_agent_name: Optional[str] = None
     borrowing_proposal_note: Optional[str] = None
+    risk_score: Optional[float] = None
+    risk_flags: Optional[list] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     resolved_at: Optional[datetime] = None
     reviewer_notes: Optional[str] = None

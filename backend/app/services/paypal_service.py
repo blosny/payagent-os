@@ -180,5 +180,41 @@ class PayPalService:
             response.raise_for_status()
             return response.json()
 
+    async def refund_capture(
+        self,
+        capture_id: str,
+        amount: Optional[float] = None,
+        currency: str = "USD",
+        note_to_payer: str = "PayAgent Autonomous SLA Dispute Refund",
+    ) -> Dict[str, Any]:
+        """Issue a refund for a PayPal capture (e.g., following an SLA dispute)."""
+        token = await self.get_access_token()
+
+        if token == "simulated_sandbox_token" or capture_id.startswith("MOCK-"):
+            refund_id = f"MOCK-REFUND-{uuid.uuid4().hex[:8].upper()}"
+            val = f"{amount:.2f}" if amount is not None else "FULL"
+            return {
+                "id": refund_id,
+                "status": "COMPLETED",
+                "simulated": True,
+                "amount": {"value": val, "currency_code": currency},
+                "note_to_payer": note_to_payer,
+            }
+
+        url = f"{settings.paypal_base_url}/v2/payments/captures/{capture_id}/refund"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {token}",
+            "PayPal-Request-Id": str(uuid.uuid4()),
+        }
+        payload: Dict[str, Any] = {"note_to_payer": note_to_payer[:255]}
+        if amount is not None:
+            payload["amount"] = {"value": f"{amount:.2f}", "currency_code": currency}
+
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, headers=headers, json=payload, timeout=12.0)
+            response.raise_for_status()
+            return response.json()
+
 
 paypal_service = PayPalService()

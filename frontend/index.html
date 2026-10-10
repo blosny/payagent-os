@@ -138,6 +138,12 @@
         <span class="tab-btn-title" data-i18n="tabToolkit">PayPal AI Toolkit & MCP</span>
         <span class="tab-nav-pill-new">NEW</span>
       </button>
+
+      <button type="button" class="tab-nav-btn" data-tab="tab-security" id="tab-btn-security">
+        <span class="tab-btn-icon">🛡️</span>
+        <span class="tab-btn-title" data-i18n="tabSecurity">Kurumsal Güvenlik & Multi-Sig</span>
+        <span class="tab-nav-pill-new" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4);">FAZ 5</span>
+      </button>
     </nav>
 
     <!-- ======================================================================
@@ -1056,6 +1062,182 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())
 
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         TAB 6: KURUMSAL AI GÜVENLİK, ANOMALİ KALKANI & MULTI-SIG (FAZ 5)
+         ====================================================================== -->
+    <div class="tab-pane hidden-tab" id="tab-security">
+      <div class="security-container">
+        
+        <!-- Security Header Banner -->
+        <div class="security-header">
+          <div class="sec-header-left">
+            <div class="security-title">
+              <span>🛡️ Kurumsal AI Güvenlik, Anomali Kalkanı & Multi-Sig Konsensüsü</span>
+              <span class="status-pill tag-red font-mono" style="font-size: 0.65rem;">FAZ 5 ACTIVE</span>
+            </div>
+            <p class="security-subtitle">
+              Resmi PayPal AI Prompts & Guardrails kalkanı ile otonom ajanların harcama gerekçelerini analiz edin, prompt injection saldırılarını durdurun, $500+ harcamalarda çoklu imzalı (Multi-Sig) AI mutabakatı çalıştırın ve SLA ihlallerinde otonom PayPal iadesi alın.
+            </p>
+          </div>
+          <div class="sec-stats-strip">
+            <div class="sec-stat-box">
+              <div class="sec-stat-label">Guardrail Kalkanı</div>
+              <div class="sec-stat-val green">AKTİF</div>
+            </div>
+            <div class="sec-stat-box">
+              <div class="sec-stat-label">Multi-Sig Eşiği</div>
+              <div class="sec-stat-val" style="color: #38bdf8;">$500.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2x2 Grid Layout for Faz 5 Features -->
+        <div class="sec-grid">
+          
+          <!-- Column 1, Card 1: LLM Risk & Guardrail Analyzer -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">
+                <span>⚡ LLM Risk & Prompt Guardrail Tarayıcısı</span>
+              </div>
+              <span class="status-pill tag-sky font-mono" style="font-size: 0.68rem;">LIVE SCANNER</span>
+            </div>
+            <p class="sec-card-desc">
+              Ajanın harcama gerekçesini (reasoning) ve parametrelerini analiz ederek 0-100 anomali skoru hesaplar, prompt injection veya sahte satıcıları anında durdurur.
+            </p>
+
+            <!-- Test Chips -->
+            <div class="sec-chips-row">
+              <button type="button" class="sec-chip-btn" id="chip-sec-safe">✓ Normal GPU Alımı ($28)</button>
+              <button type="button" class="sec-chip-btn" id="chip-sec-injection" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">🚨 Prompt Injection ($25)</button>
+              <button type="button" class="sec-chip-btn" id="chip-sec-mismatch" style="border-color: rgba(245, 158, 11, 0.4); color: #fde68a;">⚠️ Tutar Mismatch ($380)</button>
+              <button type="button" class="sec-chip-btn" id="chip-sec-typosquat">🛑 Şüpheli Satıcı</button>
+            </div>
+
+            <!-- Inputs -->
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <textarea id="sec-reasoning-input" class="fin-input" rows="2" placeholder="Harcama gerekçesi (reasoning prompt)..." style="font-size: 0.78rem;">Provisioning GPU spot compute node for batch transcription model.</textarea>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <input type="number" id="sec-amount-input" class="fin-input" value="28.00" placeholder="Tutar (USD)" style="font-size: 0.8rem;" />
+                <input type="text" id="sec-vendor-input" class="fin-input" value="AWS" placeholder="Tedarikçi" style="font-size: 0.8rem;" />
+              </div>
+              <button type="button" class="btn btn-primary" id="btn-scan-risk" style="background: linear-gradient(135deg, #ef4444, #b91c1c); border-color: #ef4444; margin-top: 0.25rem;">
+                🛡️ Risk Kalkanını Çalıştır
+              </button>
+            </div>
+
+            <!-- Real-Time Scanner Result -->
+            <div class="sec-result-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.78rem; font-weight: 700; color: #fff;">Risk & Güvenlik Değerlendirmesi:</span>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                  <span id="sec-risk-level-badge" class="status-pill tag-green font-mono">LOW</span>
+                  <span style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: #fff;">
+                    <span id="sec-risk-score-val">5.0</span>/100
+                  </span>
+                </div>
+              </div>
+              <div class="sec-gauge-bar-wrapper">
+                <div id="sec-gauge-bar" class="sec-gauge-bar low" style="width: 5%;"></div>
+              </div>
+              <div id="sec-flags-container" class="sec-flags-list">
+                <span style="font-size: 0.74rem; color: #34d399;">✓ Tehdit tespit edilmedi (Guardrails Temiz)</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.5rem;">
+                <span id="sec-summary-text" style="font-size: 0.74rem; color: var(--text-muted);">Düşük risk değerlendirmesi. Otonom icraata uygun.</span>
+                <span id="sec-action-badge" class="status-pill tag-green font-mono" style="font-size: 0.65rem;">EXECUTE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2, Card 1: Multi-Sig AI Consensus Table ($500+) -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">
+                <span>⚖️ $500+ Multi-Sig AI Konsensüs Masası</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" id="btn-create-multisig-test" style="font-size: 0.72rem;">
+                + $850 Teklif Aç
+              </button>
+            </div>
+            <p class="sec-card-desc">
+              $500 üzerindeki yüksek tutarlı harcamalarda tek ajanın inisiyatifi yerine Hukuk ve SecOps ajanlarının ortak kriptografik mutabakatı ve yönetici onayı şart koşulur.
+            </p>
+
+            <div id="multisig-proposals-container" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 410px; overflow-y: auto;">
+              <!-- Dynamic proposals injected by security.js -->
+            </div>
+          </div>
+
+          <!-- Column 1, Card 2: Smart Tax, VAT & ERP Compliance -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">
+                <span>🧾 Akıllı Vergi, KDV & ERP Fiş Motoru</span>
+              </div>
+              <span class="status-pill tag-emerald font-mono" style="font-size: 0.68rem;">SAP / QB READY</span>
+            </div>
+            <p class="sec-card-desc">
+              Tedarikçi ülkesine göre AB Reverse Charge (KDV2), ABD W-8BEN anlaşması veya yerel stopaj ayrıştırıp kurumsal muhasebeye hazır JSON fişi üretir.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 0.5rem; align-items: flex-end;">
+              <div>
+                <label style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">Tedarikçi Seçimi</label>
+                <select id="sec-tax-vendor-select" class="fin-input" style="font-size: 0.8rem;">
+                  <option value="AWS Bedrock">AWS (ABD - W-8BEN %0 Vergi)</option>
+                  <option value="Hugging Face">Hugging Face (AB/Fransa - Reverse Charge Art.196)</option>
+                  <option value="Radore Veri Merkezi">Radore (TR - %20 KDV + %10 Stopaj)</option>
+                  <option value="Mistral AI">Mistral AI (AB/Fransa - Reverse Charge)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 0.2rem;">Fatura Tutarı ($)</label>
+                <input type="number" id="sec-tax-amount-input" class="fin-input" value="120.00" style="font-size: 0.8rem;" />
+              </div>
+              <button type="button" class="btn btn-secondary" id="btn-calc-tax" style="font-size: 0.78rem; padding: 0.45rem 0.8rem;">
+                Ayrıştır
+              </button>
+            </div>
+
+            <!-- Tax Output -->
+            <div id="sec-tax-breakdown-output" style="display: flex; flex-direction: column; gap: 0.4rem;">
+              <div style="font-size: 0.76rem; color: var(--text-muted); text-align: center; padding: 0.5rem;">
+                Tedarikçi seçip 'Ayrıştır' butonuna tıklayarak vergi dökümünü inceleyin.
+              </div>
+            </div>
+
+            <!-- ERP JSON Payload Preview -->
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.25rem;">SAP / QuickBooks / Logo Kurumsal Muhasebe Fişi (ISO-20022):</div>
+              <pre class="erp-voucher-code" id="sec-erp-voucher-display">{\n  "status": "Ready for tax computation...",\n  "standard": "ISO-20022 / UBL-2.1"\n}</pre>
+            </div>
+          </div>
+
+          <!-- Column 2, Card 2: Autonomous SLA & PayPal Dispute / Refund Recovery -->
+          <div class="sec-card">
+            <div class="sec-card-header">
+              <div class="sec-card-title">
+                <span>⚡ Otonom SLA & PayPal Dispute / İade Kurtarma</span>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" id="btn-simulate-sla-breach" style="font-size: 0.72rem; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">
+                ⚡ %8.5 Kesinti Simüle Et & İade Al
+              </button>
+            </div>
+            <p class="sec-card-desc">
+              Satın alınan bulut kotası %5'ten fazla hata verdiğinde PayPal Dispute ve İade (Refund) sürecini otonom başlatıp parayı hazineye geri alır.
+            </p>
+
+            <div id="sla-records-container" style="display: flex; flex-direction: column; gap: 0.6rem; max-height: 380px; overflow-y: auto;">
+              <!-- Dynamic SLA records injected by security.js -->
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
 

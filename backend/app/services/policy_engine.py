@@ -146,6 +146,16 @@ class PolicyEngine:
         if (agent.spent_today + intent.amount) > policy.daily_budget:
             return False, f"Transaction causes daily spending (${agent.spent_today + intent.amount:.2f}) to exceed daily budget (${policy.daily_budget:.2f})."
 
+        # Check LLM Risk & Guardrail Anomaly
+        from .security_engine import llm_risk_analyzer
+        risk = llm_risk_analyzer.analyze(intent.reasoning, intent.amount, intent.recipient, agent.id)
+        if risk.is_blocked:
+            return False, f"Security Risk Blocked: {risk.analysis_summary}"
+        if risk.requires_hitl:
+            return False, f"Security Anomaly Triggered: {risk.analysis_summary}"
+        if risk.requires_multisig:
+            return False, f"Enterprise Multi-Sig Required: Expenditure of ${intent.amount:.2f} requires consensus (Threshold: $500.00)."
+
         return True, "Within all autonomous policy limits."
 
     async def submit_intent(self, intent: TransactionIntent) -> TransactionRecord:
@@ -153,6 +163,9 @@ class PolicyEngine:
         agent = self.get_agent(intent.agent_id)
         if not agent:
             raise ValueError(f"Agent with ID '{intent.agent_id}' not found.")
+
+        from .security_engine import llm_risk_analyzer
+        risk_eval = llm_risk_analyzer.analyze(intent.reasoning, intent.amount, intent.recipient, agent.id)
 
         can_auto_execute, reason = self.evaluate_policy(agent, intent)
         tx_id = f"TX-{uuid.uuid4().hex[:8].upper()}"
@@ -190,6 +203,8 @@ class PolicyEngine:
                     transaction_type=tx_type,
                     paypal_order_id=order_id,
                     paypal_capture_id=capture_id,
+                    risk_score=risk_eval.risk_score,
+                    risk_flags=risk_eval.flags,
                     resolved_at=datetime.now(timezone.utc),
                 )
             else:
@@ -213,6 +228,8 @@ class PolicyEngine:
                     status=TransactionStatus.APPROVED_AUTONOMOUS,
                     transaction_type=tx_type,
                     paypal_payout_batch_id=batch_id,
+                    risk_score=risk_eval.risk_score,
+                    risk_flags=risk_eval.flags,
                     resolved_at=datetime.now(timezone.utc),
                 )
 
@@ -265,6 +282,8 @@ class PolicyEngine:
                 proposed_donor_agent_id=donor_id,
                 proposed_donor_agent_name=donor_name,
                 borrowing_proposal_note=proposal_note,
+                risk_score=risk_eval.risk_score,
+                risk_flags=risk_eval.flags,
             )
 
         self._transactions[tx_id] = record

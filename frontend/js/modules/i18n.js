@@ -5,7 +5,6 @@
 import { appState, el } from './state.js';
 
 export const i18n = {
-const i18n = {
   tr: {
     tagline: 'Otonom Ajan Harcama & Cüzdan Orkestrasyonu',
     apiDocs: 'API Kılavuzu',
@@ -121,6 +120,7 @@ const i18n = {
     tabP2P: 'P2P Müzakere & Borçlanma',
     tabArbitrage: 'Spot İhale & Arbitraj',
     tabToolkit: 'PayPal AI Toolkit & MCP',
+    tabSecurity: 'Kurumsal Güvenlik & Multi-Sig',
     arbTitle: 'Dinamik Tedarikçi İhale & Spot Arbitraj Masası',
     arbSubtitle: 'Ajanlar GPU, Fine-Tuning ve API kiralarken AWS, Cloudflare, HuggingFace, RunPod ve DeepInfra piyasasını anlık tarar; en ucuz teklifi otonom seçip PayPal ile öder ve aradaki farkı hazineye kâr yazar.',
     arbAlphaLabel: 'KÜMÜLATİF ARBİTRAJ ALPHASI',
@@ -250,6 +250,7 @@ const i18n = {
     tabP2P: 'P2P Negotiation & Debt',
     tabArbitrage: 'Spot Bidding & Arbitrage',
     tabToolkit: 'PayPal AI Toolkit & MCP',
+    tabSecurity: 'Enterprise Security & Multi-Sig',
     arbTitle: 'Autonomous Vendor Spot Bidding & Arbitrage Desk',
     arbSubtitle: 'Agents solicit live spot rates across AWS, Cloudflare, HuggingFace, RunPod, and DeepInfra; auto-procure the lowest-cost compute via PayPal Orders v2 and capture arbitrage alpha.',
     arbAlphaLabel: 'CUMULATIVE ARBITRAGE ALPHA',
@@ -264,8 +265,6 @@ const i18n = {
     btnStartBidding: 'Solicit Live Bids & Compete',
     auctionResultTitle: 'Auction Decision Board & Arbitrage Verdict',
   },
-};
-
 };
 
 const onLangCallbacks = [];

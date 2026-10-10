@@ -10,7 +10,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-teal.svg)](https://fastapi.tiangolo.com/)
 [![PayPal: REST API v2](https://img.shields.io/badge/PayPal-REST%20API%20v2-003087.svg)](https://developer.paypal.com/)
 [![PayPal AI Toolkit](https://img.shields.io/badge/PayPal-AI%20Toolkit%20%26%20MCP-0079C1.svg)](https://github.com/paypal/AI-Toolkit)
-[![Test Suite: 30/30 Passed](https://img.shields.io/badge/Tests-30%2F30%20Passed-success.svg)](tests/)
+[![Test Suite: 40/40 Passed](https://img.shields.io/badge/Tests-40%2F40%20Passed-success.svg)](tests/)
 
 ---
 

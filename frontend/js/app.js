@@ -11,6 +11,7 @@ import { fetchAnalytics, runStressSimulation, initAnalyticsEvents } from './modu
 import { fetchDebts, initP2PEvents } from './modules/p2p.js';
 import { fetchSpotRates, fetchArbitrageHistory, initArbitrageEvents } from './modules/arbitrage.js';
 import { initToolkitEvents } from './modules/toolkit.js';
+import { fetchSecurityData, initSecurityEvents } from './modules/security.js';
 
 // Unified Refresh Orchestrator
 export async function refreshAll() {
@@ -22,6 +23,7 @@ export async function refreshAll() {
     fetchDebts(),
     fetchSpotRates(),
     fetchArbitrageHistory(),
+    fetchSecurityData(),
   ]);
 }
 
@@ -37,6 +39,7 @@ function initApp() {
   initP2PEvents(refreshAll);
   initArbitrageEvents(refreshAll);
   initToolkitEvents(refreshAll);
+  initSecurityEvents(refreshAll);
 
   // Initial Data & Language Boot
   applyLanguage(appState.currentLang);
