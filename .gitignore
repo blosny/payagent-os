@@ -60,6 +60,7 @@ scratch/
 
 # Agents
 .agents
+agent.md
 
 # Hidden Docs & Internal Guides
 .docs

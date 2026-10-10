@@ -6,6 +6,9 @@ from .negotiations import router as negotiations_router
 from .toolkit import router as toolkit_router
 from .arbitrage import router as arbitrage_router
 from .security import router as security_router
+from .mcp import router as mcp_router
+from .webhooks import router as webhooks_router
+from .escrow import router as escrow_router
 
 api_v1_router = APIRouter(prefix="/v1")
 api_v1_router.include_router(agents_router, prefix="/agents", tags=["Agents"])
@@ -15,3 +18,6 @@ api_v1_router.include_router(negotiations_router, prefix="/negotiations", tags=[
 api_v1_router.include_router(toolkit_router, prefix="/toolkit", tags=["PayPal AI Toolkit & MCP"])
 api_v1_router.include_router(arbitrage_router, prefix="/arbitrage", tags=["Spot Bidding & Arbitrage"])
 api_v1_router.include_router(security_router)
+api_v1_router.include_router(mcp_router)
+api_v1_router.include_router(webhooks_router)
+api_v1_router.include_router(escrow_router)

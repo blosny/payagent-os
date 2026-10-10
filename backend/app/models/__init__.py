@@ -36,6 +36,24 @@ from .security import (
     TaxCalculationRequest,
     SLATriggerRequest,
 )
+from .webhook import (
+    PayPalWebhookEvent,
+    WebhookVerificationRequest,
+    WebhookVerificationResponse,
+)
+from .mcp import (
+    MCPTool,
+    MCPContentItem,
+    MCPCallToolRequest,
+    MCPCallToolResult,
+    MCPJsonRpcRequest,
+    MCPJsonRpcResponse,
+)
+from .escrow import (
+    EscrowStatus,
+    EscrowContract,
+    CarbonOffsetRecord,
+)
 
 __all__ = [
     "Agent",
@@ -78,4 +96,16 @@ __all__ = [
     "MultiSigSignRequest",
     "TaxCalculationRequest",
     "SLATriggerRequest",
+    "PayPalWebhookEvent",
+    "WebhookVerificationRequest",
+    "WebhookVerificationResponse",
+    "MCPTool",
+    "MCPContentItem",
+    "MCPCallToolRequest",
+    "MCPCallToolResult",
+    "MCPJsonRpcRequest",
+    "MCPJsonRpcResponse",
+    "EscrowStatus",
+    "EscrowContract",
+    "CarbonOffsetRecord",
 ]
