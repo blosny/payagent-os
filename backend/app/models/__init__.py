@@ -54,6 +54,24 @@ from .escrow import (
     EscrowContract,
     CarbonOffsetRecord,
 )
+from .vault import (
+    SubscriptionStatus,
+    SaaSSubscription,
+    CancelSubscriptionRequest,
+)
+from .credit import (
+    FICOConfig,
+    AgentCreditScore,
+    FICOUpdateResponse,
+)
+from .telegram import (
+    TelegramSettings,
+    TelegramAlertNotification,
+)
+from .roi import (
+    PayPalDealCoupon,
+    ROIMultiplierMetric,
+)
 
 __all__ = [
     "Agent",
@@ -108,4 +126,14 @@ __all__ = [
     "EscrowStatus",
     "EscrowContract",
     "CarbonOffsetRecord",
+    "SubscriptionStatus",
+    "SaaSSubscription",
+    "CancelSubscriptionRequest",
+    "FICOConfig",
+    "AgentCreditScore",
+    "FICOUpdateResponse",
+    "TelegramSettings",
+    "TelegramAlertNotification",
+    "PayPalDealCoupon",
+    "ROIMultiplierMetric",
 ]

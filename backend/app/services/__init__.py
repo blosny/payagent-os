@@ -15,6 +15,10 @@ from .security_engine import (
 from .mcp_server import MCPServer, mcp_server
 from .webhook_service import PayPalWebhookService, paypal_webhook_service
 from .escrow_service import EscrowAndESGService, escrow_and_esg_service
+from .vault_service import VaultService, vault_service
+from .credit_service import CreditService, credit_service
+from .telegram_service import TelegramService, telegram_service
+from .roi_service import ROIService, roi_service
 
 __all__ = [
     "PayPalService",
@@ -39,4 +43,12 @@ __all__ = [
     "paypal_webhook_service",
     "EscrowAndESGService",
     "escrow_and_esg_service",
+    "VaultService",
+    "vault_service",
+    "CreditService",
+    "credit_service",
+    "TelegramService",
+    "telegram_service",
+    "ROIService",
+    "roi_service",
 ]
