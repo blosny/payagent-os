@@ -1,0 +1,777 @@
+/* --------------------------------------------------------------------------
+   Workspace Layout (Portal Grid: gap-6 / gap-8)
+   -------------------------------------------------------------------------- */
+.portal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem;
+}
+
+@media (max-width: 1024px) {
+  .portal-grid { grid-template-columns: 1fr; }
+}
+
+.portal-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.fin-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  position: relative;
+}
+
+.fin-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.95rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.card-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Defined Title Scale: font-semibold tracking-tight text-white */
+.fin-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.badge-live-pulse {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-xs);
+}
+
+.fin-card-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.count-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+  transition: all 0.2s ease;
+}
+
+.count-badge-clean {
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.count-badge-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   Forms & Controls
+   -------------------------------------------------------------------------- */
+.fin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field-group label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.fin-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 0.6rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.fin-input:focus {
+  border-color: var(--accent-paypal);
+  box-shadow: 0 0 0 2px rgba(0, 112, 186, 0.25);
+}
+
+.textarea-fixed {
+  resize: none;
+  line-height: 1.45;
+}
+
+.input-currency {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.input-currency .fin-input {
+  padding-left: 1.65rem;
+  width: 100%;
+}
+
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.fin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.68rem 1.25rem;
+  border-radius: var(--radius-xs);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fin-btn-paypal {
+  background: linear-gradient(135deg, #0070ba 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 112, 186, 0.35);
+}
+
+.fin-btn-paypal:hover {
+  background: linear-gradient(135deg, #005ea6 0%, #0369a1 100%);
+  box-shadow: 0 4px 16px rgba(0, 112, 186, 0.5);
+  transform: translateY(-1px);
+}
+
+.fin-btn-paypal:active {
+  transform: translateY(0);
+}
+
+.fin-btn-secondary {
+  background: #18181b;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.fin-btn-secondary:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.fin-btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
+}
+
+/* --------------------------------------------------------------------------
+   Thinking Indicator Animation for Agent Deliberation
+   -------------------------------------------------------------------------- */
+.thinking-bubble {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.95rem;
+  font-size: 0.76rem;
+  color: #38bdf8;
+  margin-top: 0.5rem;
+}
+
+.thinking-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.thinking-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #38bdf8;
+  animation: thinkingBlink 1.4s infinite ease-in-out both;
+}
+
+.thinking-dot:nth-child(1) { animation-delay: -0.32s; }
+.thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+.thinking-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes thinkingBlink {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.35; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   Form Footer & Presets (Clean Hierarchy: CTA vs Minimalist Presets)
+   -------------------------------------------------------------------------- */
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.4rem;
+}
+
+.preset-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.preset-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.preset-chip {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  color: #a1a1aa;
+  font-size: 0.67rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+
+.fin-btn-approve-paypal {
+  background: #0070ba;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  padding: 0.45rem 0.95rem;
+}
+
+.fin-btn-approve-paypal:hover {
+  background: #005ea6;
+  box-shadow: 0 2px 8px rgba(0, 112, 186, 0.4);
+}
+
+.fin-btn-reject {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  color: #fb7185;
+  font-size: 0.75rem;
+  padding: 0.45rem 0.85rem;
+}
+
+.fin-btn-reject:hover {
+  background: rgba(244, 63, 94, 0.2);
+}
+
+.preset-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.preset-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.preset-chip {
+  background: #18181b;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-chip:hover {
+  color: #ffffff;
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   HITL Review Queue (Targeted Polish: Left Accent Border & Avatar)
+   -------------------------------------------------------------------------- */
+.card-hitl-wrap {
+  border-color: var(--border-amber-glow);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.05);
+}
+
+.hitl-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Left Accent Border (border-l-4 border-l-amber-500 bg-amber-500/5) */
+.invoice-review-card {
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-left: 4px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.invoice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hitl-agent-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.agent-avatar-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.invoice-agent {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.invoice-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.diff-breakdown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  color: #fde68a;
+  font-weight: 600;
+}
+
+.invoice-body {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  background: #0e0e11;
+  border: 1px solid var(--border-subtle);
+  padding: 0.7rem;
+  border-radius: var(--radius-xs);
+}
+
+.invoice-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.empty-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px dashed rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-xs);
+  color: #a1a1aa;
+  font-size: 0.74rem;
+  text-align: left;
+}
+
+.empty-icon {
+  font-size: 0.95rem;
+  color: var(--accent-emerald);
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.borrowing-proposal-banner {
+  background: rgba(0, 207, 222, 0.08);
+  border: 1px solid rgba(0, 207, 222, 0.35);
+  border-left: 3px solid #00cfde;
+  border-radius: var(--radius-xs);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.45rem;
+  margin-bottom: 0.45rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.proposal-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #00cfde;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.proposal-banner-text {
+  font-size: 0.74rem;
+  color: #e4e4e7;
+  line-height: 1.45;
+}
+
+.proposal-banner-highlight {
+  color: #34d399;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Agent Fleet Cards
+   -------------------------------------------------------------------------- */
+.fleet-cards-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.agent-fleet-card {
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: border-color 0.15s ease;
+}
+
+.agent-personality-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.64rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.02em;
+}
+
+.pers-frugal {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.pers-growth {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.pers-balanced {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.agent-fleet-card:hover {
+  border-color: var(--border-strong);
+}
+
+.agent-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.agent-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fleet-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.agent-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.agent-card-balance {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-sky);
+}
+
+.budget-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.budget-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: #09090b;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0070ba 0%, #0284c7 100%);
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.progress-fill.warning {
+  background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
+}
+
+.vendor-pills-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  flex-wrap: wrap;
+}
+
+.vendor-meta-label {
+  color: var(--text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.vendor-meta-list {
+  color: #d4d4d8;
+  font-size: 0.68rem;
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   Audit Trail Table (Targeted Polish: Row Highlights & Dot Statuses)
+   -------------------------------------------------------------------------- */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.fin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.fin-table th {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fin-table td {
+  padding: 0.75rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  vertical-align: middle;
+  transition: background 0.15s ease;
+}
+
+/* Alternating / Hover Highlight: hover:bg-white/[0.02] */
+.fin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.ref-code-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Wrap in small pill tags (bg-zinc-800 text-zinc-300 font-mono text-xs px-2 py-0.5 rounded) */
+.ref-code {
+  background: #27272a;
+  color: #d4d4d8;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btn-copy-ref {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: color 0.15s ease;
+}
+
+.btn-copy-ref:hover {
+  color: #ffffff;
+}
+
+/* Status Pills with Dot Indicators */
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.status-dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-tag.auto {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.status-tag.auto .status-dot-indicator {
+  background-color: #34d399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
+}
+
+.status-tag.human {
+  background: rgba(0, 112, 186, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(0, 112, 186, 0.25);
+}
+.status-tag.human .status-dot-indicator {
+  background-color: #38bdf8;
+}
+
+.status-tag.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.status-tag.pending .status-dot-indicator {
+  background-color: #fbbf24;
+  box-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
+}
+
+.status-tag.rejected {
+  background: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+.status-tag.rejected .status-dot-indicator {
+  background-color: #fb7185;
+}
+

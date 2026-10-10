@@ -1,0 +1,34 @@
+/* PayAgent OS — Shared Components & Toasts */
+
+/* --------------------------------------------------------------------------
+   Toast Notifications
+   -------------------------------------------------------------------------- */
+.toast-hub {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.toast-msg {
+  background: #18181b;
+  border: 1px solid var(--border-strong);
+  color: #ffffff;
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.3s ease;
+}
+
+.toast-msg.success { border-left: 3px solid var(--accent-emerald); }
+.toast-msg.warning { border-left: 3px solid var(--accent-amber); }
+.toast-msg.error { border-left: 3px solid var(--accent-rose); }
+
