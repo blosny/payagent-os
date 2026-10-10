@@ -44,8 +44,26 @@
             <span class="ping-wave"></span>
             <span class="ping-dot"></span>
           </span>
-          <span class="conn-label" id="paypal-conn-label">PayPal Sandbox: Bağlı</span>
+          <span class="conn-label" id="paypal-conn-label">PayPal Sandbox: Connected</span>
         </div>
+
+        <!-- Voice CFO Morning Briefing (Web Speech API) -->
+        <button type="button" class="btn-voice-briefing" id="btn-voice-briefing" title="Listen to Elena's Morning Briefing">
+          <span>🎙️</span>
+          <span data-i18n="voiceBriefing">Listen to CFO Briefing</span>
+        </button>
+
+        <!-- Telegram Supervisor Modal Trigger -->
+        <button type="button" class="nav-icon-link" id="btn-open-telegram-modal" style="background:rgba(14,165,233,0.1); border:1px solid rgba(14,165,233,0.3); border-radius:9999px; padding:0.35rem 0.65rem; cursor:pointer;" title="Telegram Supervisor Alerts">
+          <span>📱</span>
+          <span style="font-size:0.75rem; font-weight:700; color:#38bdf8;" id="tg-account-handle">@elena_cfo</span>
+        </button>
+
+        <!-- FICO Model Settings Modal Trigger -->
+        <button type="button" class="nav-icon-link" id="btn-open-fico-modal" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:9999px; padding:0.35rem 0.65rem; cursor:pointer;" title="Configure AI FICO Model">
+          <span>⚙️</span>
+          <span style="font-size:0.75rem; font-weight:600; color:#cbd5e1;">FICO</span>
+        </button>
 
         <!-- Language Switcher (TR / EN) -->
         <div class="lang-switch" role="group" aria-label="Language Toggle">
@@ -53,59 +71,76 @@
           <button type="button" class="lang-btn" id="btn-lang-en">EN</button>
         </div>
 
-        <!-- API Reference Link -->
-        <a href="/docs" target="_blank" class="nav-icon-link" id="nav-api-docs">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-          </svg>
-          <span data-i18n="apiDocs">API Kılavuzu</span>
-        </a>
+        <!-- Elena Rostova CFO Avatar -->
+        <div class="cfo-avatar" title="Elena Rostova (CFO - Autonomous Treasury Supervisor)">EK</div>
       </div>
     </header>
 
-    <!-- Quick KPI Metrics Bar (High-Density Linear/Stripe Header Strip) -->
-    <section class="stats-row" id="stats-row">
-      <div class="stat-card">
-        <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricAllocated">Tahsis Edilen Bütçe</span>
-          <span class="stat-footnote" id="stat-agents-count">3 Ajan</span>
+    <!-- Hero Greeting Strip (Figma North Star Command Center) -->
+    <div class="hero-greeting-strip">
+      <div>
+        <div class="hero-eyebrow">
+          <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#38bdf8; box-shadow:0 0 8px #38bdf8;"></span>
+          <span data-i18n="heroEyebrow">AUTONOMOUS FINANCE COMMAND CENTER</span>
         </div>
-        <div class="stat-number-row font-mono">
-          <span class="stat-curr">$</span>
-          <span class="stat-number" id="stat-allocated">0.00</span>
+        <h2 class="hero-title">
+          <span data-i18n="heroGreeting">Good morning, Elena. Your agent fleet is operating within policy.</span> 
+          <span class="highlight-warn" data-i18n="heroAlert">One transaction needs your review.</span>
+        </h2>
+      </div>
+      <a href="#card-hitl" class="control-plane-pill">
+        <span data-i18n="heroPill">LIVE CONTROL PLANE &gt;</span>
+      </a>
+    </div>
+
+    <!-- 4 Top KPI Metrics Grid (Figma Make Architecture) -->
+    <section class="top-kpis-grid" id="stats-row">
+      <div class="top-kpi-card">
+        <div class="top-kpi-header">
+          <span data-i18n="kpiTreasuryTitle">TOTAL FLEET TREASURY</span>
+          <span class="top-kpi-badge badge-success">▲ +4.8%</span>
+        </div>
+        <div class="top-kpi-value font-mono">
+          <span>$</span><span id="stat-allocated">3,200.00</span>
+        </div>
+        <div class="top-kpi-footer">
+          <span id="stat-agents-count">3</span> <span data-i18n="kpiTreasurySub">active agent wallets</span>
         </div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricSpentToday">Bugünkü Harcama</span>
+      <div class="top-kpi-card">
+        <div class="top-kpi-header">
+          <span data-i18n="kpiSpentTitle">SPENT TODAY</span>
+          <span style="font-size: 0.75rem; color: #94a3b8;">12 txs</span>
         </div>
-        <div class="stat-number-row font-mono">
-          <span class="stat-curr">$</span>
-          <span class="stat-number" id="stat-spent-today">0.00</span>
+        <div class="top-kpi-value font-mono">
+          <span>$</span><span id="stat-spent-today">128.50</span>
         </div>
+        <div class="top-kpi-footer" data-i18n="kpiSpentSub">Daily fleet cap: $1,500.00</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricPendingHITL">İnsan Onay Kuyruğu</span>
+      <div class="top-kpi-card">
+        <div class="top-kpi-header">
+          <span data-i18n="kpiHitlTitle">HUMAN-IN-THE-LOOP QUEUE</span>
+          <span class="top-kpi-badge badge-amber" data-i18n="kpiHitlBadge">Action required</span>
         </div>
-        <div class="stat-number-row font-mono">
-          <span class="stat-number text-muted" id="stat-pending">0</span>
+        <div class="top-kpi-value font-mono" style="color: #f59e0b;">
+          <span id="stat-pending">1</span> <span style="font-size: 1.1rem; font-weight: 600;" data-i18n="kpiPendingText">Pending</span>
         </div>
+        <div class="top-kpi-footer" data-i18n="kpiHitlSub">Telegram alert dispatched to @elena_cfo</div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-meta">
-          <span class="stat-label" data-i18n="metricSettled">PayPal Hacmi</span>
+      <div class="top-kpi-card">
+        <div class="top-kpi-header">
+          <span data-i18n="kpiSavingsTitle">CUMULATIVE SAVINGS & ALPHA</span>
+          <span class="top-kpi-badge badge-success">▲ +18.2%</span>
         </div>
-        <div class="stat-number-row font-mono">
-          <span class="stat-curr">$</span>
-          <span class="stat-number text-sky-400" id="stat-volume">0.00</span>
+        <div class="top-kpi-value font-mono" style="color: #10b981;">
+          <span id="kpi-savings-value">+$84.20</span>
+          <!-- Hidden fallback for legacy scripts -->
+          <span id="stat-volume" style="display:none;">84.20</span>
         </div>
+        <div class="top-kpi-footer" data-i18n="kpiSavingsSub">Harvested via PayPal Deals & Arbitrage</div>
       </div>
     </section>
 
@@ -150,6 +185,147 @@
          TAB 1: OTONOM HARCAMA & CÜZDANLAR (OPERATIONAL FLEET & WORKSPACE)
          ====================================================================== -->
     <div class="tab-pane active" id="tab-fleet-ops">
+      
+      <!-- Figma Make Command Center 2-Column Grid (Phase 7 Innovation Architecture) -->
+      <section class="command-center-grid">
+        
+        <!-- Left Column: HITL Review & Autonomous Vault Subscription Cleaner -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- HITL Supervisor Review Queue Card -->
+          <div class="cc-card" id="card-hitl-command">
+            <div class="cc-card-header">
+              <span class="cc-card-title">
+                <span style="color: #f59e0b;">⚠️</span>
+                <span data-i18n="ccHitlTitle">HUMAN-IN-THE-LOOP REVIEW QUEUE</span>
+              </span>
+              <span class="top-kpi-badge badge-amber" id="cc-hitl-badge-indicator">1 PENDING</span>
+            </div>
+
+            <div class="hitl-request-box">
+              <div class="hitl-box-top">
+                <div>
+                  <div class="hitl-agent-name">DevOps Agent</div>
+                  <div class="hitl-vendor-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    AWS Compute Cluster
+                  </div>
+                </div>
+                <div class="hitl-amount-display">$240.00</div>
+              </div>
+
+              <div class="hitl-reasoning">
+                "Requested $240.00 for model fine-tuning cluster. Exceeds daily single-tx policy threshold ($150.00)."
+              </div>
+
+              <div class="hitl-meta-row">
+                <span>🛡️ Low Risk (0.12) • Verified Merchant</span>
+                <span style="color: #38bdf8;">✓ Dispatched to Telegram @elena_cfo</span>
+              </div>
+
+              <div class="hitl-actions-row">
+                <button type="button" class="btn-paypal-approve" onclick="window.approveSimulatedHitl()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Approve via PayPal</span>
+                </button>
+                <button type="button" class="btn-hitl-reject" onclick="window.rejectSimulatedHitl()">
+                  <span>✕ Reject</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Autonomous Subscription Cleaner (PayPal Vault) Card -->
+          <div class="cc-card" id="card-vault-cleaner">
+            <div class="cc-card-header">
+              <span class="cc-card-title">
+                <span style="color: #38bdf8;">🔄</span>
+                <span data-i18n="ccVaultTitle">AUTONOMOUS SUBSCRIPTION CLEANER</span>
+              </span>
+              <span class="top-kpi-badge badge-success">PAYPAL VAULT ACTIVE</span>
+            </div>
+
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.85rem;" data-i18n="ccVaultDesc">
+              Continuous monitoring for unused SaaS seats. Canceling unused tokens directly reclaims treasury cash.
+            </p>
+
+            <div id="vault-subscriptions-list">
+              <!-- Dynamically rendered via command_center.js -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Dynamic FICO Credit Fleet & ROI Multiplier Harvester -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- AI Fleet FICO Credit Scoring (300-850) Card -->
+          <div class="cc-card" id="card-fico-scores">
+            <div class="cc-card-header">
+              <span class="cc-card-title">
+                <span style="color: #10b981;">📈</span>
+                <span data-i18n="ccFicoTitle">AI AGENT FLEET & DYNAMIC FICO CREDIT</span>
+              </span>
+              <button type="button" class="preset-chip" onclick="document.getElementById('btn-open-fico-modal').click()" style="font-size: 0.7rem;">
+                ⚙️ Configure Model
+              </button>
+            </div>
+
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.85rem;" data-i18n="ccFicoDesc">
+              Creditworthiness dynamically adjusts single-transaction and daily spending limits based on repayment discipline.
+            </p>
+
+            <div id="fico-agents-list">
+              <!-- Dynamically rendered via command_center.js -->
+            </div>
+          </div>
+
+          <!-- ROI Productivity Multiplier & PayPal Deals Harvester Card -->
+          <div class="cc-card" id="card-roi-harvester">
+            <div class="cc-card-header">
+              <span class="cc-card-title">
+                <span style="color: #f59e0b;">🏷️</span>
+                <span data-i18n="ccRoiTitle">ROI MULTIPLIER & DISCOUNT HARVESTER</span>
+              </span>
+              <span class="top-kpi-badge badge-success" id="roi-trend-badge">▲ +0.6x ALPHA</span>
+            </div>
+
+            <div class="roi-hero-box">
+              <div>
+                <div class="roi-metric-big" id="roi-multiplier-value">3.4x</div>
+                <div class="roi-subtitle" data-i18n="ccRoiSub">
+                  For every $1 spent via PayPal, your fleet returns $3.40 in autonomous code & infrastructure output value.
+                </div>
+              </div>
+              <svg class="sparkline-svg" viewBox="0 0 110 38">
+                <defs>
+                  <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 5,30 Q 25,26 45,20 T 80,14 T 105,6 L 105,38 L 5,38 Z" fill="url(#sparkGrad)" />
+                <path d="M 5,30 Q 25,26 45,20 T 80,14 T 105,6" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            </div>
+
+            <div class="cc-card-title" style="font-size: 0.75rem; margin-bottom: 0.5rem; color: #94a3b8;">
+              <span>HARVESTED PAYPAL DEALS & PROMOS</span>
+            </div>
+
+            <div id="recent-coupons-list" class="coupons-list">
+              <!-- Dynamically loaded -->
+            </div>
+
+            <button type="button" class="preset-chip" style="margin-top: 0.75rem; width: 100%; text-align: center; justify-content: center; padding: 0.5rem;" onclick="window.harvestSampleCoupon()">
+              <span>+ Harvest New PayPal Deal / Promo</span>
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
       <div class="portal-grid">
         
         <!-- Left Column: Simulator & HITL Queue -->
@@ -1357,6 +1533,111 @@ safe_tools = guardian.wrap_tools(toolkit.get_tools())
 
     <!-- Toast Notification Container -->
     <div id="toast-container" class="toast-hub"></div>
+
+    <!-- ======================================================================
+         MODAL: TELEGRAM SUPERVISOR SETTINGS (FIGMA NORTH STAR)
+         ====================================================================== -->
+    <div class="settings-modal-backdrop" id="telegram-settings-modal">
+      <div class="settings-modal-card">
+        <div class="settings-modal-header">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size: 1.25rem;">📱</span>
+            <h3 style="margin:0; font-size:1rem; font-weight:700; color:#f8fafc;" data-i18n="tgModalTitle">Telegram Supervisor Alerts</h3>
+          </div>
+          <button type="button" id="btn-close-telegram-modal" style="background:none; border:none; color:#94a3b8; font-size:1.25rem; cursor:pointer;">✕</button>
+        </div>
+
+        <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:1rem;" data-i18n="tgModalDesc">
+          Receive actionable approval buttons directly in Telegram. Connected account: <strong style="color:#38bdf8;">@elena_cfo</strong>
+        </p>
+
+        <div class="settings-toggle-row">
+          <div>
+            <div style="font-size:0.8125rem; font-weight:600; color:#f8fafc;" data-i18n="tgOptHitl">HITL Approval Requests</div>
+            <div style="font-size:0.7rem; color:#64748b;" data-i18n="tgOptHitlSub">Instant alert when transaction exceeds policy ceiling</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="tg-toggle-hitl" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-toggle-row">
+          <div>
+            <div style="font-size:0.8125rem; font-weight:600; color:#f8fafc;" data-i18n="tgOptRisk">Blocked High-Risk Events</div>
+            <div style="font-size:0.7rem; color:#64748b;" data-i18n="tgOptRiskSub">Alerts on prompt injections or unauthorized vendors</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="tg-toggle-risk" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-toggle-row" style="margin-bottom:1.25rem;">
+          <div>
+            <div style="font-size:0.8125rem; font-weight:600; color:#f8fafc;" data-i18n="tgOptSummary">Daily 09:00 AM Treasury Briefing</div>
+            <div style="font-size:0.7rem; color:#64748b;" data-i18n="tgOptSummarySub">Automated morning portfolio overview and status</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="tg-toggle-summary">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem;">
+          <button type="button" class="preset-chip" id="btn-test-telegram-ping" style="flex:1; justify-content:center; padding:0.55rem;" data-i18n="btnTgPing">
+            🔔 Send Test Ping
+          </button>
+          <button type="button" class="fin-btn fin-btn-paypal" id="btn-save-telegram-settings" style="flex:1; justify-content:center; padding:0.55rem;" data-i18n="btnTgSave">
+            ✓ Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL: CONFIGURE AI FICO SCORING MODEL (FIGMA NORTH STAR)
+         ====================================================================== -->
+    <div class="settings-modal-backdrop" id="fico-config-modal">
+      <div class="settings-modal-card">
+        <div class="settings-modal-header">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size: 1.25rem;">⚙️</span>
+            <h3 style="margin:0; font-size:1rem; font-weight:700; color:#f8fafc;" data-i18n="ficoModalTitle">Configure AI FICO Scoring Model</h3>
+          </div>
+          <button type="button" id="btn-close-fico-modal" style="background:none; border:none; color:#94a3b8; font-size:1.25rem; cursor:pointer;">✕</button>
+        </div>
+
+        <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:1rem;" data-i18n="ficoModalDesc">
+          Define credit reward and penalty parameters that govern autonomous fleet daily spending limits.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.25rem;">
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="ficoLblOnTime">On-Time Repayment (+pts)</label>
+            <input type="number" id="fico-inp-on-time" class="fin-input font-mono" value="45">
+          </div>
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="ficoLblDiscipline">Budget Discipline (+pts)</label>
+            <input type="number" id="fico-inp-discipline" class="fin-input font-mono" value="25">
+          </div>
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="ficoLblAnomaly">Policy Anomaly (-pts)</label>
+            <input type="number" id="fico-inp-anomaly" class="fin-input font-mono" value="40">
+          </div>
+          <div class="field-group">
+            <label style="font-size:0.75rem;" data-i18n="ficoLblPrime">Prime Threshold (Score)</label>
+            <input type="number" id="fico-inp-prime" class="fin-input font-mono" value="800">
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+          <button type="button" class="fin-btn fin-btn-paypal" id="btn-save-fico-config" style="width:100%; justify-content:center; padding:0.6rem;" data-i18n="btnFicoSave">
+            ✓ Save Model Parameters
+          </button>
+        </div>
+      </div>
+    </div>
 
   </div>
 
